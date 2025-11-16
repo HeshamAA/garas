@@ -10,7 +10,6 @@ const SCHOOL_MENU_ITEMS = [
   { icon: Users, label: 'أولياء الأمور', path: '/parents' },
   { icon: UserCheck, label: 'الطلاب', path: '/students' },
   { icon: Users, label: 'المستخدمون المسجلين', path: '/receivers' },
-  { icon: CheckCircle, label: 'المستخدمون المعتمدون', path: '/trusted-receivers' },
 ];
 
 const SchoolDashboardPage = () => {

@@ -20,35 +20,37 @@ const ParentCard = ({ parent, onViewRequests }: ParentCardProps) => {
   };
 
   return (
-    <Card className="p-6 hover:shadow-lg transition-shadow">
+    <Card className="p-6 hover:shadow-lg transition-shadow h-full">
       <div className="flex items-start justify-between">
         <div className="flex-1 space-y-4 text-right">
           {/* Parent Header */}
-          <div className="flex items-center justify-end gap-3">
+          <div className="flex items-center justify-start gap-3">
+              <Avatar className="w-16 h-16">
+              <AvatarImage src={parent.avatar} />
+              <AvatarFallback>{getInitials(parent.name)}</AvatarFallback>
+            </Avatar>
             <div>
               <h3 className="font-bold text-lg">{parent.name}</h3>
               <p className="text-sm text-muted-foreground">{parent.role}</p>
             </div>
-            <Avatar className="w-16 h-16">
-              <AvatarImage src={parent.avatar} />
-              <AvatarFallback>{getInitials(parent.name)}</AvatarFallback>
-            </Avatar>
+          
           </div>
 
           {/* Contact Information */}
           <ParentContactInfo phone={parent.phone} email={parent.email} />
 
           {/* Associated Students */}
-          <div className="flex items-center justify-end gap-3">
-            <div className="flex gap-2">
+          <div className="flex items-center justify-start gap-3">
+          
+            <Users className="w-4 h-4 text-primary" />
+            <span className="text-sm font-medium">الطلاب المرتبطين:</span>
+              <div className="flex gap-2">
               {parent.students.map((student, index) => (
                 <Badge key={index} variant="secondary" className="rounded-full">
                   {student}
                 </Badge>
               ))}
             </div>
-            <Users className="w-4 h-4 text-primary" />
-            <span className="text-sm font-medium">الطلاب المرتبطين:</span>
           </div>
 
           {/* Actions */}

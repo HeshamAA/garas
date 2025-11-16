@@ -103,57 +103,61 @@ const RequestCard = ({
     <Card className={`rounded-2xl p-6 shadow-sm border border-border/50 ${className}`}>
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <RequestStatusBadge status={request.status} />
-        </div>
-
-        <div className="flex items-center gap-3">
-          <div className="text-right">
-            <h3 className="text-lg font-bold">{request.parentName}</h3>
-            <p className="text-sm text-muted-foreground">ولي امر</p>
-          </div>
-          <Avatar className="w-12 h-12">
+         <div className="flex items-center gap-3">
+             <Avatar className="w-12 h-12">
             <AvatarImage src={request.studentAvatar} />
             <AvatarFallback>
               {request.parentName.split(' ')[0]?.charAt(0) || 'P'}
             </AvatarFallback>
           </Avatar>
+          <div className="text-right">
+            <h3 className="text-lg font-bold">{request.parentName}</h3>
+            <p className="text-sm text-muted-foreground">ولي امر</p>
+          </div>
+       
         </div>
+        <div className="flex items-center gap-3">
+          <RequestStatusBadge status={request.status} />
+        </div>
+
+       
       </div>
 
       {/* Details Grid */}
       <div className="space-y-3 mb-4 text-right">
-        <div className="flex justify-between items-center text-sm">
-          <span className="text-primary flex items-center gap-2">
-            <MapPin className="w-4 h-4" />
-            {request.location}
-          </span>
+        <div className="flex  items-center text-sm gap-2">
           <span className="font-medium flex items-center gap-2">
-            <span>📍</span>
+            <MapPin className="w-4 h-4" />
             الموقع:
           </span>
+          <span className="text-primary flex items-center gap-2">
+            
+            {request.location}
+          </span>
+          
         </div>
 
-        <div className="flex justify-between items-center text-sm">
-          <span className="text-primary flex items-center gap-2">
+        <div className="flex items-center text-sm gap-2">
+           <span className="font-medium flex items-center gap-2">
             <User className="w-4 h-4" />
-            {request.receiverName}
-          </span>
-          <span className="font-medium flex items-center gap-2">
-            <span className="text-primary">⚫</span>
             المستلم:
           </span>
+          <span className="text-primary flex items-center gap-2">
+            
+            {request.receiverName}
+          </span>
+         
         </div>
 
-        <div className="flex justify-between items-center text-sm">
-          <span className="text-primary flex items-center gap-2">
+        <div className="flex items-center text-sm gap-2">
+           <span className="font-medium flex items-center gap-2">
             <User className="w-4 h-4" />
-            {request.studentName}
-          </span>
-          <span className="font-medium flex items-center gap-2">
-            <span>👤</span>
             الطالب:
           </span>
+          <span className="text-primary flex items-center gap-2">
+            {request.studentName}
+          </span>
+         
         </div>
 
         {request.pickupTime && (

@@ -9,7 +9,7 @@ import NotFound from "@/pages/NotFound";
 import { AuthPage } from "@/features/auth";
 import { StudentsPage } from "@/features/school/students";
 import { ParentsPage } from "@/features/school/parents";
-import { ReceiversPage, TrustedReceiversPage } from "@/features/school/receivers";
+import { ReceiversPage } from "@/features/school/receivers";
 import { RequestsPage } from "@/features/super-admin/requests";
 import { ReceiveRequestsPage } from "@/features/school/pickup-requests";
 import { RegisteredSchoolsPage } from "@/features/super-admin/schools";
@@ -63,14 +63,7 @@ const App = () => (
                 // </ProtectedRoute>
               } 
             />
-            <Route 
-              path="/trusted-receivers" 
-              element={
-                // <ProtectedRoute requiredRole="school">
-                  <TrustedReceiversPage />
-                // </ProtectedRoute>
-              } 
-            />
+         
             <Route 
               path="/receive-requests" 
               element={
