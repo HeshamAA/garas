@@ -1,9 +1,9 @@
 ﻿import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Student, StudentFilters } from '../types/student.types';
+import { PaginationMetadata, PaginationLinks } from '@/shared/types/pagination.types';
 import { 
   fetchStudents, 
   updateStudentStatus, 
-  createStudent, 
   deleteStudent 
 } from './studentsThunks';
 
@@ -17,6 +17,8 @@ interface StudentsState {
   isUpdating: boolean;
   isCreating: boolean;
   isDeleting: boolean;
+  pagination: PaginationMetadata | null;
+  links: PaginationLinks | null;
 }
 
 const initialState: StudentsState = {
@@ -29,39 +31,15 @@ const initialState: StudentsState = {
   isUpdating: false,
   isCreating: false,
   isDeleting: false,
+  pagination: null,
+  links: null,
 };
 
 const studentsSlice = createSlice({
   name: 'students',
   initialState,
   reducers: {
-    /**
-     * Set filters for students list
-     */
-    setFilters: (state, action: PayloadAction<StudentFilters>) => {
-      state.filters = action.payload;
-    },
-
-    /**
-     * Select a student
-     */
-    selectStudent: (state, action: PayloadAction<Student | null>) => {
-      state.selectedStudent = action.payload;
-    },
-
-    /**
-     * Clear error state
-     */
-    clearError: (state) => {
-      state.error = null;
-    },
-
-    /**
-     * Invalidate cache to force refetch
-     */
-    invalidateCache: (state) => {
-      state.lastFetched = null;
-    },
+  
   },
   extraReducers: (builder) => {
     builder
@@ -71,40 +49,17 @@ const studentsSlice = createSlice({
       })
       .addCase(fetchStudents.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.items = action.payload;
+        state.items = action.payload.items;
+        state.pagination = action.payload.metadata;
+        state.links = action.payload.links;
         state.lastFetched = Date.now();
       })
       .addCase(fetchStudents.rejected, (state, action) => {
         state.isLoading = false;
+        console.log(action.payload)
         state.error = action.payload as string || 'Failed to fetch students';
       })
-      .addCase(updateStudentStatus.pending, (state) => {
-        state.isUpdating = true;
-        state.error = null;
-      })
-      .addCase(updateStudentStatus.fulfilled, (state, action) => {
-        state.isUpdating = false;
-        const index = state.items.findIndex(s => s.id === action.payload.id);
-        if (index !== -1) {
-          state.items[index] = action.payload;
-        }
-      })
-      .addCase(updateStudentStatus.rejected, (state, action) => {
-        state.isUpdating = false;
-        state.error = action.payload as string || 'Failed to update status';
-      })
-      .addCase(createStudent.pending, (state) => {
-        state.isCreating = true;
-        state.error = null;
-      })
-      .addCase(createStudent.fulfilled, (state, action) => {
-        state.isCreating = false;
-        state.items.push(action.payload);
-      })
-      .addCase(createStudent.rejected, (state, action) => {
-        state.isCreating = false;
-        state.error = action.payload as string || 'Failed to create student';
-      })
+
       .addCase(deleteStudent.pending, (state) => {
         state.isDeleting = true;
         state.error = null;
@@ -120,5 +75,4 @@ const studentsSlice = createSlice({
   },
 });
 
-export const { setFilters, selectStudent, clearError, invalidateCache } = studentsSlice.actions;
 export default studentsSlice.reducer;

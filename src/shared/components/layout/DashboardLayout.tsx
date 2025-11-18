@@ -1,31 +1,24 @@
 import { ReactNode, useState } from 'react';
 import { Sidebar } from './Sidebar';
-import { LucideIcon, Menu } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-
-interface MenuItem {
-  icon: LucideIcon;
-  label: string;
-  path: string;
-}
+import { useAppSelector } from '@/shared/hooks';
 
 interface DashboardLayoutProps {
   children: ReactNode;
-  menuItems: MenuItem[];
-  userName: string;
-  userAvatar?: string;
 }
 
-export const DashboardLayout = ({ children, menuItems, userName, userAvatar }: DashboardLayoutProps) => {
+export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const { user } = useAppSelector(state => state.auth);
+  
+  const userName = user?.school?.name || user?.name || 'المستخدم';
+  const userAvatar = user?.avatar;
 
   return (
     <div className="flex min-h-screen bg-background" dir="rtl">
       <Sidebar 
-        menuItems={menuItems} 
-        userName={userName} 
-        userAvatar={userAvatar}
         isOpen={sidebarOpen}
         onToggle={() => setSidebarOpen(!sidebarOpen)}
       />

@@ -6,7 +6,7 @@ import { store } from "@/shared/store/store";
 import { Toaster } from "react-hot-toast";
 import Index from "@/pages/Index";
 import NotFound from "@/pages/NotFound";
-import { AuthPage } from "@/features/auth";
+import { AuthPage, ProtectedRoute } from "@/features/auth";
 import { StudentsPage } from "@/features/school/students";
 import { ParentsPage } from "@/features/school/parents";
 import { ReceiversPage } from "@/features/school/receivers";
@@ -33,70 +33,69 @@ const App = () => (
             <Route 
               path="/school-dashboard" 
               element={
-                // <ProtectedRoute requiredRole="school">
+                <ProtectedRoute requiredRole="school">
                   <SchoolDashboardPage />
-                // </ProtectedRoute>
+                </ProtectedRoute>
               } 
             />
 
             <Route 
               path="/parents" 
               element={
-                // <ProtectedRoute requiredRole="school">
+                <ProtectedRoute requiredRole="school">
                   <ParentsPage />
-                // </ProtectedRoute>
+                </ProtectedRoute>
               } 
             />
             <Route 
               path="/students" 
               element={
-                // <ProtectedRoute requiredRole="school">
+                <ProtectedRoute requiredRole="school">
                   <StudentsPage />
-                // </ProtectedRoute>
+                </ProtectedRoute>
               } 
             />
             <Route 
               path="/receivers" 
               element={
-                // <ProtectedRoute requiredRole="school">
+                <ProtectedRoute requiredRole="school">
                   <ReceiversPage />
-                // </ProtectedRoute>
+                </ProtectedRoute>
               } 
             />
-         
+           
             <Route 
               path="/receive-requests" 
               element={
-                // <ProtectedRoute requiredRole="school">
+                <ProtectedRoute requiredRole="school">
                   <ReceiveRequestsPage />
-                // </ProtectedRoute>
+                </ProtectedRoute>
               } 
             />
 
-            {/* User/Owner Protected Routes */}
+            {/* Super Admin Protected Routes */}
             <Route 
               path="/dashboard" 
               element={
-                // <ProtectedRoute requiredRole="owner">
+                <ProtectedRoute requiredRole="super_admin">
                   <UserDashboardPage />
-                // </ProtectedRoute>
+                </ProtectedRoute>
               } 
             />
-
             <Route 
               path="/requests" 
               element={
-                // <ProtectedRoute requiredRole="owner">
+                <ProtectedRoute requiredRole="super_admin">
                   <RequestsPage />
-                // </ProtectedRoute>
+                </ProtectedRoute>
               } 
             />
             <Route 
               path="/registered-schools" 
               element={
-                // <ProtectedRoute requiredRole="owner">
+                <ProtectedRoute requiredRole="super_admin">
                   <RegisteredSchoolsPage />
-                // </ProtectedRoute>
+                </ProtectedRoute>
               } 
             />
 
@@ -104,9 +103,9 @@ const App = () => (
             <Route 
               path="/account-settings" 
               element={
-                // <ProtectedRoute>
+                <ProtectedRoute>
                   <AccountSettingsPage />
-                // </ProtectedRoute>
+                </ProtectedRoute>
               } 
             />
 

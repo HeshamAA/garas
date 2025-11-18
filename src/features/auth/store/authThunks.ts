@@ -34,7 +34,7 @@ export const loginUser = createAsyncThunk<
 
 export const registerUser = createAsyncThunk<
   RegistrationResponse,
-  { data: RegistrationData; accountType: 'owner' | 'school' },
+  { data: RegistrationData; accountType: 'super_admin' | 'school' },
   { rejectValue: string }
 >(
   'auth/registerUser',

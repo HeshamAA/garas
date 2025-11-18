@@ -4,10 +4,11 @@ import ParentCard from './ParentCard';
 interface ParentListProps {
   parents: Parent[];
   isLoading?: boolean;
-  onViewRequests?: (parentId: string) => void;
+  onViewRequests?: (parentId: number) => void;
 }
 
 const ParentList = ({ parents, isLoading, onViewRequests }: ParentListProps) => {
+  console.log(parents)
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
@@ -30,8 +31,8 @@ const ParentList = ({ parents, isLoading, onViewRequests }: ParentListProps) => 
   }
 
   return (
-    <div className=" grid grid-cols-1 md:grid-cols-2 gap-5">
-      {parents.map((parent) => (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      {parents.map((parent: Parent) => (
         <ParentCard 
           key={parent.id} 
           parent={parent}

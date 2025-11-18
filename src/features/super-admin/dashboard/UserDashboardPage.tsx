@@ -1,16 +1,8 @@
 import { DashboardLayout } from '@/shared/components/layout';
-import { useAppSelector } from '@/shared/hooks';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { School, FileText, TrendingUp } from 'lucide-react';
 
-const USER_MENU_ITEMS = [
-  { icon: TrendingUp, label: 'الإحصائيات', path: '/dashboard' },
-  { icon: School, label: 'المدارس المسجلة', path: '/registered-schools' },
-  { icon: FileText, label: 'الطلبات', path: '/requests' },
-];
-
 const UserDashboardPage = () => {
-  const { user } = useAppSelector((state) => state.auth);
 
   const stats = [
     {
@@ -44,11 +36,7 @@ const UserDashboardPage = () => {
   ];
 
   return (
-    <DashboardLayout
-      menuItems={USER_MENU_ITEMS}
-      userName={user?.name || 'المستخدم'}
-      userAvatar={user?.avatar}
-    >
+    <DashboardLayout>
       <div className="p-6 lg:p-8 space-y-6 lg:space-y-8">
         <div className="animate-fade-in">
           <h1 className="text-2xl lg:text-3xl font-bold text-right">الإحصائيات</h1>

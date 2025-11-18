@@ -1,74 +1,63 @@
-﻿import { useEffect } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/shared/hooks';
-import { 
-  fetchSchools, 
-  registerSchool 
-} from '../store/schoolsThunks';
-import { 
-  clearError, 
-  invalidateCache 
-} from '../store/schoolsSlice';
-import { RegisterSchoolRequest } from '../types/school.types';
+import { fetchSchools } from '../store/schoolsThunks';
+import { GetSchoolsParams } from '../api/schoolsApi';
 
-export const useSchools = (userId?: string, autoFetch = true) => {
+export const useSchools = (autoFetch = true) => {
   const dispatch = useAppDispatch();
-  const schools = useAppSelector(state => {
-    const { items, filters } = state.schools;
-    let filtered = items;
-
-    if (filters.status && filters.status !== 'all') {
-      filtered = filtered.filter(school => school.status === filters.status);
-    }
-
-    if (filters.searchQuery) {
-      const query = filters.searchQuery.toLowerCase();
-      filtered = filtered.filter(school => 
-        school.name.toLowerCase().includes(query) ||
-        school.location.toLowerCase().includes(query)
-      );
-    }
-
-    return filtered;
+  const { items, isLoading, error, isRegistering, filters, pagination, links } = useAppSelector(state => state.schools);
+  const [params, setParams] = useState<GetSchoolsParams>({
+    page: 1,
+    limit: 10,
+    sortOrder: 'ASC',
   });
 
-  const isLoading = useAppSelector(state => state.schools.isLoading);
-  const isRegistering = useAppSelector(state => state.schools.isRegistering);
-  const error = useAppSelector(state => state.schools.error);
-  const filters = useAppSelector(state => state.schools.filters);
   useEffect(() => {
-    if (autoFetch && userId) {
-      dispatch(fetchSchools(userId));
+    if (autoFetch) {
+      dispatch(fetchSchools(params));
     }
-  }, [dispatch, userId, autoFetch]);
-  const refetch = () => {
-    if (userId) {
-      dispatch(invalidateCache());
-      dispatch(fetchSchools(userId));
-    }
+  }, [dispatch, autoFetch, params]);
+
+  const refetch = (newParams?: GetSchoolsParams) => {
+    const updatedParams = { ...params, ...newParams };
+    setParams(updatedParams);
+    dispatch(fetchSchools(updatedParams));
   };
 
-  const register = async (schoolData: RegisterSchoolRequest) => {
-    try {
-      await dispatch(registerSchool(schoolData)).unwrap();
-      return { success: true };
-    } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : 'Failed to register school';
-      return { success: false, error: message };
-    }
+  const changePage = (page: number) => {
+    refetch({ page });
   };
 
-  const clearErrorState = () => {
-    dispatch(clearError());
+  const search = (keyword: string) => {
+    refetch({ keyword, page: 1 });
+  };
+
+  const filterByName = (name: string) => {
+    refetch({ name, page: 1 });
+  };
+
+  const filterByLocation = (location: string) => {
+    refetch({ location, page: 1 });
+  };
+
+  const sort = (sortBy: string, sortOrder: 'ASC' | 'DESC') => {
+    refetch({ sortBy, sortOrder });
   };
 
   return {
-    schools,
+    items,
     isLoading,
     isRegistering,
     error,
     filters,
+    pagination,
+    links,
+    params,
     refetch,
-    register,
-    clearError: clearErrorState,
+    changePage,
+    search,
+    filterByName,
+    filterByLocation,
+    sort,
   };
 };

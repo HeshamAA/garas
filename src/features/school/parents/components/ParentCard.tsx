@@ -8,7 +8,7 @@ import ParentContactInfo from './ParentContactInfo';
 
 interface ParentCardProps {
   parent: Parent;
-  onViewRequests?: (parentId: string) => void;
+  onViewRequests?: (parentId: number) => void;
 }
 
 const ParentCard = ({ parent, onViewRequests }: ParentCardProps) => {
@@ -25,29 +25,37 @@ const ParentCard = ({ parent, onViewRequests }: ParentCardProps) => {
         <div className="flex-1 space-y-4 text-right">
           {/* Parent Header */}
           <div className="flex items-center justify-start gap-3">
-              <Avatar className="w-16 h-16">
-              <AvatarImage src={parent.avatar} />
-              <AvatarFallback>{getInitials(parent.name)}</AvatarFallback>
+            <Avatar className="w-16 h-16">
+              <AvatarImage src={parent.profileImage || undefined} />
+              <AvatarFallback>{getInitials(parent.fullName)}</AvatarFallback>
             </Avatar>
             <div>
-              <h3 className="font-bold text-lg">{parent.name}</h3>
-              <p className="text-sm text-muted-foreground">{parent.role}</p>
+              <h3 className="font-bold text-lg">{parent.fullName}</h3>
+              <p className="text-sm text-muted-foreground">{parent.user.role}</p>
             </div>
-          
           </div>
 
           {/* Contact Information */}
-          <ParentContactInfo phone={parent.phone} email={parent.email} />
+          <ParentContactInfo phone={parent.user.phoneNumber} email={parent.user.email} />
+
+          {/* National ID */}
+          {parent.nationalId && (
+            <div className="text-sm text-muted-foreground">
+              <span className="font-medium">الرقم القومي: </span>
+              {parent.nationalId}
+            </div>
+          )}
 
           {/* Associated Students */}
-          <div className="flex items-center justify-start gap-3">
-          
-            <Users className="w-4 h-4 text-primary" />
-            <span className="text-sm font-medium">الطلاب المرتبطين:</span>
-              <div className="flex gap-2">
-              {parent.students.map((student, index) => (
-                <Badge key={index} variant="secondary" className="rounded-full">
-                  {student}
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <Users className="w-4 h-4 text-primary" />
+              <span className="text-sm font-medium">الطلاب المرتبطين ({parent.students.length}):</span>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {parent.students.map((student) => (
+                <Badge key={student.id} variant="secondary" className="rounded-full">
+                  {student.fullName} - {student.class}
                 </Badge>
               ))}
             </div>
@@ -60,7 +68,7 @@ const ParentCard = ({ parent, onViewRequests }: ParentCardProps) => {
               className="rounded-full"
               onClick={() => onViewRequests?.(parent.id)}
             >
-              عرض الطلبات
+              عرض الابناء
             </Button>
           </div>
         </div>

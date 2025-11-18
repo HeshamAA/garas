@@ -1,52 +1,29 @@
-﻿export type UserRole = 'owner' | 'school' | 'parent' | 'student' | 'deliveryPerson';
-
-export interface ParentProfile {
-  id: string;
-  name: string;
-  phoneNumber: string;
-  email?: string;
-}
-
-export interface StudentProfile {
-  id: string;
-  name: string;
-}
+﻿export type UserRole = 'super_admin' | 'school';
 
 export interface School {
   id: string;
   name: string;
-}
-
-export interface DeliveryPersonProfile {
-  id: string;
-  name: string;
-  phoneNumber: string;
+  phone?: string;
+  email?: string;
+  address?: string;
 }
 
 export interface User {
   id: string;
   email: string;
-  status: string;
-  password: string;
-  gender: string;
+  name: string;
   phoneNumber: string;
-  isEmailVerified: boolean;
   role: UserRole;
+  status: 'active' | 'inactive' | 'pending';
+  isEmailVerified: boolean;
   schoolId?: string;
-  parentId?: string;
-  deliveryPersonId?: string;
-  studentId?: string;
+  school?: School;
   whitelistedTokens: string[];
   playerIds: string[];
   notifications: unknown[];
-  parentProfile?: ParentProfile;
-  studentProfile?: StudentProfile;
-  school?: School;
-  deliveryPersonProfile?: DeliveryPersonProfile;
   createdAt: string;
   updatedAt: string;
   deletedAt?: string;
-  name?: string;
   phone?: string;
   avatar?: string;
 }
@@ -66,7 +43,7 @@ export interface LoginCredentials {
   playerId?: string;
 }
 
-export interface OwnerRegistrationData {
+export interface SuperAdminRegistrationData {
   name: string;
   phone: string;
   email?: string;
@@ -76,16 +53,16 @@ export interface OwnerRegistrationData {
 }
 
 export interface SchoolRegistrationData {
-  ownerName: string;
+  name: string;
   phone: string;
   email?: string;
   password: string;
   confirmPassword: string;
-  schoolName?: string;
+  schoolName: string;
   avatar?: string;
 }
 
-export type RegistrationData = OwnerRegistrationData | SchoolRegistrationData;
+export type RegistrationData = SuperAdminRegistrationData | SchoolRegistrationData;
 
 export interface LoginResponse {
   user: User;

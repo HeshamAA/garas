@@ -1,34 +1,42 @@
 ﻿import { apiClient } from '@/shared/api/apiClient';
 import { 
-  Student, 
   StudentStatus,
-  CreateStudentRequest,
-  UpdateStudentRequest,
+
   StudentsApiResponse,
   StudentApiResponse
 } from '../types/student.types';
 
+export interface GetStudentsParams {
+  keyword?: string;
+  fullName?: string;
+  code?: string;
+  schoolId?: number;
+  parentId?: number;
+  stage?: string;
+  class?: string;
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  sortOrder?: 'ASC' | 'DESC';
+}
+
 const ENDPOINTS = {
-  students: '/students',
+  students: 'https://school.safehandapps.com/api/v1/student',
   studentById: (id: string) => `/students/${id}`,
   studentStatus: (id: string) => `/students/${id}/status`,
   studentsBySchool: (schoolId: string) => `/schools/${schoolId}/students`,
 };
 
 export const studentsApi = {
-  /**
-   * Get all students for a school
-   */
-  async getAll(schoolId: string): Promise<StudentsApiResponse> {
+  async getAll(params?: GetStudentsParams): Promise<StudentsApiResponse> {
     const response = await apiClient.get<StudentsApiResponse>(
-      ENDPOINTS.studentsBySchool(schoolId)
+      ENDPOINTS.students,
+      { params }
     );
     return response.data;
   },
 
-  /**
-   * Get a student by ID
-   */
+
   async getById(id: string): Promise<StudentApiResponse> {
     const response = await apiClient.get<StudentApiResponse>(
       ENDPOINTS.studentById(id)
@@ -36,32 +44,7 @@ export const studentsApi = {
     return response.data;
   },
 
-  /**
-   * Create a new student
-   */
-  async create(studentData: CreateStudentRequest): Promise<StudentApiResponse> {
-    const response = await apiClient.post<StudentApiResponse>(
-      ENDPOINTS.students,
-      studentData
-    );
-    return response.data;
-  },
 
-  /**
-   * Update a student
-   */
-  async update(studentData: UpdateStudentRequest): Promise<StudentApiResponse> {
-    const { id, ...data } = studentData;
-    const response = await apiClient.put<StudentApiResponse>(
-      ENDPOINTS.studentById(id),
-      data
-    );
-    return response.data;
-  },
-
-  /**
-   * Update student status
-   */
   async updateStatus(id: string, status: StudentStatus): Promise<StudentApiResponse> {
     const response = await apiClient.patch<StudentApiResponse>(
       ENDPOINTS.studentStatus(id),
@@ -70,9 +53,7 @@ export const studentsApi = {
     return response.data;
   },
 
-  /**
-   * Delete a student
-   */
+ 
   async delete(id: string): Promise<void> {
     await apiClient.delete(ENDPOINTS.studentById(id));
   },

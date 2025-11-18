@@ -48,7 +48,7 @@ export const RegistrationForms = ({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="school">مدرسة</SelectItem>
-            <SelectItem value="owner">مالك</SelectItem>
+            <SelectItem value="owner">سوبر أدمن</SelectItem>
           </SelectContent>
         </Select>
       </div>

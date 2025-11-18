@@ -1,14 +1,19 @@
 ﻿export type SchoolStatus = 'active' | 'inactive' | 'pending';
 
 export interface School {
-  id: string;
+  id: number;
   name: string;
   location: string;
+  description?: string;
+  logo?: string;
+  stages?: string[];
+  createdAt: string;
+  updatedAt: string;
   phone?: string;
   email?: string;
   avatar?: string;
-  registrationDate: Date;
-  status: SchoolStatus;
+  registrationDate?: Date;
+  status?: SchoolStatus;
   studentsCount?: number;
   period?: string;
   transportType?: string;
@@ -29,6 +34,20 @@ export interface RegisterSchoolRequest {
   transportType?: string;
 }
 
+export interface data{
+      items:School[]
+        links:{
+          hasNext:boolean
+          next:string
+          last:string
+        }
+        metadata:{
+            currentPage:number
+      itemsPerPage:number
+      totalItems:number
+      totalPages:number
+        }
+}
 export interface UpdateSchoolRequest {
   id: string;
   name?: string;
@@ -39,13 +58,13 @@ export interface UpdateSchoolRequest {
 }
 
 export interface SchoolsApiResponse {
-  data: School[];
+  data: data;
   message?: string;
   success: boolean;
 }
 
 export interface SchoolApiResponse {
-  data: School;
+  data: data;
   message?: string;
   success: boolean;
 }

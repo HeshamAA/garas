@@ -1,4 +1,4 @@
-﻿export type StudentStatus = 'active' | 'inactive' | 'pending';
+export type StudentStatus = 'active' | 'inactive' | 'pending';
 
 export interface Student {
   id: string;
@@ -21,14 +21,19 @@ export interface StudentFilters {
   searchQuery?: string;
 }
 
-export interface CreateStudentRequest {
-  name: string;
-  guardianId: string;
-  guardianName: string;
-  location: string;
-  receiverId?: string;
-  receiverName?: string;
-  avatar?: string;
+export interface data {
+      items:Student[]
+      links:{
+        hasNext:boolean
+        next:string
+        last:string
+      }
+      metadata:{
+          currentPage:number
+    itemsPerPage:number
+    totalItems:number
+    totalPages:number
+      }
 }
 
 export interface UpdateStudentRequest {
@@ -46,13 +51,13 @@ export interface UpdateStudentStatusRequest {
 }
 
 export interface StudentsApiResponse {
-  data: Student[];
+  data: data;
   message?: string;
   success: boolean;
 }
 
 export interface StudentApiResponse {
-  data: Student;
+  data: data;
   message?: string;
   success: boolean;
 }

@@ -1,8 +1,8 @@
 ﻿import { useEffect, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '@/shared/hooks';
-import { fetchParents, createParent, updateParent, deleteParent } from '../store/parentsThunks';
+import { fetchParents, deleteParent } from '../store/parentsThunks';
 import { setFilters, selectParent, clearError, invalidateCache } from '../store/parentsSlice';
-import { ParentFilters, CreateParentRequest, UpdateParentRequest } from '../types/parent.types';
+import { ParentFilters, UpdateParentRequest } from '../types/parent.types';
 
 export const useParents = (schoolId?: string) => {
   const dispatch = useAppDispatch();

@@ -2,13 +2,13 @@
 import { RequestStatus } from '../types/request.types';
 
 interface RequestActionsProps {
-  requestId: string;
+  requestId: number;
   status: RequestStatus;
-  onApprove?: (id: string) => void;
-  onReject?: (id: string) => void;
-  onComplete?: (id: string) => void;
-  onCancel?: (id: string) => void;
-  onConfirm?: (id: string) => void;
+  onApprove?: (id: number) => void;
+  onReject?: (id: number) => void;
+  onComplete?: (id: number) => void;
+  onCancel?: (id: number) => void;
+  onConfirm?: (id: number) => void;
   isLoading?: boolean;
   className?: string;
 }

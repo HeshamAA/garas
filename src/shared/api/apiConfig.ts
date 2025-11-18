@@ -1,5 +1,5 @@
 ﻿export const API_CONFIG = {
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'https://api.example.com',
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'https://school.safehandapps.com/api',
   timeout: 30000,
   retry: {
     maxRetries: 3,

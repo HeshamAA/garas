@@ -1,4 +1,4 @@
-﻿import { apiClient, handleApiResponse, handleApiError } from '@/shared/api/apiClient';
+﻿import { apiClient, handleApiError } from '@/shared/api/apiClient';
 import {
   LoginCredentials,
   RegistrationData,
@@ -8,11 +8,11 @@ import {
 } from '../types/auth.types';
 
 const AUTH_ENDPOINTS = {
-  LOGIN: '/auth/login',
-  REGISTER: '/auth/register',
-  LOGOUT: '/auth/logout',
-  ME: '/auth/get-me',
-  REFRESH: '/auth/refresh',
+  LOGIN: 'https://school.safehandapps.com/api/v1/auth/login',
+  REGISTER: 'https://school.safehandapps.com/api/v1/auth/register',
+  LOGOUT: 'https://school.safehandapps.com/api/v1/auth/logout',
+  ME: 'https://school.safehandapps.com/api/v1/auth/get-me',
+  REFRESH: 'https://school.safehandapps.com/api/v1/auth/refresh',
 } as const;
 
 export const authApi = {
@@ -44,16 +44,15 @@ export const authApi = {
       const { accessToken, role, email, isEmailVerified } = response.data.data;
       const loginMessage = response.data.message;
       localStorage.setItem('authToken', accessToken);
-      const normalizedRole = role.toLowerCase() as 'owner' | 'school' | 'parent' | 'student' | 'deliveryPerson';
+      const normalizedRole = role.toLowerCase() as 'super_admin' | 'school';
       const user: User = {
         id: '',
         email,
+        name: '',
+        phoneNumber: '',
         role: normalizedRole,
         isEmailVerified,
         status: 'active',
-        password: '',
-        gender: '',
-        phoneNumber: '',
         whitelistedTokens: [],
         playerIds: [],
         notifications: [],
@@ -86,7 +85,7 @@ export const authApi = {
    */
   register: async (
     data: RegistrationData,
-    accountType: 'owner' | 'school'
+    accountType: 'super_admin' | 'school'
   ): Promise<RegistrationResponse> => {
     try {
       const response = await apiClient.post<{ data: RegistrationResponse; message: string }>(

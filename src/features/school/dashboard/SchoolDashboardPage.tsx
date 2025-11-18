@@ -1,19 +1,9 @@
 import { DashboardLayout } from '@/shared/components/layout';
-import { useAppSelector } from '@/shared/hooks';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, UserCheck, Clock, CheckCircle, AlertCircle } from 'lucide-react';
+import { Users, UserCheck, Clock, CheckCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
-const SCHOOL_MENU_ITEMS = [
-  { icon: AlertCircle, label: 'لوحة التحكم', path: '/school-dashboard' },
-  { icon: Clock, label: 'طلبات الاستلام', path: '/receive-requests' },
-  { icon: Users, label: 'أولياء الأمور', path: '/parents' },
-  { icon: UserCheck, label: 'الطلاب', path: '/students' },
-  { icon: Users, label: 'المستخدمون المسجلين', path: '/receivers' },
-];
-
 const SchoolDashboardPage = () => {
-  const { user } = useAppSelector((state) => state.auth);
 
   const stats = [
     {
@@ -68,11 +58,7 @@ const SchoolDashboardPage = () => {
   };
 
   return (
-    <DashboardLayout
-      menuItems={SCHOOL_MENU_ITEMS}
-      userName={user?.school?.name || user?.name || 'المدرسة'}
-      userAvatar={user?.avatar}
-    >
+    <DashboardLayout>
       <div className="p-8 space-y-8">
         <div>
           <h1 className="text-3xl font-bold text-right">لوحة التحكم</h1>

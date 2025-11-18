@@ -1,83 +1,56 @@
 ﻿import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { IdCard, Car, User } from "lucide-react";
-import { Receiver } from "../types/receiver.types";
+import { IdCard, User, Phone } from "lucide-react";
 
 interface ReceiverCardProps {
-  receiver: Receiver;
+  receiver: any;
   onPickupRequestsClick?: (receiverId: string) => void;
 }
 
 const ReceiverCard = ({ receiver, onPickupRequestsClick }: ReceiverCardProps) => {
   return (
-    <div className="bg-card rounded-2xl p-6 shadow-sm border border-border/50">
+    <div className="bg-card rounded-2xl p-6 shadow-sm border border-border/50 hover:shadow-lg transition-shadow" dir="rtl">
       {/* Header */}
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <Badge
-            variant={receiver.status === "active" ? "default" : "destructive"}
-            className={`${
-              receiver.status === "active"
-                ? "bg-success text-success-foreground"
-                : "bg-destructive text-destructive-foreground"
-            } px-4 py-1 text-sm rounded-full`}
-          >
-            {receiver.status === "active" ? "نشط" : "غير نشط"}
-          </Badge>
+      <div className="flex items-start justify-start gap-4 mb-4">
+        {receiver.profileImage ? (
+          <img 
+            src={receiver.profileImage} 
+            alt={receiver.fullName}
+            className="w-16 h-16 rounded-full object-cover border-2 border-gray-200"
+          />
+        ) : (
+          <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center border-2 border-gray-200">
+            <User className="w-8 h-8 text-muted-foreground" />
+          </div>
+        )}
+        
+        <div className="flex-1 text-right">
+          <h3 className="text-lg font-bold">{receiver.fullName}</h3>
+          {receiver.user?.email && (
+            <p className="text-sm text-muted-foreground mt-1">{receiver.user.email}</p>
+          )}
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className="text-right">
-            <h3 className="text-lg font-bold">{receiver.name}</h3>
-            <p className="text-sm text-muted-foreground">{receiver.guardian}</p>
-          </div>
-          <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center">
-            <User className="w-6 h-6" />
-          </div>
-        </div>
+        <Badge
+          variant="default"
+          className="bg-success text-success-foreground px-4 py-1 text-sm rounded-full"
+        >
+          نشط
+        </Badge>
       </div>
 
       {/* Details */}
-      <div className="space-y-3 text-right mb-4">
-        <div className="flex items-center justify-end gap-2 text-sm">
-          <span className="text-foreground">{receiver.phone}</span>
-          <span className="text-primary">📱 رقم الجوال:</span>
+      <div className="space-y-3 text-right mb-4 border-t pt-4">
+        <div className="flex items-center justify-start gap-2 text-sm">
+          <Phone className="w-4 h-4 text-primary" />
+          <span className="font-medium text-gray-700">رقم الجوال:</span>
+          <span className="text-foreground">{receiver.user?.phoneNumber}</span>
         </div>
 
-        <div className="flex items-center justify-end gap-2 text-sm">
-          <span className="text-foreground">{receiver.nationalId}</span>
+        <div className="flex items-center justify-start gap-2 text-sm">
           <IdCard className="w-4 h-4 text-primary" />
-          <span className="text-primary">الرقم القومي:</span>
-        </div>
-
-        <div className="flex items-center justify-end gap-2 text-sm">
-          <span className="text-foreground">{receiver.relationship}</span>
-          <User className="w-4 h-4 text-primary" />
-          <span className="text-primary">العلاقة بالطالب:</span>
-        </div>
-
-        <div className="flex items-start justify-end gap-2 text-sm">
-          <div className="flex flex-wrap gap-2 justify-end">
-            {receiver.students.map((student, idx) => (
-              <Badge key={idx} variant="secondary" className="bg-primary/10 text-primary">
-                {student}
-              </Badge>
-            ))}
-          </div>
-          <User className="w-4 h-4 text-primary mt-1" />
-          <span className="text-primary">الطالب المرتبطين:</span>
-        </div>
-
-        <div className="flex items-start justify-end gap-2 text-sm">
-          <div className="flex flex-wrap gap-2 justify-end">
-            {receiver.vehicles.map((vehicle, idx) => (
-              <Badge key={idx} variant="secondary" className="bg-primary/10 text-primary">
-                {vehicle}
-              </Badge>
-            ))}
-          </div>
-          <Car className="w-4 h-4 text-primary mt-1" />
-          <span className="text-primary">رقع المركبة:</span>
+          <span className="font-medium text-gray-700">الرقم القومي:</span>
+          <span className="text-foreground">{receiver.nationalId}</span>
         </div>
       </div>
 
@@ -89,7 +62,7 @@ const ReceiverCard = ({ receiver, onPickupRequestsClick }: ReceiverCardProps) =>
         <span className="text-lg">⚠️</span>
         <span>طلبات الاستلام</span>
         <Badge className="bg-warning text-warning-foreground rounded-full">
-          {receiver.pickupRequests}
+          0
         </Badge>
       </Button>
     </div>

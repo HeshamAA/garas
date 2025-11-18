@@ -14,62 +14,53 @@ export interface Receiver {
   pickupRequests: number;
 }
 
-export interface TrustedReceiver {
-  id: string;
-  name: string;
-  guardian: string;
-  status: 'active' | 'inactive';
-  receiver: string;
-  avatar?: string;
+export interface data{
+    items:Receiver[]
+    links:{
+      hasNext:boolean
+      next:string
+      last:string
+    }
+    metadata:{
+        currentPage:number
+  itemsPerPage:number
+  totalItems:number
+  totalPages:number
+    }
 }
-
 export interface ReceiverFilters {
   status?: 'active' | 'inactive' | 'all';
   searchQuery?: string;
 }
 
-export interface TrustedReceiverFilters {
-  type?: 'all' | 'student' | 'guardian' | 'receiver';
-  searchQuery?: string;
-}
 
 export interface ReceiversState {
-  receivers: {
     items: Receiver[];
     filters: ReceiverFilters;
     selectedReceiver: Receiver | null;
     isLoading: boolean;
     error: string | null;
     lastFetched: number | null;
-  };
-  trustedReceivers: {
-    items: TrustedReceiver[];
-    filters: TrustedReceiverFilters;
-    selectedTrustedReceiver: TrustedReceiver | null;
-    isLoading: boolean;
-    error: string | null;
-    lastFetched: number | null;
-  };
-  isUpdating: boolean;
-  isCreating: boolean;
-  isDeleting: boolean;
+    pagination: {
+        currentPage: number;
+        itemsPerPage: number;
+        totalItems: number;
+        totalPages: number;
+    } | null;
+    links: {
+        hasNext: boolean;
+        next?: string;
+        last?: string;
+    } | null;
 }
 
-export interface CreateReceiverData {
-  name: string;
-  guardianId: string;
-  phone: string;
-  nationalId: string;
-  relationship: string;
-  studentIds: string[];
-  vehicleIds: string[];
-}
 
-export interface UpdateReceiverData extends Partial<CreateReceiverData> {
-  id: string;
-}
 
 export interface ReceiverStatusUpdate {
   id: string;
   status: 'active' | 'inactive';
+}
+
+export interface ReceiversApiResponse extends data {
+
 }

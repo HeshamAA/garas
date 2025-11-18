@@ -1,100 +1,76 @@
-﻿import { useState, useMemo } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { DashboardLayout } from '@/shared/components/layout';
-import { useAppSelector } from '@/shared/hooks';
-import { useRequestActions } from '../hooks/useRequestActions';
-import RequestFilters from '../components/RequestFilters';
-import RequestList from '../components/RequestList';
-import { RequestStatus } from '../types/request.types';
-import { FileText, UserCheck, Users, TrendingUp } from 'lucide-react';
-import { mockSchoolRequests } from '../data/mockSchoolRequests';
-
-const SCHOOL_MENU_ITEMS = [
-  { icon: TrendingUp, label: 'لوحة التحكم', path: '/school-dashboard' },
-  { icon: FileText, label: 'طلبات الاستلام', path: '/receive-requests' },
-  { icon: Users, label: 'أولياء الأمور', path: '/parents' },
-  { icon: UserCheck, label: 'الطلاب', path: '/students' },
-  { icon: Users, label: 'المستخدمون المسجلين', path: '/receivers' },
-  { icon: UserCheck, label: 'المستخدمون المعتمدون', path: '/trusted-receivers' },
-];
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Search, SlidersHorizontal, X } from 'lucide-react';
+import { useAppSelector, useAppDispatch } from '@/shared/hooks';
+import { fetchSchoolRequests } from '../store/requestsThunks';
+import RequestCard from '../components/RequestCard';
+import { Pagination } from '@/shared/components/ui';
+import { GetRequestsParams } from '../api/requestsApi';
 
 const ReceiveRequestsPage = () => {
-  const { user } = useAppSelector((state) => state.auth);
-  const { approveRequest, rejectRequest, completeRequest, isUpdating } =
-    useRequestActions();
+  const dispatch = useAppDispatch();
+  const { items, isLoading, error, pagination } = useAppSelector((state) => state.requests.schoolRequests);
   
-  // Use mock data
-  const requests = mockSchoolRequests;
-  const isLoading = false;
-  const error = null;
+  const [params, setParams] = useState<GetRequestsParams>({
+    page: 1,
+    limit: 10,
+    sortOrder: 'ASC',
+  });
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showFilters, setShowFilters] = useState(false);
+  const [studentIdFilter, setStudentIdFilter] = useState('');
+  const [deliveryIdFilter, setDeliveryIdFilter] = useState('');
+  const [howToReceiveFilter, setHowToReceiveFilter] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
+  const [sortBy, setSortBy] = useState('');
+  const [sortOrder, setSortOrder] = useState<'ASC' | 'DESC'>('ASC');
 
-  const [activeFilter, setActiveFilter] = useState<RequestStatus | 'all'>('all');
+  useEffect(() => {
+    dispatch(fetchSchoolRequests(params));
+  }, [dispatch, params]);
 
-  // Calculate status counts
-  const statusCounts = useMemo(() => ({
-    all: requests.length,
-    pending: requests.filter(r => r.status === 'pending').length,
-    approved: requests.filter(r => r.status === 'approved').length,
-    completed: requests.filter(r => r.status === 'completed').length,
-    rejected: requests.filter(r => r.status === 'rejected').length,
-  }), [requests]);
 
-  // Filter requests based on active filter
-  const filteredRequests = useMemo(() => {
-    if (activeFilter === 'all') return requests;
-    return requests.filter(r => r.status === activeFilter);
-  }, [requests, activeFilter]);
-
-  const filterOptions = [
-    { label: 'الكل', value: 'all' as const, active: activeFilter === 'all', count: statusCounts.all },
-    {
-      label: 'جديد',
-      value: 'pending' as const,
-      active: activeFilter === 'pending',
-      count: statusCounts.pending,
-    },
-    {
-      label: 'بانتظار الموافقة',
-      value: 'approved' as const,
-      active: activeFilter === 'approved',
-      count: statusCounts.approved,
-    },
-    {
-      label: 'تم التسليم',
-      value: 'completed' as const,
-      active: activeFilter === 'completed',
-      count: statusCounts.completed,
-    },
-    {
-      label: 'مرفوضة',
-      value: 'rejected' as const,
-      active: activeFilter === 'rejected',
-      count: statusCounts.rejected,
-    },
-  ];
-
-  const handleFilterChange = (value: RequestStatus | 'all') => {
-    setActiveFilter(value);
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    setParams({ ...params, keyword: searchQuery, page: 1 });
   };
 
-  const handleApprove = async (id: string) => {
-    await approveRequest(id);
+  const handleApplyFilters = () => {
+    setParams({
+      ...params,
+      studentId: studentIdFilter ? Number(studentIdFilter) : undefined,
+      deliveryId: deliveryIdFilter ? Number(deliveryIdFilter) : undefined,
+      howToReceive: howToReceiveFilter || undefined,
+      status: statusFilter || undefined,
+      sortBy: sortBy || undefined,
+      sortOrder,
+      page: 1,
+    });
+    setShowFilters(false);
   };
 
-  const handleReject = async (id: string) => {
-    await rejectRequest(id);
+  const handleClearFilters = () => {
+    setStudentIdFilter('');
+    setDeliveryIdFilter('');
+    setHowToReceiveFilter('');
+    setStatusFilter('');
+    setSortBy('');
+    setSortOrder('ASC');
+    setParams({ page: 1, limit: 10, sortOrder: 'ASC' });
   };
 
-  const handleComplete = async (id: string) => {
-    await completeRequest(id);
+  const handlePageChange = (page: number) => {
+    setParams({ ...params, page });
   };
+
+  const hasActiveFilters = studentIdFilter || deliveryIdFilter || howToReceiveFilter || statusFilter || sortBy;
 
   if (error) {
     return (
-      <DashboardLayout
-        menuItems={SCHOOL_MENU_ITEMS}
-        userName={user?.school?.name || user?.name || 'المدرسة'}
-        userAvatar={user?.avatar}
-      >
+      <DashboardLayout>
         <div className="flex items-center justify-center min-h-[60vh]">
           <div className="text-center">
             <p className="text-destructive text-lg">{error}</p>
@@ -105,11 +81,7 @@ const ReceiveRequestsPage = () => {
   }
 
   return (
-    <DashboardLayout
-      menuItems={SCHOOL_MENU_ITEMS}
-      userName={user?.school?.name || user?.name || 'المدرسة'}
-      userAvatar={user?.avatar}
-    >
+    <DashboardLayout>
       <div className="p-6 lg:p-8 space-y-6">
         {/* Header */}
         <div className="animate-fade-in">
@@ -119,12 +91,153 @@ const ReceiveRequestsPage = () => {
           </p>
         </div>
 
-        {/* Filter Buttons */}
-        <div className="animate-slide-in-right">
-          <RequestFilters
-            filters={filterOptions}
-            onChange={handleFilterChange}
-          />
+
+        {/* Search and Filters */}
+        <div className="space-y-4 animate-slide-in-right">
+          <div className="flex gap-3" dir="rtl">
+            <form onSubmit={handleSearch} className="relative flex-1">
+              <Input
+                placeholder="ابحث في الطلبات"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-card text-foreground border rounded-full h-12 pr-12 text-right placeholder:text-right"
+              />
+              <button type="submit" className="absolute right-4 top-1/2 -translate-y-1/2">
+                <Search className="w-5 h-5 text-muted-foreground" />
+              </button>
+            </form>
+            
+            <Button
+              variant={showFilters ? 'default' : 'outline'}
+              onClick={() => setShowFilters(!showFilters)}
+              className="rounded-full px-6 gap-2"
+            >
+              <SlidersHorizontal className="w-4 h-4" />
+              فلترة
+              {hasActiveFilters && (
+                <span className="bg-primary-foreground text-primary rounded-full w-5 h-5 text-xs flex items-center justify-center">
+                  !
+                </span>
+              )}
+            </Button>
+          </div>
+
+          {/* Filters Panel */}
+          {showFilters && (
+            <div className="bg-card border rounded-lg p-6 space-y-4" dir="rtl">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold">خيارات الفلترة والترتيب</h3>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowFilters(false)}
+                >
+                  <X className="w-4 h-4" />
+                </Button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {/* Student ID Filter */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-right block">رقم الطالب</label>
+                  <Input
+                    type="number"
+                    placeholder="رقم الطالب"
+                    value={studentIdFilter}
+                    onChange={(e) => setStudentIdFilter(e.target.value)}
+                    className="text-right"
+                  />
+                </div>
+
+                {/* Delivery Person ID Filter */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-right block">رقم المستلم</label>
+                  <Input
+                    type="number"
+                    placeholder="رقم المستلم"
+                    value={deliveryIdFilter}
+                    onChange={(e) => setDeliveryIdFilter(e.target.value)}
+                    className="text-right"
+                  />
+                </div>
+
+                {/* How To Receive Filter */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-right block">طريقة الاستلام</label>
+                  <Select value={howToReceiveFilter} onValueChange={setHowToReceiveFilter}>
+                    <SelectTrigger className="text-right">
+                      <SelectValue placeholder="اختر طريقة الاستلام" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="gate">من البوابة</SelectItem>
+                      <SelectItem value="class">من الفصل</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Status Filter */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-right block">الحالة</label>
+                  <Select value={statusFilter} onValueChange={setStatusFilter}>
+                    <SelectTrigger className="text-right">
+                      <SelectValue placeholder="اختر الحالة" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="pending">قيد الانتظار</SelectItem>
+                      <SelectItem value="approved">تمت الموافقة</SelectItem>
+                      <SelectItem value="rejected">مرفوض</SelectItem>
+                      <SelectItem value="completed">مكتمل</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Sort By */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-right block">ترتيب حسب</label>
+                  <Select value={sortBy} onValueChange={setSortBy}>
+                    <SelectTrigger className="text-right">
+                      <SelectValue placeholder="اختر الترتيب" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="createdAt">تاريخ الإنشاء</SelectItem>
+                      <SelectItem value="status">الحالة</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Sort Order */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-right block">نوع الترتيب</label>
+                  <Select value={sortOrder} onValueChange={(value: 'ASC' | 'DESC') => setSortOrder(value)}>
+                    <SelectTrigger className="text-right">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="ASC">تصاعدي</SelectItem>
+                      <SelectItem value="DESC">تنازلي</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="flex gap-3 pt-4 border-t">
+                <Button
+                  variant="outline"
+                  onClick={handleClearFilters}
+                  className="flex-1 rounded-full"
+                  disabled={!hasActiveFilters}
+                >
+                  مسح الفلاتر
+                </Button>
+                <Button
+                  onClick={handleApplyFilters}
+                  className="flex-1 rounded-full"
+                >
+                  تطبيق الفلاتر
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Requests List */}
@@ -134,17 +247,26 @@ const ReceiveRequestsPage = () => {
               <p className="text-muted-foreground text-lg">جاري التحميل...</p>
             </div>
           ) : (
-            <RequestList
-              requests={filteredRequests}
-              variant="school"
-              onApprove={handleApprove}
-              onReject={handleReject}
-              onComplete={handleComplete}
-              isLoading={isUpdating}
-              emptyMessage="لا توجد طلبات استلام"
-            />
+         <div className={`space-y-2 grid grid-cols-1 md:grid-cols-2 gap-4`}>
+      {items?.map((request) => (
+        <RequestCard
+          key={request.id}
+          request={request}
+          isLoading={isLoading}
+        />
+      ))}
+    </div>
           )}
         </div>
+
+        {/* Pagination */}
+        {pagination && (
+          <Pagination 
+            metadata={pagination} 
+            onPageChange={handlePageChange}
+            isLoading={isLoading}
+          />
+        )}
       </div>
     </DashboardLayout>
   );

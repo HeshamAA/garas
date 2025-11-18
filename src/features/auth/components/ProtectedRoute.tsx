@@ -1,4 +1,4 @@
-﻿import { ReactNode, useEffect } from 'react';
+﻿import { ReactNode, useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '@/shared/hooks';
 import { setUser, setToken } from '../store/authSlice';
@@ -20,6 +20,7 @@ const ProtectedRoute = ({
   const location = useLocation();
   const dispatch = useAppDispatch();
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
+  const [isChecking, setIsChecking] = useState(true);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -29,7 +30,12 @@ const ProtectedRoute = ({
         dispatch(setToken(session.token));
       }
     }
+    setIsChecking(false);
   }, [isAuthenticated, dispatch]);
+
+  if (isChecking) {
+    return null;
+  }
 
   if (!isAuthenticated || !user) {
     return (

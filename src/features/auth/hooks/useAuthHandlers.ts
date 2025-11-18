@@ -21,7 +21,7 @@ export const useAuthHandlers = () => {
       toast.success("تم تسجيل الدخول بنجاح");
       
       if (result.user) {
-        const role = result.user.role.toLowerCase() as 'owner' | 'school' | 'parent' | 'student' | 'deliveryPerson';
+        const role = result.user.role.toLowerCase() as 'super_admin' | 'school';
         const defaultRoute = getDefaultRoute(role);
         navigate(defaultRoute);
       }
@@ -63,7 +63,7 @@ export const useAuthHandlers = () => {
         confirmPassword: data.confirmPassword,
         avatar: data.avatar || '',
       };
-      const result = await dispatch(registerUser({ data: registrationData, accountType: "owner" })).unwrap();
+      const result = await dispatch(registerUser({ data: registrationData, accountType: "super_admin" })).unwrap();
       toast.success("تم إنشاء الحساب بنجاح");
 
       if (result.user) {

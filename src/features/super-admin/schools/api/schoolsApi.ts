@@ -7,52 +7,25 @@ import {
 } from '../types/school.types';
 
 const ENDPOINTS = {
-  schools: '/schools',
-  schoolById: (id: string) => `/schools/${id}`,
-  userSchools: (userId: string) => `/users/${userId}/schools`,
-  searchSchools: '/schools/search',
-  registerSchool: '/schools/register',
+  schools: 'https://school.safehandapps.com/api/v1/school',
+
 };
 
+export interface GetSchoolsParams {
+  keyword?: string;
+  name?: string;
+  location?: string;
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  sortOrder?: 'ASC' | 'DESC';
+}
+
 export const schoolsApi = {
-  /**
-   * Get all schools for a user
-   */
-  async getAll(userId: string): Promise<SchoolsApiResponse> {
+  async getAll(params?: GetSchoolsParams): Promise<SchoolsApiResponse> {
     const response = await apiClient.get<SchoolsApiResponse>(
-      ENDPOINTS.userSchools(userId)
-    );
-    return response.data;
-  },
-
-  /**
-   * Search schools
-   */
-  async search(searchParams: SearchSchoolsRequest): Promise<SchoolsApiResponse> {
-    const response = await apiClient.post<SchoolsApiResponse>(
-      ENDPOINTS.searchSchools,
-      searchParams
-    );
-    return response.data;
-  },
-
-  /**
-   * Get a school by ID
-   */
-  async getById(id: string): Promise<SchoolApiResponse> {
-    const response = await apiClient.get<SchoolApiResponse>(
-      ENDPOINTS.schoolById(id)
-    );
-    return response.data;
-  },
-
-  /**
-   * Register a new school
-   */
-  async register(schoolData: RegisterSchoolRequest): Promise<SchoolApiResponse> {
-    const response = await apiClient.post<SchoolApiResponse>(
-      ENDPOINTS.registerSchool,
-      schoolData
+      ENDPOINTS.schools,
+      { params }
     );
     return response.data;
   },

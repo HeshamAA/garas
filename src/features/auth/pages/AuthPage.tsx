@@ -15,7 +15,6 @@ const AuthPage = () => {
   const { isLoading, isRegistering, error, isAuthenticated, user } = useAppSelector(
     (state) => state.auth
   );
-
   const { loginForm, schoolForm, ownerForm } = useAuthForm();
   const { handleLogin, handleSchoolRegistration, handleOwnerRegistration } = useAuthHandlers();
   const {
@@ -53,7 +52,7 @@ const AuthPage = () => {
   }, [error, dispatch, toast]);
 
   if (isAuthenticated && user) {
-    const userRole = user.role.toLowerCase() as 'owner' | 'school' | 'parent' | 'student' | 'deliveryPerson';
+    const userRole = user.role.toLowerCase() as 'super_admin' | 'school';
     const defaultRoute = getDefaultRoute(userRole);
     return <Navigate to={defaultRoute} replace />;
   }

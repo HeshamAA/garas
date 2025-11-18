@@ -1,32 +1,35 @@
 ﻿import { apiClient } from '@/shared/api/apiClient';
 import { 
-  Parent,
-  CreateParentRequest,
-  UpdateParentRequest,
   ParentsApiResponse,
   ParentApiResponse
 } from '../types/parent.types';
 
+export interface GetParentsParams {
+  keyword?: string;
+  fullName?: string;
+  nationalId?: string;
+  userId?: number;
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  sortOrder?: 'ASC' | 'DESC';
+}
+
 const ENDPOINTS = {
-  parents: '/parents',
-  parentById: (id: string) => `/parents/${id}`,
-  parentsBySchool: (schoolId: string) => `/schools/${schoolId}/parents`,
+  parents: 'https://school.safehandapps.com/api/v1/user/parents',
+  parentById: (id: string) => `https://school.safehandapps.com/api/v1/user/parents/${id}`,
 };
 
 export const parentsApi = {
-  /**
-   * Get all parents for a school
-   */
-  async getAll(schoolId: string): Promise<ParentsApiResponse> {
+  async getAll(params?: GetParentsParams): Promise<ParentsApiResponse> {
     const response = await apiClient.get<ParentsApiResponse>(
-      ENDPOINTS.parentsBySchool(schoolId)
+      ENDPOINTS.parents,
+      { params }
     );
     return response.data;
   },
 
-  /**
-   * Get a parent by ID
-   */
+
   async getById(id: string): Promise<ParentApiResponse> {
     const response = await apiClient.get<ParentApiResponse>(
       ENDPOINTS.parentById(id)
@@ -34,32 +37,7 @@ export const parentsApi = {
     return response.data;
   },
 
-  /**
-   * Create a new parent
-   */
-  async create(parentData: CreateParentRequest): Promise<ParentApiResponse> {
-    const response = await apiClient.post<ParentApiResponse>(
-      ENDPOINTS.parents,
-      parentData
-    );
-    return response.data;
-  },
 
-  /**
-   * Update a parent
-   */
-  async update(parentData: UpdateParentRequest): Promise<ParentApiResponse> {
-    const { id, ...data } = parentData;
-    const response = await apiClient.put<ParentApiResponse>(
-      ENDPOINTS.parentById(id),
-      data
-    );
-    return response.data;
-  },
-
-  /**
-   * Delete a parent
-   */
   async delete(id: string): Promise<void> {
     await apiClient.delete(ENDPOINTS.parentById(id));
   },

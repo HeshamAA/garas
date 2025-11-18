@@ -1,45 +1,73 @@
-﻿export type RequestStatus = 'pending' | 'approved' | 'rejected' | 'completed';
+﻿export type RequestStatus = 'pending' | 'approved' | 'rejected' | 'completed' | 'delivered';
 
-export type RequestType = 'proposed' | 'current' | 'completed';
+export type HowToReceive = 'person' | 'car' | 'other';
+
+export interface Student {
+  id: number;
+  fullName: string;
+  class: string;
+  code: string;
+  parent:Parent
+}
+
+export interface Parent {
+  id: number;
+  fullName: string;
+  profileImage: string;
+}
+
+export interface School {
+  id: number;
+  name: string;
+  logo: string;
+  stage: string;
+}
+
+export interface DeliveryPerson {
+  id: number;
+  fullName: string;
+  profileImage: string;
+  user: {
+    id: number;
+    email: string;
+    phoneNumber: string;
+  };
+}
 
 export interface PickupRequest {
-  id: string;
-  studentId: string;
-  studentName: string;
-  studentAvatar?: string;
-  status: RequestStatus;
+  id: number;
+  date: string;
+  deliveryPerson: DeliveryPerson | null;
+  howToReceive: HowToReceive;
   location: string;
-  receiverId: string;
-  receiverName: string;
-  parentId: string;
-  parentName: string;
-  requestDate: Date;
-  pickupTime?: Date;
-  requestNumber: string;
-  type: RequestType;
+  numberOfCar: string | null;
+  status: RequestStatus;
+  student: Student;
+  parent: Parent;
+  school: School;
 }
 
-export interface SchoolRequest extends PickupRequest {
-  schoolName: string;
-  schoolLocation: string;
-  transportType: string;
+export interface data{
+  items:PickupRequest[]
+  links:{
+    hasNext:boolean
+    next:string
+    last:string
+  }
+  metadata:{
+      currentPage:number
+itemsPerPage:number
+totalItems:number
+totalPages:number
+  }
 }
-
 export interface RequestFilters {
   status?: RequestStatus | 'all';
-  type?: RequestType | 'all';
   searchQuery?: string;
   dateFrom?: Date;
   dateTo?: Date;
 }
 
-export interface CreateRequestPayload {
-  studentId: string;
-  receiverId: string;
-  location: string;
-  pickupTime?: Date;
-  transportType?: string;
-}
 
 export interface UpdateRequestStatusPayload {
   id: string;
@@ -54,7 +82,7 @@ export interface RequestsApiResponse {
 }
 
 export interface SchoolRequestsApiResponse {
-  data: SchoolRequest[];
+  data: data;
   success: boolean;
   message?: string;
 }

@@ -3,20 +3,17 @@ import { useAppDispatch, useAppSelector } from '@/shared/hooks';
 import { 
   fetchStudents, 
   updateStudentStatus, 
-  createStudent, 
+
   deleteStudent 
 } from '../store/studentsThunks';
 import { 
   selectFilteredStudents,
-  selectStudentsLoading,
+
   selectStudentsError,
   selectStudentCounts
 } from '../store/studentsSelectors';
-import { 
-  clearError, 
-  invalidateCache 
-} from '../store/studentsSlice';
-import { CreateStudentRequest, StudentStatus } from '../types/student.types';
+
+import { StudentStatus } from '../types/student.types';
 
 export const useStudents = (schoolId?: string, autoFetch = true) => {
   const dispatch = useAppDispatch();
@@ -34,7 +31,7 @@ export const useStudents = (schoolId?: string, autoFetch = true) => {
   }, [dispatch, schoolId, autoFetch]);
   const refetch = () => {
     if (schoolId) {
-      dispatch(invalidateCache());
+ 
       dispatch(fetchStudents(schoolId));
     }
   };
@@ -49,16 +46,6 @@ export const useStudents = (schoolId?: string, autoFetch = true) => {
     }
   };
 
-  const create = async (studentData: CreateStudentRequest) => {
-    try {
-      await dispatch(createStudent(studentData)).unwrap();
-      return { success: true };
-    } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : 'Failed to create student';
-      return { success: false, error: message };
-    }
-  };
-
   const remove = async (id: string) => {
     try {
       await dispatch(deleteStudent(id)).unwrap();
@@ -69,9 +56,6 @@ export const useStudents = (schoolId?: string, autoFetch = true) => {
     }
   };
 
-  const clearErrorState = () => {
-    dispatch(clearError());
-  };
 
   return {
     students,
@@ -83,8 +67,7 @@ export const useStudents = (schoolId?: string, autoFetch = true) => {
     counts,
     refetch,
     updateStatus,
-    create,
+
     remove,
-    clearError: clearErrorState,
   };
 };
