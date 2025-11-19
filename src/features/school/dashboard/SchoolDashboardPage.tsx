@@ -1,40 +1,96 @@
 import { DashboardLayout } from '@/shared/components/layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, UserCheck, Clock, CheckCircle } from 'lucide-react';
+import { Users, UserCheck, Clock, CheckCircle, Loader2, Truck, XCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { useEffect, useState } from 'react';
+import { statisticsApi } from '@/shared/api';
+import { SchoolStatistics } from '@/shared/types/statistics.types';
+import { useToast } from '@/hooks/use-toast';
 
 const SchoolDashboardPage = () => {
+  const [statistics, setStatistics] = useState<SchoolStatistics | null>(null);
+  const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
 
-  const stats = [
+  useEffect(() => {
+    fetchStatistics();
+  }, []);
+
+  const fetchStatistics = async () => {
+    setLoading(true);
+    try {
+      const response = await statisticsApi.getSchoolStatistics();
+      console.log(response.data)
+      setStatistics(response.data);
+    } catch (error) {
+      toast({
+        title: 'خطأ',
+        description: 'فشل في تحميل الإحصائيات',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const stats = statistics ? [
     {
       title: 'إجمالي الطلاب',
-      value: '156',
+      value: statistics.totalStudents.toString(),
       icon: Users,
       color: 'text-blue-500',
       bgColor: 'bg-blue-500/10',
     },
     {
       title: 'أولياء الأمور',
-      value: '142',
+      value: statistics.totalParents.toString(),
       icon: UserCheck,
       color: 'text-green-500',
       bgColor: 'bg-green-500/10',
     },
     {
-      title: 'طلبات اليوم',
-      value: '23',
+      title: 'مستلمين',
+      value: statistics.totalDeliveryPersons.toString(),
+      icon: Truck,
+      color: 'text-purple-500',
+      bgColor: 'bg-purple-500/10',
+    },
+    {
+      title: 'إجمالي الطلبات',
+      value: statistics.totalRequests.toString(),
       icon: Clock,
       color: 'text-orange-500',
       bgColor: 'bg-orange-500/10',
     },
     {
-      title: 'تم الاستلام',
-      value: '18',
-      icon: CheckCircle,
-      color: 'text-purple-500',
-      bgColor: 'bg-purple-500/10',
+      title: 'طلبات معلقة',
+      value: statistics.pendingRequestsToday.toString(),
+      icon: Clock,
+      color: 'text-yellow-500',
+      bgColor: 'bg-yellow-500/10',
     },
-  ];
+    {
+      title: 'تم التسليم اليوم',
+      value: statistics.deliveredRequestsToday.toString(),
+      icon: CheckCircle,
+      color: 'text-green-500',
+      bgColor: 'bg-green-500/10',
+    },
+    {
+      title: 'بانتظار الاستلام',
+      value: statistics.waitingOutsideRequestsToday.toString(),
+      icon: Clock,
+      color: 'text-blue-500',
+      bgColor: 'bg-blue-500/10',
+    },
+    {
+      title: 'ملغاة اليوم',
+      value: statistics.cancelledRequestsToday.toString(),
+      icon: XCircle,
+      color: 'text-red-500',
+      bgColor: 'bg-red-500/10',
+    },
+  ] : [];
 
   const recentRequests = [
     { id: 1, student: 'أحمد محمد', parent: 'محمد أحمد', status: 'pending', time: '10:30 ص' },
@@ -67,26 +123,32 @@ const SchoolDashboardPage = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {stats.map((stat) => {
-            const Icon = stat.icon;
-            return (
-              <Card key={stat.title}>
-                <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-sm font-medium text-right">
-                    {stat.title}
-                  </CardTitle>
-                  <div className={`p-2 rounded-lg ${stat.bgColor}`}>
-                    <Icon className={`w-5 h-5 ${stat.color}`} />
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-3xl font-bold text-right">{stat.value}</div>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {stats.map((stat) => {
+              const Icon = stat.icon;
+              return (
+                <Card key={stat.title}>
+                  <CardHeader className="flex flex-row items-center justify-between pb-2">
+                    <CardTitle className="text-sm font-medium text-right">
+                      {stat.title}
+                    </CardTitle>
+                    <div className={`p-2 rounded-lg ${stat.bgColor}`}>
+                      <Icon className={`w-5 h-5 ${stat.color}`} />
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-3xl font-bold text-right">{stat.value}</div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+        )}
 
         <Card>
           <CardHeader>

@@ -153,6 +153,7 @@ const createApiClient = (): AxiosInstance => {
 export const apiClient = createApiClient();
 
 export const handleApiResponse = <T>(response: AxiosResponse<T>): T => {
+   console.log(response.data)
   return response.data;
 };
 
