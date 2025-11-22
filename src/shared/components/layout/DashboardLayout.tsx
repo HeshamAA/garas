@@ -14,7 +14,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   
   const { isOpen: sidebarOpen, toggle: toggleSidebar } = useSidebarState(true);
   const { user } = useAppSelector(state => state.auth);
-  
+  console.log(user)
   const userName = user?.school?.name || user?.name || 'المستخدم';
   const userAvatar = user?.avatar;
   const isSchool = (user?.role).toLocaleLowerCase() === 'school';
@@ -48,7 +48,11 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                 </Avatar>
                 <div className="text-right">
                   <p className="text-sm opacity-90">حياك الله</p>
-                  <h2 className="text-lg lg:text-xl font-bold">{userName}</h2>
+                  <h2 className="text-lg lg:text-xl font-bold">{
+                
+                      isSchool ? userName : "الأدمن"
+                
+                }</h2>
                 </div>
               </div>
             </div>
