@@ -8,7 +8,7 @@ interface ParentListProps {
 }
 
 const ParentList = ({ parents, isLoading, onViewRequests }: ParentListProps) => {
-  console.log(parents)
+ 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">

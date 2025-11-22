@@ -20,7 +20,7 @@ const SchoolDashboardPage = () => {
     setLoading(true);
     try {
       const response = await statisticsApi.getSchoolStatistics();
-      console.log(response.data)
+
       setStatistics(response.data);
     } catch (error) {
       toast({
