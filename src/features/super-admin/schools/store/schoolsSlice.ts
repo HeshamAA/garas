@@ -38,16 +38,14 @@ const initialState: SchoolsState = {
 const schoolsSlice = createSlice({
   name: 'schools',
   initialState,
-  reducers: {
-  
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchSchools.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(fetchSchools.fulfilled, (state, action: any) => {
+      .addCase(fetchSchools.fulfilled, (state, action: PayloadAction<School[] | { items: School[]; metadata: PaginationMetadata; links: PaginationLinks }>) => {
         state.isLoading = false;
         if (Array.isArray(action.payload)) {
           state.items = action.payload;
@@ -60,13 +58,10 @@ const schoolsSlice = createSlice({
       })
       .addCase(fetchSchools.rejected, (state, action) => {
         state.isLoading = false;
-            console.log(action.payload)
         state.error = action.payload as string || 'Failed to fetch schools';
       })
       
   },
 });
-
-
 
 export default schoolsSlice.reducer;

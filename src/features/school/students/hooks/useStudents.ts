@@ -56,7 +56,6 @@ export const useStudents = (schoolId?: string, autoFetch = true) => {
     }
   };
 
-
   return {
     students,
     isLoading,

@@ -16,32 +16,21 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    /**
-     * Set user manually (for session restoration)
-     */
+    
     setUser: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
       state.isAuthenticated = true;
       state.error = null;
     },
 
-    /**
-     * Set token manually
-     */
     setToken: (state, action: PayloadAction<string>) => {
       state.token = action.payload;
     },
 
-    /**
-     * Clear error
-     */
     clearError: (state) => {
       state.error = null;
     },
 
-    /**
-     * Clear auth state (for logout)
-     */
     clearAuth: (state) => {
       state.user = null;
       state.isAuthenticated = false;

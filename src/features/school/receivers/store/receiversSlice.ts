@@ -21,9 +21,7 @@ const initialState: ReceiversState = {
 const receiversSlice = createSlice({
   name: 'receivers',
   initialState,
-  reducers: {
-   
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchReceivers.pending, (state) => {
@@ -44,7 +42,5 @@ const receiversSlice = createSlice({
      
   },
 });
-
-
 
 export default receiversSlice.reducer;

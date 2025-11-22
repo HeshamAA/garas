@@ -15,25 +15,16 @@ export const useAuthState = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
 
-  /**
-   * Toggle between login and register modes
-   */
   const toggleMode = () => {
     setMode(mode === "login" ? "register" : "login");
     setShowPassword(false);
   };
 
-  /**
-   * Handle account type change
-   */
   const handleAccountTypeChange = (value: AccountType) => {
     setAccountType(value);
     setImagePreview(null);
   };
 
-  /**
-   * Handle image upload
-   */
   const handleImageUpload = (
     e: React.ChangeEvent<HTMLInputElement>,
     schoolFormSetValue: UseFormSetValue<SchoolFormData>,

@@ -38,9 +38,7 @@ const initialState: StudentsState = {
 const studentsSlice = createSlice({
   name: 'students',
   initialState,
-  reducers: {
-  
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchStudents.pending, (state) => {

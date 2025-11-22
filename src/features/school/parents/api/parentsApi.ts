@@ -29,14 +29,12 @@ export const parentsApi = {
     return response.data;
   },
 
-
   async getById(id: string): Promise<ParentApiResponse> {
     const response = await apiClient.get<ParentApiResponse>(
       ENDPOINTS.parentById(id)
     );
     return response.data;
   },
-
 
   async delete(id: string): Promise<void> {
     await apiClient.delete(ENDPOINTS.parentById(id));

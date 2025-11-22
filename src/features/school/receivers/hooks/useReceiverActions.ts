@@ -1,15 +1,11 @@
 ﻿import { useAppDispatch, useToast } from '@/shared/hooks';
-import {
-
-} from '../store/receiversThunks';
+import  from '../store/receiversThunks';
 
 export const useReceiverActions = () => {
   const dispatch = useAppDispatch();
   const toast = useToast();
 
-  return {
-
-  };
+  return ;
 };
 
 export default useReceiverActions;

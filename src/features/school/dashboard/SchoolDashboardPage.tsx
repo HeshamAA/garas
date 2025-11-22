@@ -175,7 +175,6 @@ const SchoolDashboardPage = () => {
           </CardContent>
         </Card>
 
-       
       </div>
     </DashboardLayout>
   );

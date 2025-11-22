@@ -14,8 +14,6 @@ export const fetchParents = createAsyncThunk(
   }
 );
 
-
-
 export const deleteParent = createAsyncThunk(
   'parents/delete',
   async (id: string, { rejectWithValue }) => {

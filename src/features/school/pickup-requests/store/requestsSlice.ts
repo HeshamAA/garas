@@ -30,9 +30,7 @@ const initialState: RequestsState = {
 const requestsSlice = createSlice({
   name: 'requests',
   initialState,
-  reducers: {
-   
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
     
@@ -55,6 +53,5 @@ const requestsSlice = createSlice({
      
   },
 });
-
 
 export default requestsSlice.reducer;

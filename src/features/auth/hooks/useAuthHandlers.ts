@@ -9,7 +9,6 @@ export const useAuthHandlers = () => {
   const dispatch = useAppDispatch();
   const toast = useToast();
 
-
   const handleLogin = async (data: LoginFormData) => {
     try {
       const credentials = {
@@ -29,7 +28,6 @@ export const useAuthHandlers = () => {
       console.error('Login error:', err);
     }
   };
-
 
   const handleSchoolRegistration = async (data: SchoolFormData) => {
     try {

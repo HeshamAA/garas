@@ -1,51 +1,93 @@
 import { DashboardLayout } from '@/shared/components/layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { School, FileText, TrendingUp } from 'lucide-react';
+import { School, CheckCircle, Clock, TrendingUp, AlertCircle } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 const UserDashboardPage = () => {
-
+  
   const stats = [
     {
       title: 'إجمالي المدارس',
-      value: '24',
-      icon: School,
-      color: 'text-primary',
-      bgColor: 'bg-primary/10',
-    },
-    {
-      title: 'الطلبات النشطة',
-      value: '12',
-      icon: FileText,
-      color: 'text-success',
-      bgColor: 'bg-success/10',
-    },
-    {
-      title: 'الطلبات المكتملة',
       value: '156',
+      icon: School,
+      color: 'text-blue-600',
+      bgColor: 'bg-blue-500/10',
+    },
+    {
+      title: 'المدارس النشطة',
+      value: '142',
+      icon: CheckCircle,
+      color: 'text-green-600',
+      bgColor: 'bg-green-500/10',
+    },
+    {
+      title: 'مدارس معلقة',
+      value: '14',
+      icon: Clock,
+      color: 'text-yellow-600',
+      bgColor: 'bg-yellow-500/10',
+    },
+    {
+      title: 'جديدة هذا الأسبوع',
+      value: '3',
       icon: TrendingUp,
       color: 'text-purple-600',
-      bgColor: 'bg-purple-100 dark:bg-purple-900/20',
+      bgColor: 'bg-purple-500/10',
     },
     {
-      title: 'الطلبات الملغاة',
-      value: '8',
-      icon: FileText,
-      color: 'text-destructive',
-      bgColor: 'bg-destructive/10',
+      title: 'جديدة هذا الشهر',
+      value: '12',
+      icon: TrendingUp,
+      color: 'text-indigo-600',
+      bgColor: 'bg-indigo-500/10',
     },
   ];
+
+  const recentSchools = [
+    { id: 1, name: 'مدرسة التفوق الابتدائية', location: 'الرياض، حي العليا', status: 'active', date: 'منذ ساعتين' },
+    { id: 2, name: 'مدرسة النجاح الثانوية', location: 'جدة، حي الحمراء', status: 'active', date: 'منذ 5 ساعات' },
+    { id: 3, name: 'مدرسة المستقبل المتوسطة', location: 'الدمام، حي الفيصلية', status: 'pending', date: 'أمس' },
+    { id: 4, name: 'مدرسة الأمل الابتدائية', location: 'مكة، حي العزيزية', status: 'active', date: 'منذ يومين' },
+  ];
+
+  const regionDistribution = [
+    { region: 'الرياض', count: 45 },
+    { region: 'جدة', count: 32 },
+    { region: 'الدمام', count: 24 },
+    { region: 'مكة', count: 18 },
+    { region: 'المدينة', count: 15 },
+    { region: 'أخرى', count: 22 },
+  ];
+
+  const alerts = [
+    { type: 'warning', message: '3 مدارس في انتظار الموافقة' },
+    { type: 'info', message: 'تم تفعيل 5 مدارس جديدة اليوم' },
+  ];
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'active':
+        return <Badge className="bg-green-500/10 text-green-700 hover:bg-green-500/20">نشطة</Badge>;
+      case 'pending':
+        return <Badge className="bg-yellow-500/10 text-yellow-700 hover:bg-yellow-500/20">معلقة</Badge>;
+      case 'suspended':
+        return <Badge className="bg-red-500/10 text-red-700 hover:bg-red-500/20">محظورة</Badge>;
+      default:
+        return <Badge>غير معروف</Badge>;
+    }
+  };
 
   return (
     <DashboardLayout>
       <div className="p-6 lg:p-8 space-y-6 lg:space-y-8">
         <div className="animate-fade-in">
-          <h1 className="text-2xl lg:text-3xl font-bold text-right">الإحصائيات</h1>
+          <h1 className="text-2xl lg:text-3xl font-bold text-right">لوحة التحكم</h1>
           <p className="text-muted-foreground text-right mt-2">
-            نظرة عامة على نشاط المنصة
+            إدارة المدارس المسجلة في المنصة
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 animate-slide-in-right">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6 animate-slide-in-right">
           {stats.map((stat, index) => {
             const Icon = stat.icon;
             return (
@@ -70,62 +112,78 @@ const UserDashboardPage = () => {
           })}
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 animate-zoom-in">
-          <Card className="hover:shadow-md transition-shadow">
+        {alerts.length > 0 && (
+          <div className="space-y-2 animate-slide-in-right">
+            {alerts.map((alert, index) => (
+              <div
+                key={index}
+                className={`flex items-center gap-3 p-4 rounded-lg ${
+                  alert.type === 'warning'
+                    ? 'bg-yellow-500/10 border border-yellow-500/20'
+                    : 'bg-blue-500/10 border border-blue-500/20'
+                }`}
+              >
+                <AlertCircle
+                  className={`w-5 h-5 ${
+                    alert.type === 'warning' ? 'text-yellow-600' : 'text-blue-600'
+                  }`}
+                />
+                <p className="text-sm font-medium text-right flex-1">{alert.message}</p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-zoom-in">
+          
+          <Card>
             <CardHeader>
-              <CardTitle className="text-right flex items-center justify-end gap-2">
-                <span>آخر الطلبات</span>
-                <FileText className="w-5 h-5 text-primary" />
+              <CardTitle className="text-right flex items-center justify-between">
+                <span>المدارس المضافة مؤخراً</span>
+                <School className="w-5 h-5 text-primary" />
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {[
-                  { id: 1, school: 'مدرسة النور الأهلية', status: 'نشط', statusColor: 'success' },
-                  { id: 2, school: 'مدرسة الأمل الدولية', status: 'قيد المراجعة', statusColor: 'warning' },
-                  { id: 3, school: 'مدرسة المستقبل', status: 'مكتمل', statusColor: 'primary' },
-                ].map((item) => (
-                  <div 
-                    key={item.id} 
-                    className="flex items-center justify-between p-3 lg:p-4 bg-secondary/30 rounded-lg hover:bg-secondary/50 transition-colors"
+                {recentSchools.map((school) => (
+                  <div
+                    key={school.id}
+                    className="flex items-center justify-between p-4 bg-secondary/30 rounded-lg hover:bg-secondary/50 transition-colors"
                   >
-                    <div className="text-right flex-1">
-                      <p className="font-medium text-sm lg:text-base">طلب استلام #{item.id}</p>
-                      <p className="text-xs lg:text-sm text-muted-foreground">{item.school}</p>
+                    <div className="flex items-center gap-3">
+                      <div className="text-right flex-1">
+                        <p className="font-medium text-sm">{school.name}</p>
+                        <p className="text-xs text-muted-foreground">{school.location}</p>
+                        <p className="text-xs text-muted-foreground mt-1">{school.date}</p>
+                      </div>
                     </div>
-                    <span className={`text-xs px-2.5 py-1 rounded-full bg-${item.statusColor}/10 text-${item.statusColor}`}>
-                      {item.status}
-                    </span>
+                    {getStatusBadge(school.status)}
                   </div>
                 ))}
               </div>
             </CardContent>
           </Card>
 
-          <Card className="hover:shadow-md transition-shadow">
+          <Card>
             <CardHeader>
-              <CardTitle className="text-right flex items-center justify-end gap-2">
-                <span>المدارس الأكثر نشاطاً</span>
-                <School className="w-5 h-5 text-primary" />
+              <CardTitle className="text-right flex items-center justify-between">
+                <span>توزيع المدارس حسب المنطقة</span>
+                <TrendingUp className="w-5 h-5 text-primary" />
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {[
-                  { name: 'مدرسة النور الأهلية', students: 47, requests: 120 },
-                  { name: 'مدرسة الأمل الدولية', students: 38, requests: 110 },
-                  { name: 'مدرسة المستقبل', students: 52, requests: 100 },
-                ].map((school, i) => (
-                  <div 
-                    key={i} 
-                    className="flex items-center justify-between p-3 lg:p-4 bg-secondary/30 rounded-lg hover:bg-secondary/50 transition-colors"
-                  >
-                    <div className="text-right flex-1">
-                      <p className="font-medium text-sm lg:text-base">{school.name}</p>
-                      <p className="text-xs lg:text-sm text-muted-foreground">{school.students} طالب</p>
+                {regionDistribution.map((item, index) => (
+                  <div key={index} className="space-y-2">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="font-medium">{item.count} مدرسة</span>
+                      <span className="text-muted-foreground">{item.region}</span>
                     </div>
-                    <div className="text-left">
-                      <p className="text-sm font-medium text-primary">{school.requests} طلب</p>
+                    <div className="w-full bg-secondary rounded-full h-2">
+                      <div
+                        className="bg-primary rounded-full h-2 transition-all"
+                        style={{ width: `${(item.count / 156) * 100}%` }}
+                      />
                     </div>
                   </div>
                 ))}
@@ -133,6 +191,42 @@ const UserDashboardPage = () => {
             </CardContent>
           </Card>
         </div>
+
+        <Card className="animate-zoom-in">
+          <CardHeader>
+            <CardTitle className="text-right">إجراءات سريعة</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <a
+                href="/registered-schools"
+                className="flex items-center gap-3 p-4 bg-primary/10 hover:bg-primary/20 rounded-lg transition-colors cursor-pointer"
+              >
+                <School className="w-6 h-6 text-primary" />
+                <div className="text-right">
+                  <p className="font-medium">إدارة المدارس</p>
+                  <p className="text-sm text-muted-foreground">عرض وإدارة جميع المدارس</p>
+                </div>
+              </a>
+              
+              <div className="flex items-center gap-3 p-4 bg-blue-500/10 hover:bg-blue-500/20 rounded-lg transition-colors cursor-pointer">
+                <TrendingUp className="w-6 h-6 text-blue-600" />
+                <div className="text-right">
+                  <p className="font-medium">التقارير</p>
+                  <p className="text-sm text-muted-foreground">عرض التقارير والإحصائيات</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 p-4 bg-green-500/10 hover:bg-green-500/20 rounded-lg transition-colors cursor-pointer">
+                <CheckCircle className="w-6 h-6 text-green-600" />
+                <div className="text-right">
+                  <p className="font-medium">الموافقات</p>
+                  <p className="text-sm text-muted-foreground">مراجعة طلبات الموافقة</p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </DashboardLayout>
   );

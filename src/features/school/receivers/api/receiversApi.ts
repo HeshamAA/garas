@@ -3,10 +3,6 @@ import {
 ReceiversApiResponse
 } from '../types/receiver.types';
 
-
-
-
-
 export interface GetReceiversParams {
   keyword?: string;
   fullName?: string;
@@ -32,11 +28,8 @@ export const receiversApi = {
     return response.data;
   },
 
-
-
   async delete(id: string): Promise<void> {
     await apiClient.delete(ENDPOINTS.receiverById(id));
   },
-
 
 };

@@ -20,7 +20,7 @@ const GenericCard = ({
     >
       <CardContent className="p-6">
         <div className="flex items-start justify-between gap-4">
-          {/* Left side: Avatar and info */}
+          
           <div className="flex items-start gap-4 flex-1">
             {avatar !== undefined && (
               <Avatar className="w-12 h-12">
@@ -50,7 +50,6 @@ const GenericCard = ({
             </div>
           </div>
 
-          {/* Right side: Actions */}
           {actions && <div className="flex-shrink-0">{actions}</div>}
         </div>
       </CardContent>

@@ -18,9 +18,9 @@ export interface GetRequestsParams {
 }
 
 const ENDPOINTS = {
-  userRequests: (userId: string) => `https://school.safehandapps.com//api/v1/req-for-receipt`,
+  userRequests: (userId: string) => `https://school.safehandapps.com/api/v1/req-for-receipt`,
   schoolRequests: () => `https://school.safehandapps.com/api/v1/req-for-receipt`,
-
+  requestById: (id: string) => `https://school.safehandapps.com/api/v1/req-for-receipt/${id}`,
 };
 
 export const requestsApi = {
@@ -41,5 +41,8 @@ export const requestsApi = {
     return response.data;
   },
 
-
+  async getRequestById(id: string): Promise<{ data: any }> {
+    const response = await apiClient.get(ENDPOINTS.requestById(id));
+    return response.data;
+  },
 };

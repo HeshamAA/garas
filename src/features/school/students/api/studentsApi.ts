@@ -36,14 +36,12 @@ export const studentsApi = {
     return response.data;
   },
 
-
   async getById(id: string): Promise<StudentApiResponse> {
     const response = await apiClient.get<StudentApiResponse>(
       ENDPOINTS.studentById(id)
     );
     return response.data;
   },
-
 
   async updateStatus(id: string, status: StudentStatus): Promise<StudentApiResponse> {
     const response = await apiClient.patch<StudentApiResponse>(
@@ -53,7 +51,6 @@ export const studentsApi = {
     return response.data;
   },
 
- 
   async delete(id: string): Promise<void> {
     await apiClient.delete(ENDPOINTS.studentById(id));
   },

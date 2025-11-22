@@ -38,7 +38,7 @@ export const Sidebar = ({ isOpen, onToggle }: SidebarProps) => {
 
   return (
     <>
-      {/* Overlay للموبايل */}
+      
       <div 
         className={`
           fixed inset-0 bg-black/50 z-40 lg:hidden
@@ -48,7 +48,6 @@ export const Sidebar = ({ isOpen, onToggle }: SidebarProps) => {
         onClick={onToggle}
       />
 
-      {/* Sidebar */}
       <div 
         className={`
           fixed lg:sticky top-0 right-0 h-screen bg-card border-l border-border z-50
@@ -57,23 +56,7 @@ export const Sidebar = ({ isOpen, onToggle }: SidebarProps) => {
           ${isOpen ? 'translate-x-0 w-64' : 'translate-x-[200px] w-0 lg:translate-x-[200px]'}
         `}
       >
-        {/* Header */}
-        <div className={`p-4 border-b border-border transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
-          <div className="flex items-center gap-3">
-            <Avatar className="w-10 h-10">
-              <AvatarImage src={userAvatar} alt={userName} />
-              <AvatarFallback className="bg-primary/10 text-primary">
-                {getInitials(userName)}
-              </AvatarFallback>
-            </Avatar>
-            <div className="flex-1 text-right whitespace-nowrap">
-              <p className="font-semibold text-sm">{userName}</p>
-              <p className="text-xs text-muted-foreground">المسؤول</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Navigation */}
+       
         <nav className={`flex-1 flex flex-col p-3 space-y-2 overflow-y-auto transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
           {menuItems.map((item) => {
             const Icon = item.icon;
@@ -98,7 +81,6 @@ export const Sidebar = ({ isOpen, onToggle }: SidebarProps) => {
           })}
         </nav>
 
-        {/* Logout */}
         <div className={`p-3 border-t border-border transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
           <Button
             variant="ghost"

@@ -84,7 +84,6 @@ const StudentsPage = () => {
           </p>
         </div>
 
-        {/* Search and Filters */}
         <div className="space-y-4 animate-slide-in-right">
           <div className="flex gap-3" dir="rtl">
             <form onSubmit={handleSearch} className="relative flex-1">
@@ -114,7 +113,6 @@ const StudentsPage = () => {
             </Button>
           </div>
 
-          {/* Filters Panel */}
           {showFilters && (
             <div className="bg-card border rounded-lg p-6 space-y-4" dir="rtl">
               <div className="flex items-center justify-between mb-4">
@@ -129,7 +127,7 @@ const StudentsPage = () => {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {/* Full Name Filter */}
+                
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-right block">الاسم الكامل</label>
                   <Input
@@ -140,7 +138,6 @@ const StudentsPage = () => {
                   />
                 </div>
 
-                {/* Code Filter */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-right block">كود الطالب</label>
                   <Input
@@ -151,7 +148,6 @@ const StudentsPage = () => {
                   />
                 </div>
 
-                {/* Stage Filter */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-right block">المرحلة</label>
                   <Select value={stageFilter} onValueChange={setStageFilter}>
@@ -166,7 +162,6 @@ const StudentsPage = () => {
                   </Select>
                 </div>
 
-                {/* Class Filter */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-right block">الفصل</label>
                   <Select value={classFilter} onValueChange={setClassFilter}>
@@ -184,7 +179,6 @@ const StudentsPage = () => {
                   </Select>
                 </div>
 
-                {/* Sort By */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-right block">ترتيب حسب</label>
                   <Select value={sortBy} onValueChange={setSortBy}>
@@ -199,7 +193,6 @@ const StudentsPage = () => {
                   </Select>
                 </div>
 
-                {/* Sort Order */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-right block">نوع الترتيب</label>
                   <Select value={sortOrder} onValueChange={(value: 'ASC' | 'DESC') => setSortOrder(value)}>
@@ -234,7 +227,6 @@ const StudentsPage = () => {
           )}
         </div>
 
-        {/* Students list */}
         <div className="animate-zoom-in">
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
             {students?.map((student) => (
@@ -247,7 +239,6 @@ const StudentsPage = () => {
           </div>
         </div>
 
-        {/* Pagination */}
         {pagination && (
           <Pagination 
             metadata={pagination} 

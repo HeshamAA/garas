@@ -26,10 +26,6 @@ const createApiClient = (): AxiosInstance => {
     headers: API_CONFIG.headers,
   });
 
-  /**
-   * Request interceptor
-   * Add authentication token and other headers
-   */
   client.interceptors.request.use(
     (config) => {
       const token = localStorage.getItem('authToken');
@@ -46,10 +42,6 @@ const createApiClient = (): AxiosInstance => {
     }
   );
 
-  /**
-   * Response interceptor
-   * Handle errors and implement retry logic
-   */
   client.interceptors.response.use(
     (response: AxiosResponse) => {
       return response;

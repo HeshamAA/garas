@@ -18,7 +18,7 @@ export const SCHOOL_ROUTES = {
   RECEIVERS: '/receivers',
   TRUSTED_RECEIVERS: '/trusted-receivers',
   RECEIVE_REQUESTS: '/receive-requests',
-  SETTINGS: '/account-settings',
+
 } as const;
 
 export const ROUTES = {

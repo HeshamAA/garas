@@ -30,8 +30,6 @@ const ReceiversPage = () => {
     dispatch(fetchReceivers(params));
   }, [dispatch, params]);
 
-
-
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     setParams({ ...params, keyword: searchQuery, page: 1 });
@@ -73,7 +71,6 @@ const ReceiversPage = () => {
           </p>
         </div>
 
-        {/* Search and Filters */}
         <div className="space-y-4 animate-slide-in-right">
           <div className="flex gap-3" dir="rtl">
             <form onSubmit={handleSearch} className="relative flex-1">
@@ -103,7 +100,6 @@ const ReceiversPage = () => {
             </Button>
           </div>
 
-          {/* Filters Panel */}
           {showFilters && (
             <div className="bg-card border rounded-lg p-6 space-y-4" dir="rtl">
               <div className="flex items-center justify-between mb-4">
@@ -118,7 +114,7 @@ const ReceiversPage = () => {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {/* Full Name Filter */}
+                
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-right block">الاسم الكامل</label>
                   <Input
@@ -129,7 +125,6 @@ const ReceiversPage = () => {
                   />
                 </div>
 
-                {/* National ID Filter */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-right block">الرقم القومي</label>
                   <Input
@@ -140,7 +135,6 @@ const ReceiversPage = () => {
                   />
                 </div>
 
-                {/* Sort By */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-right block">ترتيب حسب</label>
                   <Select value={sortBy} onValueChange={setSortBy}>
@@ -155,7 +149,6 @@ const ReceiversPage = () => {
                   </Select>
                 </div>
 
-                {/* Sort Order */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-right block">نوع الترتيب</label>
                   <Select value={sortOrder} onValueChange={(value: 'ASC' | 'DESC') => setSortOrder(value)}>
@@ -190,14 +183,12 @@ const ReceiversPage = () => {
           )}
         </div>
 
-        {/* Error Message */}
         {error && (
           <div className="bg-destructive/10 text-destructive p-4 rounded-lg text-right">
             {error}
           </div>
         )}
 
-        {/* Receivers List */}
         <div className="animate-zoom-in">
           {isLoading ? (
             <div className="text-center py-12">
@@ -219,7 +210,6 @@ const ReceiversPage = () => {
           )}
         </div>
 
-        {/* Pagination */}
         {pagination && (
           <Pagination 
             metadata={pagination} 

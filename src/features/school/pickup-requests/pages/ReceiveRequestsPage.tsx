@@ -32,7 +32,6 @@ const ReceiveRequestsPage = () => {
     dispatch(fetchSchoolRequests(params));
   }, [dispatch, params]);
 
-
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     setParams({ ...params, keyword: searchQuery, page: 1 });
@@ -83,7 +82,7 @@ const ReceiveRequestsPage = () => {
   return (
     <DashboardLayout>
       <div className="p-6 lg:p-8 space-y-6">
-        {/* Header */}
+        
         <div className="animate-fade-in">
           <h2 className="text-2xl lg:text-3xl font-bold text-right">طلبات الاستلام</h2>
           <p className="text-muted-foreground text-right mt-2">
@@ -91,8 +90,6 @@ const ReceiveRequestsPage = () => {
           </p>
         </div>
 
-
-        {/* Search and Filters */}
         <div className="space-y-4 animate-slide-in-right">
           <div className="flex gap-3" dir="rtl">
             <form onSubmit={handleSearch} className="relative flex-1">
@@ -122,7 +119,6 @@ const ReceiveRequestsPage = () => {
             </Button>
           </div>
 
-          {/* Filters Panel */}
           {showFilters && (
             <div className="bg-card border rounded-lg p-6 space-y-4" dir="rtl">
               <div className="flex items-center justify-between mb-4">
@@ -137,7 +133,7 @@ const ReceiveRequestsPage = () => {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {/* Student ID Filter */}
+                
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-right block">رقم الطالب</label>
                   <Input
@@ -149,7 +145,6 @@ const ReceiveRequestsPage = () => {
                   />
                 </div>
 
-                {/* Delivery Person ID Filter */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-right block">رقم المستلم</label>
                   <Input
@@ -161,7 +156,6 @@ const ReceiveRequestsPage = () => {
                   />
                 </div>
 
-                {/* How To Receive Filter */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-right block">طريقة الاستلام</label>
                   <Select value={howToReceiveFilter} onValueChange={setHowToReceiveFilter}>
@@ -175,7 +169,6 @@ const ReceiveRequestsPage = () => {
                   </Select>
                 </div>
 
-                {/* Status Filter */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-right block">الحالة</label>
                   <Select value={statusFilter} onValueChange={setStatusFilter}>
@@ -191,7 +184,6 @@ const ReceiveRequestsPage = () => {
                   </Select>
                 </div>
 
-                {/* Sort By */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-right block">ترتيب حسب</label>
                   <Select value={sortBy} onValueChange={setSortBy}>
@@ -205,7 +197,6 @@ const ReceiveRequestsPage = () => {
                   </Select>
                 </div>
 
-                {/* Sort Order */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-right block">نوع الترتيب</label>
                   <Select value={sortOrder} onValueChange={(value: 'ASC' | 'DESC') => setSortOrder(value)}>
@@ -240,7 +231,6 @@ const ReceiveRequestsPage = () => {
           )}
         </div>
 
-        {/* Requests List */}
         <div className="animate-zoom-in">
           {isLoading ? (
             <div className="text-center py-12">
@@ -259,7 +249,6 @@ const ReceiveRequestsPage = () => {
           )}
         </div>
 
-        {/* Pagination */}
         {pagination && (
           <Pagination 
             metadata={pagination} 

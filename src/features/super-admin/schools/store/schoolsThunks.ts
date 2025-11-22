@@ -6,6 +6,7 @@ export const fetchSchools = createAsyncThunk(
   async (params: GetSchoolsParams | undefined, { rejectWithValue }) => {
     try {
       const response = await schoolsApi.getAll(params);
+      console.log(response)
       return response.data;
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : 'Failed to fetch schools';
@@ -13,4 +14,4 @@ export const fetchSchools = createAsyncThunk(
     }
   }
 );
-
+

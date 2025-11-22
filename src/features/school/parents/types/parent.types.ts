@@ -29,8 +29,6 @@ export interface Parent {
   };
 }
 
-
-
 export interface ParentFilters {
   searchQuery?: string;
 }
@@ -69,4 +67,4 @@ export interface ParentApiResponse {
   success: boolean;
   message?: string;
 }
-
+

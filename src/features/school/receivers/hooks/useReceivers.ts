@@ -5,7 +5,6 @@ import {
    
 } from '../store/receiversThunks';
 
-
 export const useReceivers = () => {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector(state => state.auth);
@@ -20,7 +19,6 @@ export const useReceivers = () => {
     }
   }, [dispatch, user?.id]);
 
-
   const filteredReceivers = items.filter(receiver => {
     if (filters.status === 'all') return true;
     return receiver.status === filters.status;
@@ -32,9 +30,7 @@ export const useReceivers = () => {
     isLoading,
     error,
 
-
   };
 };
-
 
 export default useReceivers;

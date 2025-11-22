@@ -13,8 +13,8 @@ import { ReceiversPage } from "@/features/school/receivers";
 import { RequestsPage } from "@/features/super-admin/requests";
 import { ReceiveRequestsPage } from "@/features/school/pickup-requests";
 import { RegisteredSchoolsPage } from "@/features/super-admin/schools";
-import { AccountSettingsPage, UserDashboardPage } from "@/features/super-admin/dashboard";
 import { SchoolDashboardPage } from "@/features/school/dashboard";
+import { UserDashboardPage } from "./features/super-admin/dashboard";
 
 const queryClient = new QueryClient();
 
@@ -25,11 +25,10 @@ const App = () => (
         <Toaster position="top-center" reverseOrder={false} />
         <BrowserRouter>
           <Routes>
-            {/* Public Routes */}
+            
             <Route path="/" element={<Index />} />
             <Route path="/login" element={<AuthPage />} />
 
-            {/* School Protected Routes */}
             <Route 
               path="/school-dashboard" 
               element={
@@ -73,7 +72,6 @@ const App = () => (
               } 
             />
 
-            {/* Super Admin Protected Routes */}
             <Route 
               path="/dashboard" 
               element={
@@ -99,17 +97,8 @@ const App = () => (
               } 
             />
 
-            {/* Shared Protected Routes */}
-            <Route 
-              path="/account-settings" 
-              element={
-                <ProtectedRoute>
-                  <AccountSettingsPage />
-                </ProtectedRoute>
-              } 
-            />
+          
 
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

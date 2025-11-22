@@ -9,10 +9,6 @@ const Index = () => {
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
 
-  /**
-   * Redirect authenticated users to their appropriate dashboard
-   * Prevents logged-in users from seeing the landing page
-   */
   useEffect(() => {
     if (isAuthenticated && user) {
       const defaultRoute = getDefaultRoute(user.role);
@@ -40,10 +36,10 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50" dir="rtl">
-      {/* Hero Section */}
+      
       <div className="flex flex-col items-center justify-center min-h-screen px-4 py-16">
         <div className="max-w-4xl text-center space-y-8">
-          {/* Bell Icon */}
+          
           <div className="flex justify-center mb-4 md:mb-6 animate-in fade-in duration-700">
             <div className="relative">
               <div className="absolute inset-0 bg-blue-400 rounded-full blur-2xl opacity-30 animate-pulse"></div>
@@ -51,7 +47,6 @@ const Index = () => {
             </div>
           </div>
 
-          {/* Main Heading */}
           <div className="space-y-3 md:space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150">
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-4">
               مرحباً بك في جرس
@@ -64,7 +59,6 @@ const Index = () => {
             </p>
           </div>
 
-          {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center pt-4 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300 px-4">
             <Button
               size="lg"
@@ -84,7 +78,6 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Features Section */}
         <div className="max-w-5xl mx-auto mt-16 md:mt-24 px-4 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-500">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
             {features.map((feature, index) => (

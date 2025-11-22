@@ -33,7 +33,6 @@ export interface ReceiverFilters {
   searchQuery?: string;
 }
 
-
 export interface ReceiversState {
     items: Receiver[];
     filters: ReceiverFilters;
@@ -54,13 +53,11 @@ export interface ReceiversState {
     } | null;
 }
 
-
-
 export interface ReceiverStatusUpdate {
   id: string;
   status: 'active' | 'inactive';
 }
 
-export interface ReceiversApiResponse extends data {
-
+export interface ReceiversApiResponse extends data{
+    
 }

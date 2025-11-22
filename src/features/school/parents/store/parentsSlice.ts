@@ -22,7 +22,7 @@ interface ParentsState {
 
 const initialState: ParentsState = {
   items: [],
-  filters: {},
+  filters: { status: 'all' },
   selectedParent: null,
   isLoading: false,
   error: null,
@@ -47,12 +47,10 @@ const parentsSlice = createSlice({
       state.selectedParent = action.payload;
     },
 
-  
     clearError: (state) => {
       state.error = null;
     },
 
-  
     invalidateCache: (state) => {
       state.lastFetched = null;
     },

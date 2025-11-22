@@ -16,9 +16,7 @@ const AUTH_ENDPOINTS = {
 } as const;
 
 export const authApi = {
-  /**
-   * Login user
-   */
+  
   login: async (credentials: LoginCredentials): Promise<LoginResponse> => {
     try {
       const loginPayload = {
@@ -80,9 +78,6 @@ export const authApi = {
     }
   },
 
-  /**
-   * Register user
-   */
   register: async (
     data: RegistrationData,
     accountType: 'super_admin' | 'school'
@@ -98,9 +93,6 @@ export const authApi = {
     }
   },
 
-  /**
-   * Logout user
-   */
   logout: async (): Promise<void> => {
     try {
       await apiClient.post(AUTH_ENDPOINTS.LOGOUT);
@@ -109,9 +101,6 @@ export const authApi = {
     }
   },
 
-  /**
-   * Get current user
-   */
   getCurrentUser: async (): Promise<User> => {
     try {
       const response = await apiClient.get<{ data: User; message: string }>(AUTH_ENDPOINTS.ME);
@@ -121,9 +110,6 @@ export const authApi = {
     }
   },
 
-  /**
-   * Refresh authentication token
-   */
   refreshToken: async (): Promise<{ token: string }> => {
     try {
       const response = await apiClient.post<{ data: { token: string }; message: string }>(

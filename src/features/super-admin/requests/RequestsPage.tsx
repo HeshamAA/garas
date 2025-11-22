@@ -4,10 +4,7 @@ import { Search } from 'lucide-react';
 
 const RequestsPage = () => {
   
-
   const error = null;
-
-  
 
   if (error) {
     return (
@@ -24,7 +21,7 @@ const RequestsPage = () => {
   return (
     <DashboardLayout>
       <div className="p-6 lg:p-8 space-y-6">
-        {/* Header */}
+        
         <div className="animate-fade-in">
           <h1 className="text-2xl lg:text-3xl font-bold text-right">الطلبات</h1>
           <p className="text-muted-foreground text-right mt-2">
@@ -32,7 +29,6 @@ const RequestsPage = () => {
           </p>
         </div>
 
-        {/* Search */}
         <div className="relative animate-slide-in-right">
           <Input
             placeholder="ابحث عن اسم المدرسة"
@@ -41,7 +37,6 @@ const RequestsPage = () => {
           <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
         </div>
 
-    
       </div>
     </DashboardLayout>
   );

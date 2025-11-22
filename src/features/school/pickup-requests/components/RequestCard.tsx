@@ -1,11 +1,13 @@
 import { Card } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { MapPin, User, Clock, Bell } from 'lucide-react';
+import { MapPin, User, Clock } from 'lucide-react';
+import { memo, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { PickupRequest } from '../types/request.types';
 import RequestStatusBadge from './RequestStatusBadge';
 
 interface RequestCardProps {
-  request: PickupRequest ;
+  request: PickupRequest;
   variant?: 'user' | 'school';
   onApprove?: (id: number) => void;
   onReject?: (id: number) => void;
@@ -16,30 +18,28 @@ interface RequestCardProps {
   className?: string;
 }
 
-const RequestCard = ({
+const RequestCard = memo(({
   request,
-
   className = '',
 }: RequestCardProps) => {
-
-  console.log(request)
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('ar-SA', {
+  const navigate = useNavigate();
+  const formattedDate = useMemo(() => {
+    return new Date(request.date).toLocaleDateString('ar-SA', {
       year: 'numeric',
       month: '2-digit',
       day: '2-digit',
     });
-  };
+  }, [request.date]);
   
-  const formatTime = (dateString: string) => {
-    return new Date(dateString).toLocaleTimeString('ar-SA', {
+  const formattedTime = useMemo(() => {
+    return new Date(request.date).toLocaleTimeString('ar-SA', {
       hour: '2-digit',
       minute: '2-digit',
     });
-  };
+  }, [request.date]);
 
-  const getHowToReceiveLabel = (how: string) => {
-    switch (how) {
+  const howToReceiveLabel = useMemo(() => {
+    switch (request.howToReceive) {
       case 'person':
         return 'شخصياً';
       case 'car':
@@ -47,18 +47,32 @@ const RequestCard = ({
       default:
         return 'أخرى';
     }
+  }, [request.howToReceive]);
+
+  const parentInitials = useMemo(() => {
+    return request.student.parent?.fullName?.split(' ').map(n => n[0]).join('').slice(0, 2) || 'P';
+  }, [request.student.parent?.fullName]);
+
+  const deliveryPersonInitials = useMemo(() => {
+    return request.deliveryPerson?.fullName.split(' ').map(n => n[0]).join('').slice(0, 2) || 'D';
+  }, [request.deliveryPerson?.fullName]);
+
+  const handleCardClick = () => {
+    navigate(`/receive-requests/${request.id}`);
   };
 
-
   return (
-    <Card className={`rounded-2xl p-6 shadow-sm border border-border/50 ${className}`}>
-      {/* Header */}
+    <Card 
+      className={`rounded-2xl p-6 shadow-sm border border-border/50 hover:shadow-lg transition-shadow cursor-pointer ${className}`}
+      onClick={handleCardClick}
+    >
+      
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
           <Avatar className="w-12 h-12">
-            {/* <AvatarImage src={request.student.parent?.profileImage || undefined} /> */}
+            <AvatarImage src={request.student.parent?.profileImage || undefined} loading="lazy" />
             <AvatarFallback>
-              {request.student.parent?.fullName?.split(' ').map(n => n[0]).join('').slice(0, 2) || 'P'}
+              {parentInitials}
             </AvatarFallback>
           </Avatar>
           <div className="text-right">
@@ -71,7 +85,6 @@ const RequestCard = ({
         </div>
       </div>
 
-      {/* Details Grid */}
       <div className="space-y-3 mb-4 text-right">
              {request.student && (
           <div className="flex items-center text-sm gap-2">
@@ -101,13 +114,13 @@ const RequestCard = ({
             التاريخ:
           </span>
           <span className="text-primary">
-            {formatDate(request.date)} - {formatTime(request.date)}
+            {formattedDate} - {formattedTime}
           </span>
         </div>
 
         <div className="flex items-center text-sm gap-2">
           <span className="font-medium">طريقة الاستلام:</span>
-          <span className="text-primary">{getHowToReceiveLabel(request.howToReceive)}</span>
+          <span className="text-primary">{howToReceiveLabel}</span>
         </div>
 
         {request.numberOfCar && (
@@ -122,9 +135,9 @@ const RequestCard = ({
             <p className="font-medium text-sm">معلومات المستلم:</p>
             <div className="flex items-center gap-3">
               <Avatar className="w-10 h-10">
-                <AvatarImage src={request.deliveryPerson.profileImage || undefined} />
+                <AvatarImage src={request.deliveryPerson.profileImage || undefined} loading="lazy" />
                 <AvatarFallback>
-                  {request.deliveryPerson.fullName.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                  {deliveryPersonInitials}
                 </AvatarFallback>
               </Avatar>
               <div className="text-right flex-1">
@@ -136,17 +149,10 @@ const RequestCard = ({
         )}
       </div>
 
-      {/* Action Buttons */}
-      {/* <RequestActions
-        requestId={request.id}
-        status={request.status}
-        onApprove={onApprove}
-        onReject={onReject}
-        onComplete={onComplete}
-        isLoading={isLoading}
-      /> */}
     </Card>
   );
-};
+});
+
+RequestCard.displayName = 'RequestCard';
 
 export default RequestCard;

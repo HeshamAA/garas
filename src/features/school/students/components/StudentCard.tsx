@@ -2,9 +2,9 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Building2, Clock, User, Phone } from 'lucide-react';
+import { memo, useMemo, useCallback } from 'react';
 
-// Helper functions للترجمة
-const translateClass = (classValue) => {
+const translateClass = (classValue: string): string => {
   const classMap = {
     'one': 'الأول',
     'two': 'الثاني',
@@ -16,8 +16,8 @@ const translateClass = (classValue) => {
   return classMap[classValue] || classValue;
 };
 
-const translateStage = (stageValue) => {
-  const stageMap = {
+const translateStage = (stageValue: string): string => {
+  const stageMap: Record<string, string> = {
     'first': 'الابتدائية',
     'middle': 'الإعدادية',
     'secondary': 'الثانوية',
@@ -25,35 +25,44 @@ const translateStage = (stageValue) => {
   return stageMap[stageValue] || stageValue;
 };
 
-export const StudentCard = ({ 
+interface StudentCardProps {
+  student: any;
+  onViewRequests?: (studentId: number) => void;
+}
+
+export const StudentCard = memo(({ 
   student, 
   onViewRequests,
-}) => {
-  const getInitials = (name) => {
-    if (!name) return 'NA';
-    const parts = name.split(' ');
+}: StudentCardProps) => {
+  const getInitials = useMemo(() => {
+    if (!student.fullName) return 'NA';
+    const parts = student.fullName.split(' ');
     return parts.length >= 2 
       ? `${parts[0][0]}${parts[1][0]}` 
-      : name.substring(0, 2);
-  };
+      : student.fullName.substring(0, 2);
+  }, [student.fullName]);
 
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('ar-EG', {
+  const formattedDate = useMemo(() => {
+    return new Date(student.dateOfBirth).toLocaleDateString('ar-EG', {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
     });
-  };
+  }, [student.dateOfBirth]);
+
+  const handleViewRequests = useCallback(() => {
+    onViewRequests?.(student.id);
+  }, [onViewRequests, student.id]);
 
   return (
     <Card className="p-6 hover:shadow-lg transition-shadow duration-300" dir="rtl">
       <div className="space-y-4">
-        {/* Header with avatar and name */}
+        
         <div className="flex items-center justify-start gap-4">
           <Avatar className="w-16 h-16 border-2 border-gray-200">
-            <AvatarImage src={student.profileImage} alt={student.fullName} />
+            <AvatarImage src={student.profileImage} alt={student.fullName} loading="lazy" />
             <AvatarFallback className="bg-blue-100 text-blue-600 font-semibold">
-              {getInitials(student.fullName)}
+              {getInitials}
             </AvatarFallback>
           </Avatar>
           <div className="flex-1 text-right">
@@ -63,27 +72,24 @@ export const StudentCard = ({
         </div>
 
         <div className="border-t pt-4 space-y-3">
-          {/* Class */}
+          
           <div className="flex items-center justify-start gap-2 text-sm">
             <span className="font-medium text-gray-700">الفصل:</span>
             <span className="text-blue-600 font-medium">{translateClass(student.class)}</span>
           </div>
 
-          {/* Stage */}
           <div className="flex items-center justify-start gap-2 text-sm">
             <span className="font-medium text-gray-700">المرحلة:</span>
             <span className="text-blue-600 font-medium">{translateStage(student.stage)}</span>
           </div>
 
-          {/* Date of Birth */}
           <div className="flex items-center justify-start gap-2 text-sm">
             <Clock className="w-4 h-4 text-gray-700" />
             <span className="font-medium text-gray-700">تاريخ الميلاد:</span>
-            <span className="text-blue-600">{formatDate(student.dateOfBirth)}</span>
+            <span className="text-blue-600">{formattedDate}</span>
           </div>
         </div>
 
-        {/* School Info */}
         {student.school && (
           <div className="bg-gray-50 p-3 rounded-lg">
             <div className="flex items-center justify-start gap-2 text-sm">
@@ -94,6 +100,7 @@ export const StudentCard = ({
                   src={student.school.logo} 
                   alt={student.school.name}
                   className="w-8 h-8 rounded-full object-cover border border-gray-200"
+                  loading="lazy"
                 />
                 <div className="text-right">
                   <p className="text-blue-600 font-medium">{student.school.name}</p>
@@ -104,7 +111,6 @@ export const StudentCard = ({
           </div>
         )}
 
-        {/* Parent Info */}
         {student.parent && (
           <div className="bg-blue-50 p-4 rounded-lg space-y-3 border border-blue-100">
             <p className="font-bold text-sm text-gray-800 flex items-center justify-start gap-2">
@@ -113,9 +119,9 @@ export const StudentCard = ({
             </p>
             <div className="flex items-center justify-start gap-3">
               <Avatar className="w-12 h-12 border-2 border-white">
-                <AvatarImage src={student.parent.profileImage} alt={student.parent.fullName} />
+                <AvatarImage src={student.parent.profileImage} alt={student.parent.fullName} loading="lazy" />
                 <AvatarFallback className="bg-blue-200 text-blue-700 font-semibold">
-                  {getInitials(student.parent.fullName)}
+                  {student.parent.fullName?.substring(0, 2)}
                 </AvatarFallback>
               </Avatar>
               <div className="text-right flex-1">
@@ -132,12 +138,11 @@ export const StudentCard = ({
           </div>
         )}
 
-        {/* Actions */}
         {onViewRequests && (
           <div className="pt-2">
             <Button 
               className="w-full rounded-full bg-blue-600 hover:bg-blue-700 transition-colors"
-              onClick={() => onViewRequests(student.id)}
+              onClick={handleViewRequests}
             >
               عرض طلبات الاستلام
             </Button>
@@ -146,4 +151,6 @@ export const StudentCard = ({
       </div>
     </Card>
   );
-};
+});
+
+StudentCard.displayName = 'StudentCard';

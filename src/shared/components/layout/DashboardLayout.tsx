@@ -1,9 +1,9 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode } from 'react';
 import { Sidebar } from './Sidebar';
 import { Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useAppSelector } from '@/shared/hooks';
+import { useAppSelector, useSidebarState } from '@/shared/hooks';
 import { NotificationPopup } from '../notifications/NotificationPopup';
 
 interface DashboardLayoutProps {
@@ -11,7 +11,8 @@ interface DashboardLayoutProps {
 }
 
 export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  
+  const { isOpen: sidebarOpen, toggle: toggleSidebar } = useSidebarState(true);
   const { user } = useAppSelector(state => state.auth);
   
   const userName = user?.school?.name || user?.name || 'المستخدم';
@@ -22,17 +23,17 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     <div className="flex min-h-screen bg-background" dir="rtl">
       <Sidebar 
         isOpen={sidebarOpen}
-        onToggle={() => setSidebarOpen(!sidebarOpen)}
+        onToggle={toggleSidebar}
       />
       <main className="flex-1 overflow-auto">
-        {/* Welcome Header */}
+        
         <div className="sticky top-0 z-30 bg-primary text-primary-foreground shadow-md">
           <div className="flex items-center justify-between px-6 py-4 gap-4">
             <div className="flex items-center gap-4">
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => setSidebarOpen(!sidebarOpen)}
+                onClick={toggleSidebar}
                 className="text-primary-foreground hover:bg-primary-foreground/10"
               >
                 <Menu className="w-5 h-5" />

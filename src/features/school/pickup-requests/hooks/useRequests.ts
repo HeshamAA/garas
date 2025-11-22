@@ -2,7 +2,6 @@
 import { useAppDispatch, useAppSelector } from '@/shared/hooks';
 import {  fetchSchoolRequests } from '../store/requestsThunks';
 
-
 export const useSchoolRequests = (schoolId?: string) => {
   const dispatch = useAppDispatch();
   const { items, filters, isLoading, error } = useAppSelector(
@@ -14,7 +13,6 @@ export const useSchoolRequests = (schoolId?: string) => {
       dispatch(fetchSchoolRequests(schoolId));
     }
   }, [dispatch, schoolId]);
-
 
   const statusCounts = useMemo(() => {
     return {
