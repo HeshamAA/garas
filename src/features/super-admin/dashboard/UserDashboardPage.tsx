@@ -56,6 +56,13 @@ const UserDashboardPage = () => {
       color: 'text-green-600',
       bgColor: 'bg-green-500/10',
     },
+    ...(statistics.suspendedSchools !== undefined ? [{
+      title: 'مدارس محظورة',
+      value: statistics.suspendedSchools.toString(),
+      icon: AlertCircle,
+      color: 'text-red-600',
+      bgColor: 'bg-red-500/10',
+    }] : []),
     {
       title: 'مدارس معلقة',
       value: statistics.pendingSchools.toString(),
@@ -79,13 +86,28 @@ const UserDashboardPage = () => {
     },
   ] : [];
 
-  const recentSchools = [
-    { id: 1, name: 'مدرسة التفوق الابتدائية', location: 'الرياض، حي العليا', status: 'active', date: 'منذ ساعتين' },
-    { id: 2, name: 'مدرسة النجاح الثانوية', location: 'جدة، حي الحمراء', status: 'active', date: 'منذ 5 ساعات' },
-    { id: 3, name: 'مدرسة المستقبل المتوسطة', location: 'الدمام، حي الفيصلية', status: 'pending', date: 'أمس' },
-    { id: 4, name: 'مدرسة الأمل الابتدائية', location: 'مكة، حي العزيزية', status: 'active', date: 'منذ يومين' },
-  ];
+  const getRelativeTime = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInMs = now.getTime() - date.getTime();
+    const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
+    const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
+    const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
 
+    if (diffInMinutes < 60) {
+      return `منذ ${diffInMinutes} دقيقة`;
+    } else if (diffInHours < 24) {
+      return `منذ ${diffInHours} ساعة`;
+    } else if (diffInDays === 1) {
+      return 'أمس';
+    } else if (diffInDays < 7) {
+      return `منذ ${diffInDays} أيام`;
+    } else {
+      return date.toLocaleDateString('ar-SA');
+    }
+  };
+
+  const recentSchools = statistics?.recentSchools || [];
   const regionDistribution = statistics?.schoolsByRegion || [];
 
   const alerts = statistics ? [
@@ -173,23 +195,38 @@ const UserDashboardPage = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3">
-                {recentSchools.map((school) => (
-                  <div
-                    key={school.id}
-                    className="flex items-center justify-between p-4 bg-secondary/30 rounded-lg hover:bg-secondary/50 transition-colors"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="text-right flex-1">
-                        <p className="font-medium text-sm">{school.name}</p>
-                        <p className="text-xs text-muted-foreground">{school.location}</p>
-                        <p className="text-xs text-muted-foreground mt-1">{school.date}</p>
+              {recentSchools.length === 0 ? (
+                <div className="text-center py-8 text-muted-foreground">
+                  لا توجد مدارس مضافة مؤخراً
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {recentSchools.map((school) => (
+                    <div
+                      key={school.id}
+                      className="flex items-center justify-between p-4 bg-secondary/30 rounded-lg hover:bg-secondary/50 transition-colors"
+                    >
+                      <div className="flex items-center gap-3 flex-1">
+                        {school.logo && (
+                          <img 
+                            src={school.logo} 
+                            alt={school.name}
+                            className="w-10 h-10 rounded-full object-cover"
+                          />
+                        )}
+                        <div className="text-right flex-1">
+                          <p className="font-medium text-sm">{school.name}</p>
+                          <p className="text-xs text-muted-foreground">{school.location}</p>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            {getRelativeTime(school.createdAt)}
+                          </p>
+                        </div>
                       </div>
+                      {getStatusBadge(school.status)}
                     </div>
-                    {getStatusBadge(school.status)}
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </CardContent>
           </Card>
 
@@ -201,22 +238,28 @@ const UserDashboardPage = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3">
-                {regionDistribution.map((item, index) => (
-                  <div key={index} className="space-y-2">
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="font-medium">{item.count} مدرسة</span>
-                      <span className="text-muted-foreground">{item.region}</span>
+              {regionDistribution.length === 0 ? (
+                <div className="text-center py-8 text-muted-foreground">
+                  لا توجد بيانات لتوزيع المدارس
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {regionDistribution.map((item, index) => (
+                    <div key={index} className="space-y-2">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="font-medium">{item.count} مدرسة</span>
+                        <span className="text-muted-foreground">{item.region}</span>
+                      </div>
+                      <div className="w-full bg-secondary rounded-full h-2">
+                        <div
+                          className="bg-primary rounded-full h-2 transition-all"
+                          style={{ width: `${statistics ? (item.count / statistics.totalSchools) * 100 : 0}%` }}
+                        />
+                      </div>
                     </div>
-                    <div className="w-full bg-secondary rounded-full h-2">
-                      <div
-                        className="bg-primary rounded-full h-2 transition-all"
-                        style={{ width: `${statistics ? (item.count / statistics.totalSchools) * 100 : 0}%` }}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>

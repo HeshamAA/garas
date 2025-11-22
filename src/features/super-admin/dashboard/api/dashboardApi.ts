@@ -3,12 +3,14 @@ import { apiClient, handleApiError, handleApiResponse } from '@/shared/api/apiCl
 
 export interface SuperAdminStatistics {
   totalSchools: number;          
-  activeSchools: number;        
+  activeSchools: number;
+  suspendedSchools?: number;        
   pendingSchools: number;        
   newThisWeek: number;             
   newThisMonth: number;            
   activatedToday: number;          
   schoolsByRegion: SchoolByRegion[];
+  recentSchools: RecentSchool[];
 }
 
 
@@ -31,7 +33,8 @@ export interface RecentSchool {
   id: number;
   name: string;
   location: string;
-  status: 'active' | 'pending';
+  logo?: string;
+  status: 'active' | 'pending' | 'suspended';
   createdAt: string;
 }
 
@@ -42,6 +45,7 @@ export const superAdminDashboardApi = {
       const response = await apiClient.get<{ success: boolean; message: string; data: SuperAdminStatistics }>(
         'https://school.safehandapps.com/api/v1/school/dashboard'
       );
+      console.log(response)
       return handleApiResponse(response);
     } catch (error) {
       return handleApiError(error);
