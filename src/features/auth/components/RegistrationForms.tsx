@@ -41,8 +41,8 @@ export const RegistrationForms = ({
           onImageUpload={onImageUpload}
           onToggleMode={onToggleMode}
           fields={{
-            name: { label: "اسم المدرسة", placeholder: "اسم المدرسة", fieldName: "ownerName" },
-            phone: { label: "رقم جوال المدرسة", placeholder: "رقم الجوال" },
+            name: { label: "اسم المدرسة", placeholder: "اسم المدرسة", fieldName: "name" },
+            phone: { label: "رقم جوال المدرسة", placeholder: "رقم الجوال", fieldName: "phoneNumber" },
             email: { label: "البريد الإلكتروني", placeholder: "البريد الإلكتروني" },
           }}
         />

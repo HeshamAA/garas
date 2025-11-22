@@ -38,7 +38,7 @@ export const useAuthState = () => {
         setImagePreview(result);
 
         if (accountType === "school") {
-          schoolFormSetValue("avatar", result);
+          schoolFormSetValue("logo", file);
         } else {
           ownerFormSetValue("avatar", result);
         }

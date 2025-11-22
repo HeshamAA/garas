@@ -8,12 +8,16 @@ export const loginSchema = z.object({
 });
 
 export const schoolRegistrationSchema = z.object({
-  ownerName: z.string().min(2, "اسم المالك مطلوب"),
-  phone: z.string().min(10, "رقم الجوال مطلوب"),
-  email: z.string().email("البريد الإلكتروني غير صحيح").optional().or(z.literal("")),
+  name: z.string().min(2, "اسم المدرسة مطلوب"),
+  phoneNumber: z.string().min(10, "رقم الجوال مطلوب"),
+  email: z.string().email("البريد الإلكتروني غير صحيح"),
   password: z.string().min(6, "كلمة المرور يجب أن تكون 6 أحرف على الأقل"),
   confirmPassword: z.string().min(6, "تأكيد كلمة المرور مطلوب"),
-  avatar: z.string().optional(),
+  description: z.string().optional(),
+  location: z.string().optional(),
+  stages: z.array(z.string()).optional(),
+  playerId: z.string().min(1, "Player ID مطلوب"),
+  logo: z.any().optional(),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "كلمة المرور غير متطابقة",
   path: ["confirmPassword"],
@@ -47,12 +51,15 @@ export const useAuthForm = () => {
   const schoolForm = useForm<SchoolFormData>({
     resolver: zodResolver(schoolRegistrationSchema),
     defaultValues: {
-      ownerName: "",
-      phone: "",
+      name: "",
+      phoneNumber: "",
       email: "",
       password: "",
       confirmPassword: "",
-      avatar: "",
+      description: "",
+      location: "",
+      stages: [],
+      playerId: "",
     },
   });
 

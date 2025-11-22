@@ -47,7 +47,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                   </AvatarFallback>
                 </Avatar>
                 <div className="text-right">
-                  <p className="text-sm opacity-90">جباك الله</p>
+                  <p className="text-sm opacity-90">حياك الله</p>
                   <h2 className="text-lg lg:text-xl font-bold">{userName}</h2>
                 </div>
               </div>

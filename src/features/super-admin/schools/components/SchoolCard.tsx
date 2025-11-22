@@ -1,20 +1,16 @@
 ﻿import { Card } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
-import { MapPin, Calendar, GraduationCap } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { MapPin, Calendar, GraduationCap, CheckCircle2 } from 'lucide-react';
 import { School } from '../types/school.types';
-import { memo, useMemo, useCallback } from 'react';
+import { memo, useMemo } from 'react';
 
 interface SchoolCardProps {
   school: School;
-  onViewDetails?: (schoolId: string) => void;
-  onManageStudents?: (schoolId: string) => void;
 }
 
 export const SchoolCard = memo(({ 
-  school, 
-  onViewDetails,
-  onManageStudents 
+  school
 }: SchoolCardProps) => {
   const schoolInitials = useMemo(() => {
     const parts = school.name.split(' ');
@@ -31,17 +27,20 @@ export const SchoolCard = memo(({
     });
   }, [school.createdAt]);
 
-  const handleViewDetails = useCallback(() => {
-    onViewDetails?.(school.id.toString());
-  }, [onViewDetails, school.id]);
-
-  const handleManageStudents = useCallback(() => {
-    onManageStudents?.(school.id.toString());
-  }, [onManageStudents, school.id]);
+  const isActive = school.status === 'active';
 
   return (
-    <Card className="p-6 hover:shadow-lg transition-shadow" dir="rtl">
+    <Card className={`p-6 hover:shadow-lg transition-all relative ${isActive ? 'border-2 border-green-500 shadow-md' : ''}`} dir="rtl">
       
+      {isActive && (
+        <div className="absolute top-4 left-4">
+          <Badge className="bg-green-500 hover:bg-green-600 text-white gap-1 px-3 py-1">
+            <CheckCircle2 className="w-4 h-4" />
+            <span>نشط</span>
+          </Badge>
+        </div>
+      )}
+
       <div className="flex items-start justify-start gap-3 mb-4">
         <Avatar className="w-16 h-16">
           <AvatarImage src={school.logo} loading="lazy" />
@@ -59,7 +58,7 @@ export const SchoolCard = memo(({
         </div>
       </div>
 
-      <div className="space-y-3 text-right mb-4">
+      <div className="space-y-3 text-right">
         <div className="flex items-center justify-start gap-2 text-sm">
           <MapPin className="w-4 h-4 text-primary flex-shrink-0" />
           <span className="font-medium">الموقع:</span>
@@ -79,26 +78,6 @@ export const SchoolCard = memo(({
           <span className="font-medium">تاريخ التسجيل:</span>
           <span className="text-muted-foreground">{formattedDate}</span>
         </div>
-      </div>
-
-      <div className="flex gap-3 pt-4 border-t">
-        {onViewDetails && (
-          <Button 
-            variant="outline" 
-            className="flex-1 rounded-full"
-            onClick={handleViewDetails}
-          >
-            عرض التفاصيل
-          </Button>
-        )}
-        {onManageStudents && (
-          <Button 
-            className="flex-1 rounded-full"
-            onClick={handleManageStudents}
-          >
-            إدارة الطلاب
-          </Button>
-        )}
       </div>
     </Card>
   );

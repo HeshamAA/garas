@@ -19,15 +19,7 @@ const RegisteredSchoolsPage = () => {
   const [sortBy, setSortBy] = useState('');
   const [sortOrder, setSortOrder] = useState<'ASC' | 'DESC'>('ASC');
   
-  const handleViewDetails = (schoolId: string) => {
-    console.log('View details for school:', schoolId);
-    toast.info('سيتم إضافة صفحة تفاصيل المدرسة قريباً');
-  };
 
-  const handleManageStudents = (schoolId: string) => {
-    console.log('Manage students for school:', schoolId);
-    toast.info('سيتم إضافة إدارة الطلاب قريباً');
-  };
 
   const handleAddSchool = () => {
     toast.info('سيتم إضافة نموذج تسجيل المدرسة قريباً');
@@ -63,12 +55,7 @@ const RegisteredSchoolsPage = () => {
     <DashboardLayout>
       <div className="p-6 lg:p-8 space-y-6">
         <div className="flex justify-between items-center animate-fade-in">
-          <Button 
-            className="rounded-full px-6 lg:px-8"
-            onClick={handleAddSchool}
-          >
-            إضافة مدرسة جديدة
-          </Button>
+        
           <div className="text-right">
             <h2 className="text-2xl lg:text-3xl font-bold">المدارس المسجلة</h2>
             <p className="text-muted-foreground text-sm mt-1">
@@ -210,8 +197,6 @@ const RegisteredSchoolsPage = () => {
                 <SchoolCard
                   key={school.id}
                   school={school}
-                  onViewDetails={handleViewDetails}
-                  onManageStudents={handleManageStudents}
                 />
               ))}
             </div>

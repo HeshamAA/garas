@@ -1,47 +1,83 @@
+import { useEffect, useState } from 'react';
 import { DashboardLayout } from '@/shared/components/layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { School, CheckCircle, Clock, TrendingUp, AlertCircle } from 'lucide-react';
+import { School, CheckCircle, Clock, TrendingUp, AlertCircle, Loader2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { superAdminDashboardApi, SuperAdminStatistics } from './api/dashboardApi';
+import { useToast } from '@/hooks/use-toast';
 
 const UserDashboardPage = () => {
-  
-  const stats = [
+  const [statistics, setStatistics] = useState<SuperAdminStatistics | null>(null);
+  const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    fetchStatistics();
+  }, []);
+
+  const fetchStatistics = async () => {
+    setLoading(true);
+    try {
+      const response = await superAdminDashboardApi.getStatistics();
+      setStatistics(response.data);
+    } catch (error) {
+      toast({
+        title: 'خطأ',
+        description: 'فشل في تحميل الإحصائيات',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        </div>
+      </DashboardLayout>
+    );
+  }
+
+  const stats = statistics ? [
     {
       title: 'إجمالي المدارس',
-      value: '156',
+      value: statistics.totalSchools.toString(),
       icon: School,
       color: 'text-blue-600',
       bgColor: 'bg-blue-500/10',
     },
     {
       title: 'المدارس النشطة',
-      value: '142',
+      value: statistics.activeSchools.toString(),
       icon: CheckCircle,
       color: 'text-green-600',
       bgColor: 'bg-green-500/10',
     },
     {
       title: 'مدارس معلقة',
-      value: '14',
+      value: statistics.pendingSchools.toString(),
       icon: Clock,
       color: 'text-yellow-600',
       bgColor: 'bg-yellow-500/10',
     },
     {
       title: 'جديدة هذا الأسبوع',
-      value: '3',
+      value: statistics.newThisWeek.toString(),
       icon: TrendingUp,
       color: 'text-purple-600',
       bgColor: 'bg-purple-500/10',
     },
     {
       title: 'جديدة هذا الشهر',
-      value: '12',
+      value: statistics.newThisMonth.toString(),
       icon: TrendingUp,
       color: 'text-indigo-600',
       bgColor: 'bg-indigo-500/10',
     },
-  ];
+  ] : [];
 
   const recentSchools = [
     { id: 1, name: 'مدرسة التفوق الابتدائية', location: 'الرياض، حي العليا', status: 'active', date: 'منذ ساعتين' },
@@ -50,19 +86,12 @@ const UserDashboardPage = () => {
     { id: 4, name: 'مدرسة الأمل الابتدائية', location: 'مكة، حي العزيزية', status: 'active', date: 'منذ يومين' },
   ];
 
-  const regionDistribution = [
-    { region: 'الرياض', count: 45 },
-    { region: 'جدة', count: 32 },
-    { region: 'الدمام', count: 24 },
-    { region: 'مكة', count: 18 },
-    { region: 'المدينة', count: 15 },
-    { region: 'أخرى', count: 22 },
-  ];
+  const regionDistribution = statistics?.schoolsByRegion || [];
 
-  const alerts = [
-    { type: 'warning', message: '3 مدارس في انتظار الموافقة' },
-    { type: 'info', message: 'تم تفعيل 5 مدارس جديدة اليوم' },
-  ];
+  const alerts = statistics ? [
+    ...(statistics.pendingSchools > 0 ? [{ type: 'warning' as const, message: `${statistics.pendingSchools} مدارس في انتظار الموافقة` }] : []),
+    ...(statistics.activatedToday > 0 ? [{ type: 'info' as const, message: `تم تفعيل ${statistics.activatedToday} مدارس جديدة اليوم` }] : []),
+  ] : [];
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -182,7 +211,7 @@ const UserDashboardPage = () => {
                     <div className="w-full bg-secondary rounded-full h-2">
                       <div
                         className="bg-primary rounded-full h-2 transition-all"
-                        style={{ width: `${(item.count / 156) * 100}%` }}
+                        style={{ width: `${statistics ? (item.count / statistics.totalSchools) * 100 : 0}%` }}
                       />
                     </div>
                   </div>

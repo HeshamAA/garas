@@ -2,6 +2,8 @@
 import { useAppDispatch, useToast } from "@/shared/hooks";
 import { loginUser, registerUser } from "../store/authThunks";
 import { getDefaultRoute } from "@/shared/constants/routes";
+import { schoolRegistrationApi, SchoolSignUpData } from "../api/schoolRegistrationApi";
+import { setUser, setToken } from "../store/authSlice";
 import type { LoginFormData, SchoolFormData, OwnerFormData } from "./useAuthForm";
 
 export const useAuthHandlers = () => {
@@ -31,23 +33,42 @@ export const useAuthHandlers = () => {
 
   const handleSchoolRegistration = async (data: SchoolFormData) => {
     try {
-      const registrationData = {
-        ownerName: data.ownerName,
-        phone: data.phone,
-        email: data.email || '',
+      const signUpData: SchoolSignUpData = {
+        email: data.email,
+        name: data.name,
+        phoneNumber: data.phoneNumber,
         password: data.password,
-        confirmPassword: data.confirmPassword,
-        avatar: data.avatar || '',
+        playerId: data.playerId,
+        description: data.description,
+        location: data.location,
+        stages: data.stages || [],
       };
-      const result = await dispatch(registerUser({ data: registrationData, accountType: "school" })).unwrap();
-      toast.success("تم إنشاء الحساب بنجاح");
 
-      if (result.user) {
-        const defaultRoute = getDefaultRoute(result.user.role);
-        navigate(defaultRoute);
+      if (data.logo) {
+        signUpData.logo = data.logo;
       }
-    } catch (err) {
+
+      const response = await schoolRegistrationApi.signUp(signUpData);
+
+      if (response.success) {
+        const user = {
+          ...response.data.user,
+          role: response.data.user.role.toLowerCase() as 'super_admin' | 'school',
+        };
+        
+        dispatch(setUser(user));
+        dispatch(setToken(response.data.accessToken));
+        
+        toast.success(response.message || "تم إنشاء الحساب بنجاح");
+        
+        const defaultRoute = getDefaultRoute(user.role);
+        navigate(defaultRoute);
+      } else {
+        toast.error(response.message || "حدث خطأ أثناء التسجيل");
+      }
+    } catch (err: any) {
       console.error('School registration error:', err);
+      toast.error(err?.message || "حدث خطأ أثناء التسجيل");
     }
   };
 

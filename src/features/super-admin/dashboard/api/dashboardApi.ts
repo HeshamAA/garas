@@ -1,11 +1,20 @@
 import { apiClient, handleApiError, handleApiResponse } from '@/shared/api/apiClient';
 
+
 export interface SuperAdminStatistics {
-  totalSchools: number;        
+  totalSchools: number;          
   activeSchools: number;        
-  pendingSchools: number;       
-  newSchoolsThisWeek: number;   
-  newSchoolsThisMonth: number;  
+  pendingSchools: number;        
+  newThisWeek: number;             
+  newThisMonth: number;            
+  activatedToday: number;          
+  schoolsByRegion: SchoolByRegion[];
+}
+
+
+export interface SchoolByRegion {
+  region: string;  
+  count: number;   
 }
 
 export interface SchoolGrowthData {
@@ -27,11 +36,11 @@ export interface RecentSchool {
 }
 
 export const superAdminDashboardApi = {
-  
-  async getStatistics(): Promise<{ data: SuperAdminStatistics }> {
+ 
+  async getStatistics(): Promise<{ success: boolean; message: string; data: SuperAdminStatistics }> {
     try {
-      const response = await apiClient.get<{ data: SuperAdminStatistics }>(
-        '/api/v1/super-admin/schools/statistics'
+      const response = await apiClient.get<{ success: boolean; message: string; data: SuperAdminStatistics }>(
+        'https://school.safehandapps.com/api/v1/school/dashboard'
       );
       return handleApiResponse(response);
     } catch (error) {
@@ -39,38 +48,5 @@ export const superAdminDashboardApi = {
     }
   },
 
-  async getSchoolGrowth(period: 'year' | 'month' = 'year'): Promise<{ data: SchoolGrowthData[] }> {
-    try {
-      const response = await apiClient.get<{ data: SchoolGrowthData[] }>(
-        '/api/v1/super-admin/schools/growth',
-        { params: { period } }
-      );
-      return handleApiResponse(response);
-    } catch (error) {
-      return handleApiError(error);
-    }
-  },
 
-  async getSchoolDistribution(): Promise<{ data: SchoolDistribution[] }> {
-    try {
-      const response = await apiClient.get<{ data: SchoolDistribution[] }>(
-        '/api/v1/super-admin/schools/distribution'
-      );
-      return handleApiResponse(response);
-    } catch (error) {
-      return handleApiError(error);
-    }
-  },
-
-  async getRecentSchools(limit: number = 5): Promise<{ data: RecentSchool[] }> {
-    try {
-      const response = await apiClient.get<{ data: RecentSchool[] }>(
-        '/api/v1/super-admin/schools/recent',
-        { params: { limit } }
-      );
-      return handleApiResponse(response);
-    } catch (error) {
-      return handleApiError(error);
-    }
-  },
 };

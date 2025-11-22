@@ -5,16 +5,12 @@ interface SchoolListProps {
   schools: School[];
   isLoading?: boolean;
   emptyMessage?: string;
-  onViewDetails?: (schoolId: string) => void;
-  onManageStudents?: (schoolId: string) => void;
 }
 
 export const SchoolList = ({ 
   schools, 
   isLoading = false,
-  emptyMessage = 'لا توجد مدارس مسجلة',
-  onViewDetails,
-  onManageStudents
+  emptyMessage = 'لا توجد مدارس مسجلة'
 }: SchoolListProps) => {
   if (isLoading) {
     return (
@@ -43,8 +39,6 @@ export const SchoolList = ({
         <SchoolCard
           key={school.id}
           school={school}
-          onViewDetails={onViewDetails}
-          onManageStudents={onManageStudents}
         />
       ))}
     </div>
