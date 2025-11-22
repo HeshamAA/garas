@@ -45,7 +45,7 @@ export const superAdminDashboardApi = {
       const response = await apiClient.get<{ success: boolean; message: string; data: SuperAdminStatistics }>(
         'https://school.safehandapps.com/api/v1/school/dashboard'
       );
-      console.log(response)
+
       return handleApiResponse(response);
     } catch (error) {
       return handleApiError(error);

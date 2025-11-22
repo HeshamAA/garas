@@ -14,7 +14,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   
   const { isOpen: sidebarOpen, toggle: toggleSidebar } = useSidebarState(true);
   const { user } = useAppSelector(state => state.auth);
-  console.log(user)
+
   const userName = user?.school?.name || user?.name || 'المستخدم';
   const userAvatar = user?.avatar;
   const isSchool = (user?.role).toLocaleLowerCase() === 'school';
