@@ -1,6 +1,7 @@
 ﻿export const PUBLIC_ROUTES = {
   HOME: '/',
   LOGIN: '/login',
+  FORGOT_PASSWORD: '/forgot-password',
   REGISTER: '/register',
 } as const;
 
@@ -8,6 +9,8 @@ export const SUPER_ADMIN_ROUTES = {
   DASHBOARD: '/dashboard',
   REQUESTS: '/requests',
   SCHOOLS: '/registered-schools',
+  SUBSCRIPTIONS: '/subscriptions',
+  SUBSCRIPTION_PLANS: '/subscription-plans',
   SETTINGS: '/account-settings',
 } as const;
 
@@ -18,7 +21,7 @@ export const SCHOOL_ROUTES = {
   RECEIVERS: '/receivers',
   TRUSTED_RECEIVERS: '/trusted-receivers',
   RECEIVE_REQUESTS: '/receive-requests',
-
+  SUBSCRIPTION: '/my-subscription',
 } as const;
 
 export const ROUTES = {

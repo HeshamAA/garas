@@ -4,6 +4,9 @@ import { Badge } from '@/components/ui/badge';
 import { MapPin, Calendar, GraduationCap, CheckCircle2 } from 'lucide-react';
 import { School } from '../types/school.types';
 import { memo, useMemo } from 'react';
+import { useAppDispatch, useToast } from '@/shared/hooks';
+import { toggleSchoolStatus } from '../store/schoolsThunks';
+import { Button } from '@/components/ui/button';
 
 interface SchoolCardProps {
   school: School;
@@ -29,6 +32,19 @@ export const SchoolCard = memo(({
 
   const isActive = school.status === 'active';
 
+  const dispatch = useAppDispatch();
+  const toast = useToast();
+
+  const handleToggle = async () => {
+    try {
+      const action = await dispatch(toggleSchoolStatus(school.id)).unwrap();
+      toast.success(action.message || 'تم تحديث حالة المدرسة');
+    } catch (err: unknown) {
+      const msg = typeof err === 'string' ? err : (err instanceof Error ? err.message : 'فشل تحديث حالة المدرسة');
+      toast.error(msg);
+    }
+  };
+
   return (
     <Card className={`p-6 hover:shadow-lg transition-all relative ${isActive ? 'border-2 border-green-500 shadow-md' : ''}`} dir="rtl">
       
@@ -41,7 +57,7 @@ export const SchoolCard = memo(({
         </div>
       )}
 
-      <div className="flex items-start justify-start gap-3 mb-4">
+      <div className="flex items-start gap-3 mb-4">
         <Avatar className="w-16 h-16">
           <AvatarImage src={school.logo} loading="lazy" />
           <AvatarFallback className="bg-primary/10 text-primary">
@@ -78,6 +94,19 @@ export const SchoolCard = memo(({
           <span className="font-medium">تاريخ التسجيل:</span>
           <span className="text-muted-foreground">{formattedDate}</span>
         </div>
+      </div>
+
+      <div className="mt-6 pt-4 border-t flex flex-col gap-3">
+        <div className="flex items-center justify-between text-sm text-muted-foreground">
+          <span>{isActive ? 'المدرسة نشطة حالياً' : 'المدرسة غير مفعلة'}</span>
+        </div>
+        <Button
+          size="sm"
+          variant={isActive ? 'destructive' : 'outline'}
+          onClick={handleToggle}
+        >
+          {isActive ? 'إلغاء التفعيل' : 'تفعيل'}
+        </Button>
       </div>
     </Card>
   );

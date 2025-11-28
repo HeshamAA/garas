@@ -7,6 +7,7 @@ import { Toaster } from "react-hot-toast";
 import Index from "@/pages/Index";
 import NotFound from "@/pages/NotFound";
 import { AuthPage, ProtectedRoute } from "@/features/auth";
+import { ForgotPasswordPage } from "@/features/auth/pages/ForgotPasswordPage";
 import { StudentsPage } from "@/features/school/students";
 import { ParentsPage } from "@/features/school/parents";
 import { ReceiversPage } from "@/features/school/receivers";
@@ -15,6 +16,7 @@ import { ReceiveRequestsPage } from "@/features/school/pickup-requests";
 import { RegisteredSchoolsPage } from "@/features/super-admin/schools";
 import { SchoolDashboardPage } from "@/features/school/dashboard";
 import { UserDashboardPage } from "./features/super-admin/dashboard";
+import { SchoolSubscriptionPage, SubscriptionPlansPage, SuperAdminSubscriptionsPage } from "@/features/subscription";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +30,7 @@ const App = () => (
             
             <Route path="/" element={<Index />} />
             <Route path="/login" element={<AuthPage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
             <Route 
               path="/school-dashboard" 
@@ -71,6 +74,14 @@ const App = () => (
                 </ProtectedRoute>
               } 
             />
+            <Route 
+              path="/my-subscription" 
+              element={
+                <ProtectedRoute requiredRole="school">
+                  <SchoolSubscriptionPage />
+                </ProtectedRoute>
+              } 
+            />
 
             <Route 
               path="/dashboard" 
@@ -93,6 +104,22 @@ const App = () => (
               element={
                 <ProtectedRoute requiredRole="super_admin">
                   <RegisteredSchoolsPage />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/subscriptions" 
+              element={
+                <ProtectedRoute requiredRole="super_admin">
+                  <SuperAdminSubscriptionsPage />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/subscription-plans" 
+              element={
+                <ProtectedRoute requiredRole="super_admin">
+                  <SubscriptionPlansPage />
                 </ProtectedRoute>
               } 
             />

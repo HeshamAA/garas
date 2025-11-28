@@ -2,7 +2,8 @@
 import { School, SchoolFilters } from '../types/school.types';
 import { PaginationMetadata, PaginationLinks } from '@/shared/types/pagination.types';
 import { 
-  fetchSchools, 
+  fetchSchools,
+  toggleSchoolStatus,
 } from './schoolsThunks';
 
 interface SchoolsState {
@@ -60,7 +61,22 @@ const schoolsSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload as string || 'Failed to fetch schools';
       })
-      
+      .addCase(toggleSchoolStatus.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(toggleSchoolStatus.fulfilled, (state, action) => {
+        state.isLoading = false;
+        const schoolId = action.payload.schoolId;
+        const school = state.items.find(s => s.id === schoolId);
+        if (school) {
+          school.status = school.status === 'active' ? 'inactive' : 'active';
+        }
+      })
+      .addCase(toggleSchoolStatus.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string || 'Failed to toggle school status';
+      });
   },
 });
 

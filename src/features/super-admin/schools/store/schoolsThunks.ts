@@ -14,4 +14,17 @@ export const fetchSchools = createAsyncThunk(
     }
   }
 );
-
+
+export const toggleSchoolStatus = createAsyncThunk(
+  'schools/toggleStatus',
+  async (schoolId: number, { rejectWithValue }) => {
+    try {
+      const response = await schoolsApi.toggleStatus(schoolId);
+      return { schoolId, ...response };
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Failed to toggle school status';
+      return rejectWithValue(message);
+    }
+  }
+);
+

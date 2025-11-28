@@ -81,3 +81,35 @@ export interface AuthErrorResponse {
   code?: string;
   details?: unknown;
 }
+
+// Forget Password Types
+export interface ForgetPasswordRequest {
+  email: string;
+}
+
+export interface ForgetPasswordResponse {
+  message: string;
+  success: boolean;
+}
+
+export interface VerifyOtpRequest {
+  email: string;
+  otpCode: string;
+  forgetPassword: boolean;
+}
+
+export interface VerifyOtpResponse {
+  message: string;
+  success: boolean;
+}
+
+export interface UpdatePasswordRequest {
+  email: string;
+  password: string;
+  otpValue: string;
+}
+
+export interface UpdatePasswordResponse {
+  message: string;
+  success: boolean;
+}

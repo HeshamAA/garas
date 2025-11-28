@@ -1,6 +1,7 @@
 ﻿import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import type { UseFormReturn } from "react-hook-form";
 import type { LoginFormData } from "../hooks";
 
@@ -21,6 +22,7 @@ export const LoginForm = ({
   onTogglePassword,
   onToggleMode,
 }: LoginFormProps) => {
+  const navigate = useNavigate();
   return (
     <form 
       onSubmit={form.handleSubmit(onSubmit)} 
@@ -67,7 +69,11 @@ export const LoginForm = ({
           </p>
         )}
         <div className="text-left">
-          <button type="button" className="text-primary text-sm link-hover-effect">
+          <button 
+            type="button" 
+            className="text-primary text-sm link-hover-effect"
+            onClick={() => navigate('/forgot-password')}
+          >
             هل نسيت كلمة المرور؟
           </button>
         </div>

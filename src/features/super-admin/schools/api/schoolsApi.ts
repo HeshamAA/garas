@@ -29,4 +29,11 @@ export const schoolsApi = {
     );
     return response.data;
   },
+
+  async toggleStatus(id: number): Promise<{ message: string; success: boolean }> {
+    const response = await apiClient.patch<{ message: string; success: boolean }>(
+      `${ENDPOINTS.schools}/${id}/status`
+    );
+    return response.data;
+  },
 };
