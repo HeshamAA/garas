@@ -9,6 +9,7 @@ import { useToast } from '@/hooks/use-toast';
 import { requestsApi } from '@/features/school/pickup-requests/api/requestsApi';
 import { PickupRequest } from '@/features/school/pickup-requests/types/request.types';
 import { EmptyState } from '@/shared/components/EmptyState';
+import { useOneSignal } from '@/shared/hooks';
 
 const SchoolDashboardPage = () => {
   const [statistics, setStatistics] = useState<SchoolStatistics | null>(null);
@@ -16,6 +17,15 @@ const SchoolDashboardPage = () => {
   const [recentRequests, setRecentRequests] = useState<PickupRequest[]>([]);
   const [loadingRequests, setLoadingRequests] = useState(true);
   const { toast } = useToast();
+  const { subscriptionId, isReady } = useOneSignal();
+
+  // عرض الـ subscription ID في الـ console
+  useEffect(() => {
+    if (isReady && subscriptionId) {
+      console.log('OneSignal is ready! Subscription ID:', subscriptionId);
+      // هنا ممكن تبعت الـ subscriptionId للـ backend
+    }
+  }, [isReady, subscriptionId]);
 
   useEffect(() => {
     fetchStatistics();
