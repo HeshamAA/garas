@@ -9,6 +9,7 @@ import { fetchSchoolRequests } from '../store/requestsThunks';
 import RequestCard from '../components/RequestCard';
 import { Pagination } from '@/shared/components/ui';
 import { GetRequestsParams } from '../api/requestsApi';
+import { EmptyState } from '@/shared/components/EmptyState';
 
 const ReceiveRequestsPage = () => {
   const dispatch = useAppDispatch();
@@ -236,16 +237,21 @@ const ReceiveRequestsPage = () => {
             <div className="text-center py-12">
               <p className="text-muted-foreground text-lg">جاري التحميل...</p>
             </div>
+          ) : items && items.length > 0 ? (
+            <div className={`space-y-2 grid grid-cols-1 md:grid-cols-2 gap-4`}>
+              {items.map((request) => (
+                <RequestCard
+                  key={request.id}
+                  request={request}
+                  isLoading={isLoading}
+                />
+              ))}
+            </div>
           ) : (
-         <div className={`space-y-2 grid grid-cols-1 md:grid-cols-2 gap-4`}>
-      {items?.map((request) => (
-        <RequestCard
-          key={request.id}
-          request={request}
-          isLoading={isLoading}
-        />
-      ))}
-    </div>
+            <EmptyState 
+              message="لا توجد طلبات استلام" 
+              description="لم يتم العثور على أي طلبات استلام حالياً."
+            />
           )}
         </div>
 

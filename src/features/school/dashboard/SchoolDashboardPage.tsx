@@ -6,21 +6,26 @@ import { useEffect, useState } from 'react';
 import { statisticsApi } from '@/shared/api';
 import { SchoolStatistics } from '@/shared/types/statistics.types';
 import { useToast } from '@/hooks/use-toast';
+import { requestsApi } from '@/features/school/pickup-requests/api/requestsApi';
+import { PickupRequest } from '@/features/school/pickup-requests/types/request.types';
+import { EmptyState } from '@/shared/components/EmptyState';
 
 const SchoolDashboardPage = () => {
   const [statistics, setStatistics] = useState<SchoolStatistics | null>(null);
   const [loading, setLoading] = useState(true);
+  const [recentRequests, setRecentRequests] = useState<PickupRequest[]>([]);
+  const [loadingRequests, setLoadingRequests] = useState(true);
   const { toast } = useToast();
 
   useEffect(() => {
     fetchStatistics();
+    fetchRecentRequests();
   }, []);
 
   const fetchStatistics = async () => {
     setLoading(true);
     try {
       const response = await statisticsApi.getSchoolStatistics();
-
       setStatistics(response.data);
     } catch (error) {
       toast({
@@ -30,6 +35,25 @@ const SchoolDashboardPage = () => {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchRecentRequests = async () => {
+    setLoadingRequests(true);
+    try {
+      const response = await requestsApi.getSchoolRequests({
+        limit: 5,
+        page: 1,
+        sortBy: 'date',
+        sortOrder: 'DESC',
+      });
+      console.log('Recent requests response:', response);
+      console.log('Recent requests items:', response.data?.items);
+      setRecentRequests(response.data?.items || []);
+    } catch (error) {
+      console.error('Failed to fetch recent requests:', error);
+    } finally {
+      setLoadingRequests(false);
     }
   };
 
@@ -92,14 +116,6 @@ const SchoolDashboardPage = () => {
     },
   ] : [];
 
-  const recentRequests = [
-    { id: 1, student: 'أحمد محمد', parent: 'محمد أحمد', status: 'pending', time: '10:30 ص' },
-    { id: 2, student: 'فاطمة علي', parent: 'علي حسن', status: 'approved', time: '10:45 ص' },
-    { id: 3, student: 'خالد سعيد', parent: 'سعيد خالد', status: 'completed', time: '11:00 ص' },
-    { id: 4, student: 'نورة عبدالله', parent: 'عبدالله محمد', status: 'pending', time: '11:15 ص' },
-    { id: 5, student: 'عمر يوسف', parent: 'يوسف عمر', status: 'approved', time: '11:30 ص' },
-  ];
-
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'pending':
@@ -107,10 +123,22 @@ const SchoolDashboardPage = () => {
       case 'approved':
         return <Badge variant="outline" className="bg-blue-500/10 text-blue-500 border-blue-500/20">تمت الموافقة</Badge>;
       case 'completed':
+      case 'delivered':
         return <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">مكتمل</Badge>;
+      case 'rejected':
+        return <Badge variant="outline" className="bg-red-500/10 text-red-500 border-red-500/20">مرفوض</Badge>;
       default:
         return <Badge variant="outline">غير معروف</Badge>;
     }
+  };
+
+  const formatTime = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleTimeString('ar-EG', { 
+      hour: '2-digit', 
+      minute: '2-digit',
+      hour12: true 
+    });
   };
 
   return (
@@ -155,23 +183,37 @@ const SchoolDashboardPage = () => {
             <CardTitle className="text-right">طلبات الاستلام الأخيرة</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-3">
-              {recentRequests.map((request) => (
-                <div
-                  key={request.id}
-                  className="flex items-center justify-between p-4 bg-secondary/30 rounded-lg hover:bg-secondary/50 transition-colors"
-                >
-                  <div className="flex items-center gap-4">
-                    <span className="text-sm text-muted-foreground">{request.time}</span>
-                    {getStatusBadge(request.status)}
+            {loadingRequests ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="w-6 h-6 animate-spin text-primary" />
+              </div>
+            ) : recentRequests.length > 0 ? (
+              <div className="space-y-3">
+                {recentRequests.map((request) => (
+                  <div
+                    key={request.id}
+                    className="flex items-center justify-between p-4 bg-secondary/30 rounded-lg hover:bg-secondary/50 transition-colors"
+                  >
+                        <div className="text-right">
+                      <p className="font-medium">{request.student?.fullName || 'غير محدد'}</p>
+                      <p className="text-sm text-muted-foreground">
+                        ولي الأمر: {request.parent?.fullName || request.student?.parent?.fullName || 'غير محدد'}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <span className="text-sm text-muted-foreground">{formatTime(request.date)}</span>
+                      {getStatusBadge(request.status)}
+                    </div>
+                
                   </div>
-                  <div className="text-right">
-                    <p className="font-medium">{request.student}</p>
-                    <p className="text-sm text-muted-foreground">ولي الأمر: {request.parent}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <EmptyState 
+                message="لا توجد طلبات استلام" 
+                description="لم يتم تسجيل أي طلبات استلام حتى الآن."
+              />
+            )}
           </CardContent>
         </Card>
 

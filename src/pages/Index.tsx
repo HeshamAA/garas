@@ -6,6 +6,7 @@ import { Bell, School, Users, Shield, Check, Star, Award, Clock } from 'lucide-r
 import { getDefaultRoute } from '@/shared/constants/routes';
 import { subscriptionApi } from '@/features/subscription/api/subscriptionApi';
 import { SubscriptionPlan } from '@/features/subscription/types/subscription.types';
+import { EmptyState } from '@/shared/components/EmptyState';
 
 const Index = () => {
   const navigate = useNavigate();
@@ -157,9 +158,10 @@ const Index = () => {
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
             </div>
           ) : plans.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-gray-500 text-lg">لا توجد خطط متاحة حالياً</p>
-            </div>
+            <EmptyState 
+              message="لا توجد خطط متاحة حالياً" 
+              description="نعمل على إضافة خطط جديدة قريباً. تابعنا للحصول على آخر التحديثات."
+            />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {plans.map((plan) => (

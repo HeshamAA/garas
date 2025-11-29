@@ -11,6 +11,7 @@ import { fetchStudents } from '../store/studentsThunks';
 import { StudentCard } from '../components/StudentCard';
 import { Pagination } from '@/shared/components/ui';
 import { GetStudentsParams } from '../api/studentsApi';
+import { EmptyState } from '@/shared/components/EmptyState';
 
 const StudentsPage = () => {
   const dispatch = useAppDispatch();
@@ -228,15 +229,22 @@ const StudentsPage = () => {
         </div>
 
         <div className="animate-zoom-in">
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-            {students?.map((student) => (
-              <StudentCard
-                key={student.id}
-                student={student}
-                onViewRequests={handleViewRequests}
-              />
-            ))}
-          </div>
+          {students && students.length > 0 ? (
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+              {students.map((student) => (
+                <StudentCard
+                  key={student.id}
+                  student={student}
+                  onViewRequests={handleViewRequests}
+                />
+              ))}
+            </div>
+          ) : (
+            <EmptyState 
+              message="لا يوجد طلاب" 
+              description="لم يتم العثور على أي طلاب. قم بإضافة طلاب جدد للبدء."
+            />
+          )}
         </div>
 
         {pagination && (

@@ -1,5 +1,6 @@
 ﻿import { Parent } from '../types/parent.types';
 import ParentCard from './ParentCard';
+import { EmptyState } from '@/shared/components/EmptyState';
 
 interface ParentListProps {
   parents: Parent[];
@@ -22,11 +23,10 @@ const ParentList = ({ parents, isLoading, onViewRequests }: ParentListProps) => 
 
   if (parents.length === 0) {
     return (
-      <div className="flex items-center justify-center py-12">
-        <div className="text-center">
-          <p className="text-muted-foreground text-lg">لا يوجد أولياء أمور</p>
-        </div>
-      </div>
+      <EmptyState 
+        message="لا يوجد أولياء أمور" 
+        description="لم يتم العثور على أي أولياء أمور. قم بإضافة أولياء أمور جدد للبدء."
+      />
     );
   }
 

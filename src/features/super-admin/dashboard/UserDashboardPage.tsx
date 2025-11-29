@@ -264,41 +264,7 @@ const UserDashboardPage = () => {
           </Card>
         </div>
 
-        <Card className="animate-zoom-in">
-          <CardHeader>
-            <CardTitle className="text-right">إجراءات سريعة</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <a
-                href="/registered-schools"
-                className="flex items-center gap-3 p-4 bg-primary/10 hover:bg-primary/20 rounded-lg transition-colors cursor-pointer"
-              >
-                <School className="w-6 h-6 text-primary" />
-                <div className="text-right">
-                  <p className="font-medium">إدارة المدارس</p>
-                  <p className="text-sm text-muted-foreground">عرض وإدارة جميع المدارس</p>
-                </div>
-              </a>
-              
-              <div className="flex items-center gap-3 p-4 bg-blue-500/10 hover:bg-blue-500/20 rounded-lg transition-colors cursor-pointer">
-                <TrendingUp className="w-6 h-6 text-blue-600" />
-                <div className="text-right">
-                  <p className="font-medium">التقارير</p>
-                  <p className="text-sm text-muted-foreground">عرض التقارير والإحصائيات</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3 p-4 bg-green-500/10 hover:bg-green-500/20 rounded-lg transition-colors cursor-pointer">
-                <CheckCircle className="w-6 h-6 text-green-600" />
-                <div className="text-right">
-                  <p className="font-medium">الموافقات</p>
-                  <p className="text-sm text-muted-foreground">مراجعة طلبات الموافقة</p>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+      
       </div>
     </DashboardLayout>
   );

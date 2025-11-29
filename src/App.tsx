@@ -17,6 +17,7 @@ import { RegisteredSchoolsPage } from "@/features/super-admin/schools";
 import { SchoolDashboardPage } from "@/features/school/dashboard";
 import { UserDashboardPage } from "./features/super-admin/dashboard";
 import { SchoolSubscriptionPage, SubscriptionPlansPage, SuperAdminSubscriptionsPage } from "@/features/subscription";
+import { PageTransitionLoader } from "@/shared/components/PageTransitionLoader";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,7 @@ const App = () => (
       <TooltipProvider>
         <Toaster position="top-center" reverseOrder={false} />
         <BrowserRouter>
+          <PageTransitionLoader />
           <Routes>
             
             <Route path="/" element={<Index />} />

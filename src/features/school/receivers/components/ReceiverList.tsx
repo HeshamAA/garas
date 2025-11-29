@@ -1,5 +1,6 @@
 ﻿import { Receiver } from "../types/receiver.types";
 import ReceiverCard from "./ReceiverCard";
+import { EmptyState } from '@/shared/components/EmptyState';
 
 interface ReceiverListProps {
   receivers: Receiver[];
@@ -24,9 +25,10 @@ const ReceiverList = ({
 
   if (receivers.length === 0) {
     return (
-      <div className="text-center py-12">
-        <p className="text-muted-foreground text-lg">{emptyMessage}</p>
-      </div>
+      <EmptyState 
+        message="لا يوجد مستلمون" 
+        description="لم يتم العثور على أي مستلمين. قم بإضافة مستلمين جدد للبدء."
+      />
     );
   }
 
