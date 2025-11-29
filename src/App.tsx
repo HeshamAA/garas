@@ -91,14 +91,7 @@ const App = () => (
                 </ProtectedRoute>
               } 
             />
-            <Route 
-              path="/requests" 
-              element={
-                <ProtectedRoute requiredRole="super_admin">
-                  <RequestsPage />
-                </ProtectedRoute>
-              } 
-            />
+        
             <Route 
               path="/registered-schools" 
               element={

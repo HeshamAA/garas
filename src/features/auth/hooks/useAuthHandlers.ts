@@ -3,6 +3,7 @@ import { useAppDispatch, useToast } from "@/shared/hooks";
 import { loginUser, registerUser } from "../store/authThunks";
 import { getDefaultRoute } from "@/shared/constants/routes";
 import { schoolRegistrationApi, SchoolSignUpData } from "../api/schoolRegistrationApi";
+import { authApi } from "../api/authApi";
 import { setUser, setToken } from "../store/authSlice";
 import type { LoginFormData, SchoolFormData, OwnerFormData } from "./useAuthForm";
 
@@ -16,18 +17,20 @@ export const useAuthHandlers = () => {
       const credentials = {
         identifier: data.identifier,
         password: data.password,
-        playerId: 'a',
+        playerId: '1',
       };
       const result = await dispatch(loginUser(credentials)).unwrap();
       toast.success("تم تسجيل الدخول بنجاح");
-      
+  
       if (result.user) {
         const role = result.user.role.toLowerCase() as 'super_admin' | 'school';
         const defaultRoute = getDefaultRoute(role);
         navigate(defaultRoute);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Login error:', err);
+      const errorMessage = err?.message || "فشل تسجيل الدخول";
+      toast.error(errorMessage);
     }
   };
 
@@ -38,7 +41,7 @@ export const useAuthHandlers = () => {
         name: data.name,
         phoneNumber: data.phoneNumber,
         password: data.password,
-        playerId: data.playerId,
+        playerId: "1",
         description: data.description,
         location: data.location,
         stages: data.stages || [],
@@ -50,25 +53,32 @@ export const useAuthHandlers = () => {
 
       const response = await schoolRegistrationApi.signUp(signUpData);
 
-      if (response.success) {
-        const user = {
-          ...response.data.user,
-          role: response.data.user.role.toLowerCase() as 'super_admin' | 'school',
-        };
+      if (response?.success && response?.data?.accessToken) {
+        // حفظ الـ token
+        const token = response.data.accessToken;
+        localStorage.setItem('authToken', token);
+        dispatch(setToken(token));
         
-        dispatch(setUser(user));
-        dispatch(setToken(response.data.accessToken));
-        
-        toast.success(response.message || "تم إنشاء الحساب بنجاح");
-        
-        const defaultRoute = getDefaultRoute(user.role);
-        navigate(defaultRoute);
+        // جلب بيانات المستخدم الكاملة من get-me
+        try {
+          const user = await authApi.getCurrentUser();
+          dispatch(setUser(user));
+          
+          toast.success(response.message || "تم إنشاء الحساب بنجاح");
+          
+          const defaultRoute = getDefaultRoute(user.role);
+          navigate(defaultRoute);
+        } catch (getMeError) {
+          console.error('Failed to get user data:', getMeError);
+          toast.error("حدث خطأ في جلب بيانات المستخدم");
+        }
       } else {
-        toast.error(response.message || "حدث خطأ أثناء التسجيل");
+        toast.error(response?.message || "حدث خطأ أثناء التسجيل");
       }
     } catch (err: any) {
       console.error('School registration error:', err);
-      toast.error(err?.message || "حدث خطأ أثناء التسجيل");
+      const errorMessage = err?.message || err?.response?.data?.message || "حدث خطأ أثناء التسجيل";
+      toast.error(errorMessage);
     }
   };
 
@@ -89,8 +99,10 @@ export const useAuthHandlers = () => {
         const defaultRoute = getDefaultRoute(result.user.role);
         navigate(defaultRoute);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Owner registration error:', err);
+      const errorMessage = err?.message || "حدث خطأ أثناء التسجيل";
+      toast.error(errorMessage);
     }
   };
 

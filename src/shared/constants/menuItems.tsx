@@ -18,7 +18,6 @@ export const SCHOOL_MENU_ITEMS: MenuItem[] = [
 
 export const SUPER_ADMIN_MENU_ITEMS: MenuItem[] = [
   { icon: TrendingUp, label: 'لوحة التحكم', path: SUPER_ADMIN_ROUTES.DASHBOARD },
-  { icon: FileText, label: 'الطلبات', path: SUPER_ADMIN_ROUTES.REQUESTS },
   { icon: Building2, label: 'المدارس المسجلة', path: SUPER_ADMIN_ROUTES.SCHOOLS },
   { icon: CreditCard, label: 'اشتراكات المدارس', path: SUPER_ADMIN_ROUTES.SUBSCRIPTIONS },
   { icon: ListChecks, label: 'خطط الاشتراك', path: SUPER_ADMIN_ROUTES.SUBSCRIPTION_PLANS },

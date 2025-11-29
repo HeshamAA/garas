@@ -16,8 +16,8 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const { user } = useAppSelector(state => state.auth);
 
   const userName = user?.school?.name || user?.name || 'المستخدم';
-  const userAvatar = user?.avatar;
-  const isSchool = (user?.role).toLocaleLowerCase() === 'school';
+  const userAvatar = user?.profileImage;
+  const isSchool = user?.role?.toLowerCase() === 'school';
 
   return (
     <div className="flex min-h-screen bg-background" dir="rtl">

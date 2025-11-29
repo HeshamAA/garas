@@ -26,6 +26,7 @@ export interface User {
   deletedAt?: string;
   phone?: string;
   avatar?: string;
+  profileImage?: string;
 }
 
 export interface AuthState {

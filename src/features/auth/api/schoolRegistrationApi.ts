@@ -78,7 +78,7 @@ export const schoolRegistrationApi = {
 
       return response.data;
     } catch (error) {
-      return handleApiError(error);
+      handleApiError(error);
     }
   },
 };

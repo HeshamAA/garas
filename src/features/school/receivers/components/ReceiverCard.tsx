@@ -71,16 +71,7 @@ const ReceiverCard = memo(({ receiver, onPickupRequestsClick }: ReceiverCardProp
         </div>
       </div>
 
-      <Button 
-        className="w-full bg-primary text-primary-foreground hover:bg-primary/90 rounded-full py-6 flex items-center justify-center gap-2"
-        onClick={() => onPickupRequestsClick?.(receiver.id)}
-      >
-        <span className="text-lg">⚠️</span>
-        <span>طلبات الاستلام</span>
-        <Badge className="bg-warning text-warning-foreground rounded-full">
-          {requestsCount}
-        </Badge>
-      </Button>
+
     </div>
   );
 });

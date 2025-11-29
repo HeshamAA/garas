@@ -207,23 +207,6 @@ export const RegistrationFormFields = ({
           )}
         </div>
 
-        {isSchoolForm && (
-          <div className="space-y-2 text-right">
-            <label className="text-sm font-medium">Player ID</label>
-            <Input
-              {...(form as UseFormReturn<SchoolFormData>).register("playerId")}
-              placeholder="player-id-123"
-              className="text-right h-14 rounded-2xl form-field-transition focus:ring-2 focus:ring-primary/20"
-              disabled={isRegistering}
-            />
-            {(form as UseFormReturn<SchoolFormData>).formState.errors.playerId && (
-              <p className="text-sm text-destructive animate-fade-in flex items-center gap-1">
-                <span className="text-base">⚠️</span>
-                {(form as UseFormReturn<SchoolFormData>).formState.errors.playerId?.message}
-              </p>
-            )}
-          </div>
-        )}
       </div>
 
       <div className="bg-secondary/30 rounded-2xl p-6 border border-border form-field-transition hover:border-primary/30">

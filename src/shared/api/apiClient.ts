@@ -99,6 +99,16 @@ const createApiClient = (): AxiosInstance => {
             data
           );
 
+        case 409: {
+          const conflictMessage = (data as Record<string, unknown>)?.message as string;
+          throw new ApiError(
+            conflictMessage || 'حدث تعارض في البيانات',
+            'CONFLICT',
+            409,
+            data
+          );
+        }
+
         case 422:
           throw new ApiError(
             ERROR_MESSAGES.VALIDATION_ERROR,

@@ -1,7 +1,9 @@
 ﻿import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Bell, ChevronDown, Search } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Bell, ChevronDown, Search, School } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import { useAppSelector } from "@/shared/hooks";
 
 interface HeaderProps {
   showTabs?: boolean;
@@ -9,7 +11,11 @@ interface HeaderProps {
 
 const Header = ({ showTabs = true }: HeaderProps) => {
   const location = useLocation();
+  const { user } = useAppSelector(state => state.auth);
 
+  const schoolName = user?.school?.name || user?.name || "اسم المدرسة";
+  const schoolLogo = user?.profileImage || user?.avatar;
+  console.log(user)
   const tabs = [
     { name: "أولياء الأمور", path: "/parents" },
     { name: "الطلاب", path: "/students" },
@@ -17,6 +23,15 @@ const Header = ({ showTabs = true }: HeaderProps) => {
     { name: "طلبات الاستلام", path: "/requests" },
     { name: "الأعدادات", path: "/school-profile" },
   ];
+
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map(word => word[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  };
 
   return (
     <div className="bg-primary text-primary-foreground">
@@ -27,7 +42,15 @@ const Header = ({ showTabs = true }: HeaderProps) => {
             اختر آخر
           </Button>
 
-          <h1 className="text-2xl font-bold">اسم المدرسة</h1>
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-bold">{schoolName}</h1>
+            <Avatar className="w-12 h-12 border-2 border-primary-foreground/20">
+              <AvatarImage src={schoolLogo} alt={schoolName} />
+              <AvatarFallback className="bg-primary-foreground/10 text-primary-foreground">
+                {schoolLogo ? <School className="w-6 h-6" /> : getInitials(schoolName)}
+              </AvatarFallback>
+            </Avatar>
+          </div>
 
           <div className="bg-card rounded-2xl p-2">
             <Bell className="w-8 h-8 text-primary" />

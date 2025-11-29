@@ -16,7 +16,6 @@ export const schoolRegistrationSchema = z.object({
   description: z.string().optional(),
   location: z.string().optional(),
   stages: z.array(z.string()).optional(),
-  playerId: z.string().min(1, "Player ID مطلوب"),
   logo: z.any().optional(),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "كلمة المرور غير متطابقة",
@@ -59,7 +58,6 @@ export const useAuthForm = () => {
       description: "",
       location: "",
       stages: [],
-      playerId: "",
     },
   });
 
