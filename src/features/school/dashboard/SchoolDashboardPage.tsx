@@ -19,11 +19,11 @@ const SchoolDashboardPage = () => {
   const { toast } = useToast();
   const { subscriptionId, isReady } = useOneSignal();
 
-  // عرض الـ subscription ID في الـ console
+
   useEffect(() => {
     if (isReady && subscriptionId) {
       console.log('OneSignal is ready! Subscription ID:', subscriptionId);
-      // هنا ممكن تبعت الـ subscriptionId للـ backend
+
     }
   }, [isReady, subscriptionId]);
 
@@ -57,8 +57,7 @@ const SchoolDashboardPage = () => {
         sortBy: 'date',
         sortOrder: 'DESC',
       });
-      console.log('Recent requests response:', response);
-      console.log('Recent requests items:', response.data?.items);
+     
       setRecentRequests(response.data?.items || []);
     } catch (error) {
       console.error('Failed to fetch recent requests:', error);

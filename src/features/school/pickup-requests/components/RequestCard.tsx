@@ -39,6 +39,7 @@ const RequestCard = memo(({
   }, [request.date]);
 
   const howToReceiveLabel = useMemo(() => {
+    if (!request.howToReceive) return 'غير محدد';
     switch (request.howToReceive) {
       case 'person':
         return 'شخصياً';
@@ -63,7 +64,7 @@ const RequestCard = memo(({
 
   return (
     <Card 
-      className={`rounded-2xl p-6 shadow-sm border border-border/50 hover:shadow-lg transition-shadow cursor-pointer ${className}`}
+      className={` flex flex-col rounded-2xl p-6 shadow-sm border border-border/50 hover:shadow-lg transition-shadow cursor-pointer ${className}`}
       onClick={handleCardClick}
     >
       
@@ -85,7 +86,7 @@ const RequestCard = memo(({
         </div>
       </div>
 
-      <div className="space-y-3 mb-4 text-right">
+      <div className="space-y-3 mb-4 text-right h-full max-h-full flex flex-col justify-around">
              {request.student && (
           <div className="flex items-center text-sm gap-2">
             <span className="font-medium flex items-center gap-2">
@@ -93,7 +94,7 @@ const RequestCard = memo(({
               الطالب:
             </span>
             <span className="text-primary">
-              {request.student.fullName} - {typeof request.student.class === 'object' ? (request.student.class as any)?.name || 'غير محدد' : request.student.class}
+              {request.student.fullName} - {typeof request.student.class === 'object' ? (request.student.class)?.name || 'غير محدد' : request.student.class}
             </span>
           </div>
         )}
@@ -104,7 +105,7 @@ const RequestCard = memo(({
             الموقع:
           </span>
           <span className="text-primary">
-            {request.location}
+            {request.location || 'غير محدد'}
           </span>
         </div>
 
@@ -123,16 +124,18 @@ const RequestCard = memo(({
           <span className="text-primary">{howToReceiveLabel}</span>
         </div>
 
-        {request.numberOfCar && (
-          <div className="flex items-center text-sm gap-2">
-            <span className="font-medium">رقم السيارة:</span>
-            <span className="text-primary">{request.numberOfCar}</span>
+        {request.howToReceive === 'car' && (
+          <div className="flex items-center text-sm gap-2 flex-wrap">
+            <span className="font-medium">تفاصيل السيارة:</span>
+            <span className="text-primary">
+              رقم السيارة: {request.numberOfCar || 'غير محدد'} | نوع السيارة: {request.carType || 'غير محدد'} | لون السيارة: {request.carColor || 'غير محدد'}
+            </span>
           </div>
         )}
   
-        {request.deliveryPerson && (
-          <div className="space-y-2 p-3 bg-primary/5 rounded-lg mt-2">
-            <p className="font-medium text-sm">معلومات المستلم:</p>
+        <div className="space-y-2 p-3 bg-primary/5 rounded-lg mt-2">
+          <p className="font-medium text-sm">معلومات المستلم:</p>
+          {request.deliveryPerson ? (
             <div className="flex items-center gap-3">
               <Avatar className="w-10 h-10">
                 <AvatarImage src={request.deliveryPerson.profileImage || undefined} loading="lazy" />
@@ -142,11 +145,13 @@ const RequestCard = memo(({
               </Avatar>
               <div className="text-right flex-1">
                 <p className="font-medium text-sm">{request.deliveryPerson.fullName}</p>
-                <p className="text-xs text-muted-foreground">{request.deliveryPerson.user.phoneNumber}</p>
+                <p className="text-xs text-muted-foreground">{request.deliveryPerson.user?.phoneNumber || 'غير محدد'}</p>
               </div>
             </div>
-          </div>
-        )}
+          ) : (
+            <p className="text-sm text-muted-foreground">غير محدد</p>
+          )}
+        </div>
       </div>
 
     </Card>

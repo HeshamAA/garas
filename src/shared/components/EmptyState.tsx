@@ -1,5 +1,4 @@
-import { useEffect, useRef } from 'react';
-import '@lottiefiles/lottie-player';
+import { Inbox } from 'lucide-react';
 
 interface EmptyStateProps {
   message: string;
@@ -7,25 +6,11 @@ interface EmptyStateProps {
 }
 
 export const EmptyState = ({ message, description }: EmptyStateProps) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (containerRef.current && containerRef.current.children.length === 0) {
-      const player = document.createElement('lottie-player');
-      player.setAttribute('src', '/EmptyList.lottie');
-      player.setAttribute('background', 'transparent');
-      player.setAttribute('speed', '1');
-      player.setAttribute('style', 'width: 250px; height: 250px; margin: 0 auto;');
-      player.setAttribute('loop', '');
-      player.setAttribute('autoplay', '');
-      
-      containerRef.current.appendChild(player);
-    }
-  }, []);
-
   return (
     <div className="flex flex-col items-center justify-center py-12 px-4 animate-fade-in">
-      <div ref={containerRef} className="mb-6" />
+      <div className="mb-6 text-gray-300">
+        <Inbox size={120} strokeWidth={1.5} />
+      </div>
       <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-2 text-center">
         {message}
       </h3>

@@ -57,9 +57,14 @@ export const SuperAdminSubscriptionsPage = () => {
 
   const loadSubscriptions = async (showLoader = true) => {
     try {
-      showLoader ? setIsLoading(true) : setIsRefreshing(true);
+      if (showLoader) {
+        setIsLoading(true);
+      } else {
+        setIsRefreshing(true);
+      }
       const response = await subscriptionApi.getSubscriptions(filters);
       const items = Array.isArray(response.items) ? response.items : [];
+
       setSubscriptions(items);
       setPagination(response.metadata ?? null);
     } catch (error) {
@@ -74,6 +79,7 @@ export const SuperAdminSubscriptionsPage = () => {
     }
   };
 
+
   useEffect(() => {
     loadSubscriptions();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -83,7 +89,7 @@ export const SuperAdminSubscriptionsPage = () => {
     setFilters((prev) => ({
       ...prev,
       [key]: value || undefined,
-      page: key === 'page' ? value : 1,
+      page: key === 'page' ? (value as number) : 1,
     }));
   };
 
@@ -181,6 +187,8 @@ export const SuperAdminSubscriptionsPage = () => {
     sortOrderFilter !== 'ASC' ||
     limitFilter !== '10';
 
+
+    console.log(subscriptions)
   return (
     <DashboardLayout>
       <div className="p-6 lg:p-8 space-y-6" dir="rtl">
@@ -364,7 +372,7 @@ export const SuperAdminSubscriptionsPage = () => {
                     subscriptions.map((subscription) => (
                       <TableRow key={subscription.id}>
                         <TableCell>{subscription.schoolName}</TableCell>
-                        <TableCell>{subscription.planName}</TableCell>
+                        <TableCell>{subscription.plan.name}</TableCell>
                         <TableCell>
                           <div className="flex flex-col">
                             <span>من: {new Date(subscription.startDate).toLocaleDateString('ar-SA')}</span>
@@ -382,9 +390,7 @@ export const SuperAdminSubscriptionsPage = () => {
                         </TableCell>
                         <TableCell>
                           <div className="flex flex-wrap gap-2">
-                            <Button variant="outline" size="sm" onClick={() => handleViewDetails(subscription.id)}>
-                              التفاصيل
-                            </Button>
+                   
                             <Button
                               variant="destructive"
                               size="sm"

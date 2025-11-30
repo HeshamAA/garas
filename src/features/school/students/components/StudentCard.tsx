@@ -138,16 +138,7 @@ export const StudentCard = memo(({
           </div>
         )}
 
-        {onViewRequests && (
-          <div className="pt-2">
-            <Button 
-              className="w-full rounded-full bg-blue-600 hover:bg-blue-700 transition-colors"
-              onClick={handleViewRequests}
-            >
-              عرض طلبات الاستلام
-            </Button>
-          </div>
-        )}
+    
       </div>
     </Card>
   );
