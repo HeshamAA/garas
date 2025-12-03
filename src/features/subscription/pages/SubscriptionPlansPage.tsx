@@ -14,7 +14,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { useSubscriptionPlans } from '../hooks/useSubscriptionPlans';
-import { PlanCard, CreatePlanForm } from '../components/SubscriptionPlans';
+import { PlanCard, CreatePlanForm, PlanDetailDialog, EditPlanDialog } from '../components/SubscriptionPlans';
 
 export const SubscriptionPlansPage = () => {
   const {
@@ -26,13 +26,25 @@ export const SubscriptionPlansPage = () => {
     formValues,
     featuresInput,
     setFeaturesInput,
+    detailDialogOpen,
+    setDetailDialogOpen,
+    detailPlan,
+    detailLoading,
+    editDialogOpen,
+    setEditDialogOpen,
+    editValues,
+    editFeaturesInput,
+    setEditFeaturesInput,
+    isUpdating,
     deleteState,
     setDeleteState,
     handlePlanFilterChange,
     handleInputChange,
+    handleEditInputChange,
     handleSubmitPlan,
     handleOpenDetail,
     handleOpenEdit,
+    handleUpdatePlan,
     handleConfirmDelete,
   } = useSubscriptionPlans();
 
@@ -137,7 +149,24 @@ export const SubscriptionPlansPage = () => {
         </div>
       </div>
 
-      {/* TODO: Add detail and edit dialogs as separate components */}
+      <PlanDetailDialog
+        open={detailDialogOpen}
+        onOpenChange={setDetailDialogOpen}
+        plan={detailPlan}
+        loading={detailLoading}
+      />
+
+      <EditPlanDialog
+        open={editDialogOpen}
+        onOpenChange={setEditDialogOpen}
+        editValues={editValues}
+        featuresInput={editFeaturesInput}
+        loading={detailLoading}
+        isUpdating={isUpdating}
+        onInputChange={handleEditInputChange}
+        onFeaturesChange={setEditFeaturesInput}
+        onSubmit={handleUpdatePlan}
+      />
 
       <AlertDialog open={Boolean(deleteState.id)} onOpenChange={(open) => !open && setDeleteState({ id: null, loading: false })}>
         <AlertDialogContent>
