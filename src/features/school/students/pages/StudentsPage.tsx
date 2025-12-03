@@ -1,10 +1,10 @@
-﻿import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DashboardLayout } from '@/shared/components/layout';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Search, SlidersHorizontal, X } from 'lucide-react';
-import { StudentFilters } from '../components/StudentFilters';
+
 import { useAppSelector, useAppDispatch } from '@/shared/hooks';
 import { StudentStatus } from '../types/student.types';
 import { fetchStudents } from '../store/studentsThunks';
@@ -34,7 +34,7 @@ const StudentsPage = () => {
   
   useEffect(() => {
     dispatch(fetchStudents(params));
-  }, [dispatch, params]);
+  }, [dispatch, params.page, params.limit, params.keyword, params.fullName, params.code, params.stage, params.class, params.sortBy, params.sortOrder]);
 
   const handleViewRequests = (studentId: number) => {
     console.log('View requests for student:', studentId);

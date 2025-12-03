@@ -1,19 +1,41 @@
 export type StudentStatus = 'active' | 'inactive' | 'pending';
 
 export interface Student {
-  id: string;
-  name: string;
+  id: number;
+  fullName: string;
+  code: string;
+  class: string;
+  stage: string;
+  dateOfBirth: string;
+  profileImage?: string;
+  name?: string;
   avatar?: string;
-  status: StudentStatus;
-  location: string;
-  guardianId: string;
-  guardianName: string;
+  status?: StudentStatus;
+  location?: string;
+  guardianId?: string;
+  guardianName?: string;
   receiverId?: string;
   receiverName?: string;
-  lastUpdate: Date;
+  lastUpdate?: Date;
   time?: string;
   date?: string;
   role?: string;
+  school?: {
+    name: string;
+    logo: string;
+    location: string;
+  };
+  parent?: {
+    fullName: string;
+    phoneNumber: string;
+    email?: string;
+    profileImage?: string;
+  };
+}
+
+export interface StudentCardProps {
+  student: Student;
+  onViewRequests?: (studentId: number) => void;
 }
 
 export interface StudentFilters {

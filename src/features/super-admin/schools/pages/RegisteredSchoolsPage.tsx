@@ -1,55 +1,36 @@
-import { useState } from 'react';
 import { DashboardLayout } from '@/shared/components/layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, SlidersHorizontal, X } from 'lucide-react';
-import { useToast } from '@/shared/hooks';
-import { useSchools } from '../hooks/useSchools';
-import { SchoolCard } from '../components/SchoolCard';
+import { Search, SlidersHorizontal } from 'lucide-react';
 import { Pagination } from '@/shared/components/ui';
+import { useRegisteredSchools } from '../hooks/useRegisteredSchools';
+import { SchoolCard } from '../components/SchoolCard';
+import { SchoolsFilters } from '../components/SchoolsFilters';
 
 const RegisteredSchoolsPage = () => {
-  const toast = useToast();
-  const { items: schools, isLoading, error, pagination, changePage, search, filterByName, filterByLocation, sort, refetch } = useSchools(true);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [showFilters, setShowFilters] = useState(false);
-  const [nameFilter, setNameFilter] = useState('');
-  const [locationFilter, setLocationFilter] = useState('');
-  const [sortBy, setSortBy] = useState('');
-  const [sortOrder, setSortOrder] = useState<'ASC' | 'DESC'>('ASC');
-  
-
-
-  const handleAddSchool = () => {
-    toast.info('سيتم إضافة نموذج تسجيل المدرسة قريباً');
-  };
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    search(searchQuery);
-  };
-
-  const handleApplyFilters = () => {
-    refetch({
-      name: nameFilter || undefined,
-      location: locationFilter || undefined,
-      sortBy: sortBy || undefined,
-      sortOrder,
-      page: 1,
-    });
-    setShowFilters(false);
-  };
-
-  const handleClearFilters = () => {
-    setNameFilter('');
-    setLocationFilter('');
-    setSortBy('');
-    setSortOrder('ASC');
-    refetch({ page: 1 });
-  };
-
-  const hasActiveFilters = nameFilter || locationFilter || sortBy;
+  const {
+    schools,
+    isLoading,
+    error,
+    pagination,
+    searchQuery,
+    setSearchQuery,
+    showFilters,
+    setShowFilters,
+    nameFilter,
+    setNameFilter,
+    locationFilter,
+    setLocationFilter,
+    sortBy,
+    setSortBy,
+    sortOrder,
+    setSortOrder,
+    hasActiveFilters,
+    changePage,
+    handleSearch,
+    handleApplyFilters,
+    handleClearFilters,
+  } = useRegisteredSchools();
 
   return (
     <DashboardLayout>
@@ -94,85 +75,20 @@ const RegisteredSchoolsPage = () => {
           </div>
 
           {showFilters && (
-            <div className="bg-card border rounded-lg p-6 space-y-4" dir="rtl">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold">خيارات الفلترة والترتيب</h3>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setShowFilters(false)}
-                >
-                  <X className="w-4 h-4" />
-                </Button>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-right block">اسم المدرسة</label>
-                  <Input
-                    placeholder="ابحث بالاسم"
-                    value={nameFilter}
-                    onChange={(e) => setNameFilter(e.target.value)}
-                    className="text-right"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-right block">الموقع</label>
-                  <Input
-                    placeholder="ابحث بالموقع"
-                    value={locationFilter}
-                    onChange={(e) => setLocationFilter(e.target.value)}
-                    className="text-right"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-right block">ترتيب حسب</label>
-                  <Select value={sortBy} onValueChange={setSortBy}>
-                    <SelectTrigger className="text-right">
-                      <SelectValue placeholder="اختر الترتيب" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="name">الاسم</SelectItem>
-                      <SelectItem value="location">الموقع</SelectItem>
-                      <SelectItem value="createdAt">تاريخ التسجيل</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-right block">نوع الترتيب</label>
-                  <Select value={sortOrder} onValueChange={(value: 'ASC' | 'DESC') => setSortOrder(value)}>
-                    <SelectTrigger className="text-right">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="ASC">تصاعدي (أ-ي)</SelectItem>
-                      <SelectItem value="DESC">تنازلي (ي-أ)</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              <div className="flex gap-3 pt-4 border-t">
-                <Button
-                  variant="outline"
-                  onClick={handleClearFilters}
-                  className="flex-1 rounded-full"
-                  disabled={!hasActiveFilters}
-                >
-                  مسح الفلاتر
-                </Button>
-                <Button
-                  onClick={handleApplyFilters}
-                  className="flex-1 rounded-full"
-                >
-                  تطبيق الفلاتر
-                </Button>
-              </div>
-            </div>
+            <SchoolsFilters
+              nameFilter={nameFilter}
+              onNameChange={setNameFilter}
+              locationFilter={locationFilter}
+              onLocationChange={setLocationFilter}
+              sortBy={sortBy}
+              onSortByChange={setSortBy}
+              sortOrder={sortOrder}
+              onSortOrderChange={setSortOrder}
+              hasActiveFilters={hasActiveFilters}
+              onApply={handleApplyFilters}
+              onClear={handleClearFilters}
+              onClose={() => setShowFilters(false)}
+            />
           )}
         </div>
 

@@ -16,7 +16,7 @@ export const useSchools = (autoFetch = true) => {
     if (autoFetch) {
       dispatch(fetchSchools(params));
     }
-  }, [dispatch, autoFetch, params]);
+  }, [dispatch, autoFetch, params.page, params.limit, params.keyword, params.name, params.location, params.sortBy, params.sortOrder]);
 
   const refetch = (newParams?: GetSchoolsParams) => {
     const updatedParams = { ...params, ...newParams };

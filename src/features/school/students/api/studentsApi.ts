@@ -1,57 +1,38 @@
-﻿import { apiClient } from '@/shared/api/apiClient';
-import { 
+﻿import { createApiService } from '@/shared/api/createApiService';
+import { API_ENDPOINTS } from '@/shared/api/apiEndpoints';
+import {
   StudentStatus,
-
   StudentsApiResponse,
   StudentApiResponse
 } from '../types/student.types';
+import type { BaseQueryParams } from '@/shared/api/createApiService';
 
-export interface GetStudentsParams {
-  keyword?: string;
+export interface GetStudentsParams extends BaseQueryParams {
   fullName?: string;
   code?: string;
   schoolId?: number;
   parentId?: number;
   stage?: string;
   class?: string;
-  page?: number;
-  limit?: number;
-  sortBy?: string;
-  sortOrder?: 'ASC' | 'DESC';
 }
 
-const ENDPOINTS = {
-  students: 'https://school.safehandapps.com/api/v1/student',
-  studentById: (id: string) => `/students/${id}`,
-  studentStatus: (id: string) => `/students/${id}/status`,
-  studentsBySchool: (schoolId: string) => `/schools/${schoolId}/students`,
-};
+// Create base API service using generic factory
+const baseStudentsApi = createApiService<
+  any,
+  StudentsApiResponse,
+  StudentApiResponse,
+  GetStudentsParams
+>(API_ENDPOINTS.school.students);
 
+// Export API with custom methods
 export const studentsApi = {
-  async getAll(params?: GetStudentsParams): Promise<StudentsApiResponse> {
-    const response = await apiClient.get<StudentsApiResponse>(
-      ENDPOINTS.students,
-      { params }
-    );
-    return response.data;
-  },
+  // Use generic methods
+  getAll: baseStudentsApi.getAll.bind(baseStudentsApi),
+  getById: baseStudentsApi.getById.bind(baseStudentsApi),
+  delete: baseStudentsApi.delete.bind(baseStudentsApi),
 
-  async getById(id: string): Promise<StudentApiResponse> {
-    const response = await apiClient.get<StudentApiResponse>(
-      ENDPOINTS.studentById(id)
-    );
-    return response.data;
-  },
-
+  // Custom method for updating status
   async updateStatus(id: string, status: StudentStatus): Promise<StudentApiResponse> {
-    const response = await apiClient.patch<StudentApiResponse>(
-      ENDPOINTS.studentStatus(id),
-      { status }
-    );
-    return response.data;
-  },
-
-  async delete(id: string): Promise<void> {
-    await apiClient.delete(ENDPOINTS.studentById(id));
+    return baseStudentsApi.patch(id, { status });
   },
 };

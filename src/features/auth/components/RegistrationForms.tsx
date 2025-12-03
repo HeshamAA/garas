@@ -1,14 +1,10 @@
 ﻿import { RegistrationFormFields } from "./RegistrationFormFields";
 import type { UseFormReturn } from "react-hook-form";
-import type { SchoolFormData, OwnerFormData, AccountType } from "../hooks";
+import type { SchoolFormData } from "../hooks";
 
 interface RegistrationFormsProps {
-  accountType: AccountType;
-  onAccountTypeChange: (value: AccountType) => void;
   schoolForm: UseFormReturn<SchoolFormData>;
-  ownerForm: UseFormReturn<OwnerFormData>;
   onSchoolSubmit: (data: SchoolFormData) => Promise<void>;
-  onOwnerSubmit: (data: OwnerFormData) => Promise<void>;
   isRegistering: boolean;
   imagePreview: string | null;
   onImageUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -16,12 +12,8 @@ interface RegistrationFormsProps {
 }
 
 export const RegistrationForms = ({
-  accountType,
-  onAccountTypeChange,
   schoolForm,
-  ownerForm,
   onSchoolSubmit,
-  onOwnerSubmit,
   isRegistering,
   imagePreview,
   onImageUpload,
@@ -29,7 +21,6 @@ export const RegistrationForms = ({
 }: RegistrationFormsProps) => {
   return (
     <div className="space-y-6 animate-slide-in-left">
-      {/* تم إزالة خيار اختيار نوع الحساب - التسجيل للمدارس فقط */}
       <form 
         onSubmit={schoolForm.handleSubmit(onSchoolSubmit)} 
         className="space-y-6 animate-zoom-in"

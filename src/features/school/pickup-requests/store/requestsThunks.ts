@@ -13,4 +13,16 @@ export const fetchSchoolRequests = createAsyncThunk(
     }
   }
 );
-
+
+export const cancelRequest = createAsyncThunk(
+  'requests/cancelRequest',
+  async (id: number, { rejectWithValue }) => {
+    try {
+      const response = await requestsApi.updateRequestStatus(id, 'canceld');
+      return { id, message: response.message };
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Failed to cancel request';
+      return rejectWithValue(message);
+    }
+  }
+);

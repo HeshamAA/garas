@@ -1,68 +1,22 @@
-﻿import { Card } from '@/components/ui/card';
+import { memo } from 'react';
+import { Card } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
 import { Building2, Clock, User, Phone } from 'lucide-react';
-import { memo, useMemo, useCallback } from 'react';
+import { StudentCardProps } from '../types/student.types';
+import { useStudentCard } from '../hooks/useStudentCard';
+import { translateClass, translateStage } from '../utils/studentFormatters';
 
-const translateClass = (classValue: string): string => {
-  const classMap = {
-    'one': 'الأول',
-    'two': 'الثاني',
-    'three': 'الثالث',
-    'four': 'الرابع',
-    'five': 'الخامس',
-    'six': 'السادس',
-  };
-  return classMap[classValue] || classValue;
-};
-
-const translateStage = (stageValue: string): string => {
-  const stageMap: Record<string, string> = {
-    'first': 'الابتدائية',
-    'middle': 'الإعدادية',
-    'secondary': 'الثانوية',
-  };
-  return stageMap[stageValue] || stageValue;
-};
-
-interface StudentCardProps {
-  student: any;
-  onViewRequests?: (studentId: number) => void;
-}
-
-export const StudentCard = memo(({ 
-  student, 
-  onViewRequests,
-}: StudentCardProps) => {
-  const getInitials = useMemo(() => {
-    if (!student.fullName) return 'NA';
-    const parts = student.fullName.split(' ');
-    return parts.length >= 2 
-      ? `${parts[0][0]}${parts[1][0]}` 
-      : student.fullName.substring(0, 2);
-  }, [student.fullName]);
-
-  const formattedDate = useMemo(() => {
-    return new Date(student.dateOfBirth).toLocaleDateString('ar-EG', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
-  }, [student.dateOfBirth]);
-
-  const handleViewRequests = useCallback(() => {
-    onViewRequests?.(student.id);
-  }, [onViewRequests, student.id]);
+export const StudentCard = memo(({ student, onViewRequests }: StudentCardProps) => {
+  const { initials, formattedDate } = useStudentCard(student, onViewRequests);
 
   return (
     <Card className="p-6 hover:shadow-lg transition-shadow duration-300" dir="rtl">
       <div className="space-y-4">
-        
         <div className="flex items-center justify-start gap-4">
           <Avatar className="w-16 h-16 border-2 border-gray-200">
             <AvatarImage src={student.profileImage} alt={student.fullName} loading="lazy" />
             <AvatarFallback className="bg-blue-100 text-blue-600 font-semibold">
-              {getInitials}
+              {initials}
             </AvatarFallback>
           </Avatar>
           <div className="flex-1 text-right">
@@ -72,7 +26,6 @@ export const StudentCard = memo(({
         </div>
 
         <div className="border-t pt-4 space-y-3">
-          
           <div className="flex items-center justify-start gap-2 text-sm">
             <span className="font-medium text-gray-700">الفصل:</span>
             <span className="text-blue-600 font-medium">{translateClass(student.class)}</span>
@@ -137,8 +90,6 @@ export const StudentCard = memo(({
             </div>
           </div>
         )}
-
-    
       </div>
     </Card>
   );

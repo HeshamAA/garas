@@ -1,46 +1,24 @@
-﻿import { createSlice } from '@reduxjs/toolkit';
-import { PaginationMetadata, PaginationLinks } from '@/shared/types/pagination.types';
-import { 
-  ReceiversState 
-} from '../types/receiver.types';
-import {
-  fetchReceivers,
-} from './receiversThunks';
+﻿import { createEntitySlice, BaseEntityState } from '@/shared/store/createEntitySlice';
+import { Receiver, ReceiverFilters } from '../types/receiver.types';
+import { fetchReceivers } from './receiversThunks';
 
-const initialState: ReceiversState = {
-    items: [],
-    filters: { status: 'all' },
-    selectedReceiver: null,
-    isLoading: false,
-    error: null,
-    lastFetched: null,
-    pagination: null,
-    links: null,
-};
+// Define the state type using BaseEntityState
+export type ReceiversState = BaseEntityState<Receiver, ReceiverFilters>;
 
-const receiversSlice = createSlice({
+// Create the receivers slice using the factory
+const receiversSlice = createEntitySlice<Receiver, ReceiverFilters>({
   name: 'receivers',
-  initialState,
-  reducers: {},
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchReceivers.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
-      })
-      .addCase(fetchReceivers.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.items = action.payload.items;
-        state.pagination = action.payload.metadata;
-        state.links = action.payload.links;
-        state.lastFetched = Date.now();
-      })
-      .addCase(fetchReceivers.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.payload as string || 'Failed to fetch receivers';
-      })
-     
-  },
+  initialFilters: { status: 'all' },
+  fetchThunk: fetchReceivers,
 });
+
+// Export actions
+export const {
+  setFilters,
+  selectItem: selectReceiver,
+  clearError,
+  invalidateCache,
+  resetState,
+} = receiversSlice.actions;
 
 export default receiversSlice.reducer;

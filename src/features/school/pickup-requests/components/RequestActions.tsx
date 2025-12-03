@@ -45,7 +45,7 @@ const RequestActions = ({
       </div>
     );
   }
-  if (status === 'approved' && onComplete) {
+  if (status === 'waiting_outside' && onComplete) {
     return (
       <Button
         className="w-full rounded-full py-6"

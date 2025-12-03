@@ -1,10 +1,8 @@
-import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ArrowLeft, Mail } from 'lucide-react';
-import { forgotPasswordApi } from '../api/forgotPasswordApi';
-import { useToast } from '@/hooks/use-toast';
+import { useForgotPasswordStep1 } from '../hooks/useForgotPasswordStep1';
 
 interface ForgotPasswordStep1Props {
   onComplete: (email: string) => void;
@@ -12,40 +10,7 @@ interface ForgotPasswordStep1Props {
 }
 
 export const ForgotPasswordStep1 = ({ onComplete, onBack }: ForgotPasswordStep1Props) => {
-  const [email, setEmail] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!email) {
-      toast({
-        title: 'خطأ',
-        description: 'من فضلك أدخل البريد الإلكتروني',
-        variant: 'destructive',
-      });
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      await forgotPasswordApi.forgetPassword({ email });
-      toast({
-        title: 'تم الإرسال',
-        description: 'تم إرسال رمز التحقق إلى بريدك الإلكتروني',
-      });
-      onComplete(email);
-    } catch (error) {
-      toast({
-        title: 'خطأ',
-        description: 'حدث خطأ أثناء إرسال رمز التحقق',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const { email, setEmail, isLoading, handleSubmit } = useForgotPasswordStep1({ onComplete });
 
   return (
     <div className="space-y-6">

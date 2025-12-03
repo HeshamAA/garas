@@ -1,10 +1,8 @@
-import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ArrowLeft, Unlock } from 'lucide-react';
-import { forgotPasswordApi } from '../api/forgotPasswordApi';
-import { useToast } from '@/hooks/use-toast';
+import { useForgotPasswordStep3 } from '../hooks/useForgotPasswordStep3';
 
 interface ForgotPasswordStep3Props {
   email: string;
@@ -14,35 +12,11 @@ interface ForgotPasswordStep3Props {
 }
 
 export const ForgotPasswordStep3 = ({ email, otpCode, onComplete, onBack }: ForgotPasswordStep3Props) => {
-  const [password, setPassword] = useState('');
-  const [confirm, setConfirm] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!password || !confirm) {
-      toast({ title: 'خطأ', description: 'من فضلك املأ الحقول المطلوبة', variant: 'destructive' });
-      return;
-    }
-
-    if (password !== confirm) {
-      toast({ title: 'خطأ', description: 'كلمتا المرور غير متطابقتين', variant: 'destructive' });
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      await forgotPasswordApi.updatePassword({ email, newPassword: password, otpAgin: otpCode });
-      toast({ title: 'تم التحديث', description: 'تم تحديث كلمة المرور بنجاح' });
-      onComplete();
-    } catch (error) {
-      toast({ title: 'خطأ', description: 'فشل تحديث كلمة المرور', variant: 'destructive' });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const { password, setPassword, confirm, setConfirm, isLoading, handleSubmit } = useForgotPasswordStep3({
+    email,
+    otpCode,
+    onComplete,
+  });
 
   return (
     <div className="space-y-6">

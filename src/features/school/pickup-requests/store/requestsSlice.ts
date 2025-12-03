@@ -1,7 +1,7 @@
 ﻿import { createSlice } from '@reduxjs/toolkit';
 import { PickupRequest, RequestFilters } from '../types/request.types';
 import { PaginationMetadata, PaginationLinks } from '@/shared/types/pagination.types';
-import { fetchSchoolRequests } from './requestsThunks';
+import { fetchSchoolRequests, cancelRequest } from './requestsThunks';
 
 interface RequestsState {
   schoolRequests: {
@@ -50,7 +50,24 @@ const requestsSlice = createSlice({
          console.log(action.payload)
         state.schoolRequests.error = action.payload as string || 'Failed to fetch school requests';
       })
-     
+      // Cancel request
+      .addCase(cancelRequest.pending, (state) => {
+        state.schoolRequests.isLoading = true;
+      })
+      .addCase(cancelRequest.fulfilled, (state, action) => {
+        state.schoolRequests.isLoading = false;
+        // Update the request status in the items array
+        const requestIndex = state.schoolRequests.items.findIndex(
+          (req) => req.id === action.payload.id
+        );
+        if (requestIndex !== -1) {
+          state.schoolRequests.items[requestIndex].status = 'canceld';
+        }
+      })
+      .addCase(cancelRequest.rejected, (state, action) => {
+        state.schoolRequests.isLoading = false;
+        state.schoolRequests.error = action.payload as string || 'Failed to cancel request';
+      });
   },
 });
 

@@ -2,34 +2,34 @@
 import { useAppDispatch, useAppSelector } from '@/shared/hooks';
 import { fetchParents, deleteParent } from '../store/parentsThunks';
 import { setFilters, selectParent, clearError, invalidateCache } from '../store/parentsSlice';
-import { ParentFilters, UpdateParentRequest } from '../types/parent.types';
+import { ParentFilters } from '../types/parent.types';
+import type { GetParentsParams } from '../api/parentsApi';
 
-export const useParents = (schoolId?: string) => {
+export const useParents = (params?: GetParentsParams) => {
   const dispatch = useAppDispatch();
   const { 
     items, 
     filters, 
-    selectedParent,
+    selectedItem: selectedParent,
     isLoading, 
     isUpdating,
     isCreating,
     isDeleting,
     error 
   } = useAppSelector(state => state.parents);
+
   useEffect(() => {
-    if (schoolId) {
-      dispatch(fetchParents(schoolId));
-    }
-  }, [dispatch, schoolId]);
+    dispatch(fetchParents(params));
+  }, [dispatch, params]);
   const filteredParents = useMemo(() => {
     let filtered = items;
 
     if (filters.searchQuery) {
       const query = filters.searchQuery.toLowerCase();
       filtered = filtered.filter(parent => 
-        parent.name.toLowerCase().includes(query) ||
-        parent.email.toLowerCase().includes(query) ||
-        parent.phone.includes(query)
+        parent.fullName.toLowerCase().includes(query) ||
+        parent.user.email.toLowerCase().includes(query) ||
+        parent.user.phoneNumber.includes(query)
       );
     }
 
@@ -39,29 +39,9 @@ export const useParents = (schoolId?: string) => {
     dispatch(setFilters(newFilters));
   };
 
-  const handleSelectParent = (parentId: string | null) => {
+  const handleSelectParent = (parentId: number | null) => {
     const parent = parentId ? items.find(p => p.id === parentId) : null;
     dispatch(selectParent(parent || null));
-  };
-
-  const handleCreateParent = async (parentData: CreateParentRequest) => {
-    try {
-      await dispatch(createParent(parentData)).unwrap();
-      return { success: true };
-    } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : 'Failed to create parent';
-      return { success: false, error: message };
-    }
-  };
-
-  const handleUpdateParent = async (parentData: UpdateParentRequest) => {
-    try {
-      await dispatch(updateParent(parentData)).unwrap();
-      return { success: true };
-    } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : 'Failed to update parent';
-      return { success: false, error: message };
-    }
   };
 
   const handleDeleteParent = async (parentId: string) => {
@@ -76,9 +56,7 @@ export const useParents = (schoolId?: string) => {
 
   const handleRefresh = () => {
     dispatch(invalidateCache());
-    if (schoolId) {
-      dispatch(fetchParents(schoolId));
-    }
+    dispatch(fetchParents(params));
   };
 
   const handleClearError = () => {
@@ -97,8 +75,6 @@ export const useParents = (schoolId?: string) => {
     error,
     setFilters: handleSetFilters,
     selectParent: handleSelectParent,
-    createParent: handleCreateParent,
-    updateParent: handleUpdateParent,
     deleteParent: handleDeleteParent,
     refresh: handleRefresh,
     clearError: handleClearError,

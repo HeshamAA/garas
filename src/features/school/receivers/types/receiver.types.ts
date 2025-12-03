@@ -33,26 +33,6 @@ export interface ReceiverFilters {
   searchQuery?: string;
 }
 
-export interface ReceiversState {
-    items: Receiver[];
-    filters: ReceiverFilters;
-    selectedReceiver: Receiver | null;
-    isLoading: boolean;
-    error: string | null;
-    lastFetched: number | null;
-    pagination: {
-        currentPage: number;
-        itemsPerPage: number;
-        totalItems: number;
-        totalPages: number;
-    } | null;
-    links: {
-        hasNext: boolean;
-        next?: string;
-        last?: string;
-    } | null;
-}
-
 export interface ReceiverStatusUpdate {
   id: string;
   status: 'active' | 'inactive';

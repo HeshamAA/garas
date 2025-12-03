@@ -18,9 +18,9 @@ export const useSchoolRequests = (schoolId?: string) => {
     return {
       all: items.length,
       pending: items.filter((req) => req.status === 'pending').length,
-      approved: items.filter((req) => req.status === 'approved').length,
-      completed: items.filter((req) => req.status === 'completed').length,
-      rejected: items.filter((req) => req.status === 'rejected').length,
+      waiting_outside: items.filter((req) => req.status === 'waiting_outside').length,
+      deliverd: items.filter((req) => req.status === 'deliverd').length,
+      canceld: items.filter((req) => req.status === 'canceld').length,
     };
   }, [items]);
 

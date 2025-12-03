@@ -1,3 +1,6 @@
-﻿export { default as RegisteredSchoolsPage } from './pages/RegisteredSchoolsPage';
-export * from './types/school.types';
-export * from './hooks/useSchools';
+﻿export * from './api';
+export * from './components';
+export * from './hooks';
+export * from './pages';
+export * from './store';
+export * from './types';

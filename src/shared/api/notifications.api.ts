@@ -1,41 +1,46 @@
-import { apiClient, handleApiError, handleApiResponse } from './apiClient';
+import { createApiService } from './createApiService';
 import { Notification, NotificationsResponse, NotificationParams } from '../types/notification.types';
+import { API_ENDPOINTS, buildEndpoint } from './apiEndpoints';
 
+// Create base service instance
+const baseService = createApiService<Notification, NotificationsResponse>(
+  API_ENDPOINTS.notifications
+);
+
+// Extend with custom methods
 export const notificationsApi = {
+  /**
+   * Get notifications for the current user
+   */
   getNotifications: async (params?: NotificationParams): Promise<NotificationsResponse> => {
-    try {
-      const response = await apiClient.get<NotificationsResponse>('https://school.safehandapps.com/api/v1/notifications/me', {
-        params: {
-          page: params?.page || 1,
-          limit: params?.limit || 10,
-        },
-      });
-     
-      return handleApiResponse(response);
-    } catch (error) {
-      return handleApiError(error);
-    }
+    return baseService.customRequest<NotificationsResponse>(
+      'GET',
+      '/me',
+      undefined,
+      {
+        page: params?.page || 1,
+        limit: params?.limit || 10,
+      }
+    );
   },
 
+  /**
+   * Mark a specific notification as read
+   */
   markAsRead: async (notificationId: string): Promise<Notification> => {
-    try {
-      const response = await apiClient.patch<Notification>(
-        `https://school.safehandapps.com/api/v1/notifications/${notificationId}/read`
-      );
-      return handleApiResponse(response);
-    } catch (error) {
-      return handleApiError(error);
-    }
+    return baseService.customRequest<Notification>(
+      'PATCH',
+      `/${notificationId}/read`
+    );
   },
 
+  /**
+   * Mark all notifications as read
+   */
   markAllAsRead: async (): Promise<{ message: string }> => {
-    try {
-      const response = await apiClient.patch<{ message: string }>(
-        'https://school.safehandapps.com/api/v1/notifications/read-all'
-      );
-      return handleApiResponse(response);
-    } catch (error) {
-      return handleApiError(error);
-    }
+    return baseService.customRequest<{ message: string }>(
+      'PATCH',
+      '/read-all'
+    );
   },
 };

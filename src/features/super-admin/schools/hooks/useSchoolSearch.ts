@@ -1,23 +1,23 @@
 ﻿import { useAppDispatch, useAppSelector } from '@/shared/hooks';
 import { 
-  searchSchools 
+  fetchSchools 
 } from '../store/schoolsThunks';
 import { 
   setSearchQuery,
   clearSearchResults 
 } from '../store/schoolsSlice';
-import { SearchSchoolsRequest } from '../types/school.types';
 
 export const useSchoolSearch = () => {
   const dispatch = useAppDispatch();
-  const searchResults = useAppSelector(state => state.schools.searchResults);
+  const searchResults = useAppSelector(state => state.schools.items);
   const searchQuery = useAppSelector(state => state.schools.searchQuery);
-  const isSearching = useAppSelector(state => state.schools.isSearching);
+  const isSearching = useAppSelector(state => state.schools.isLoading);
   const error = useAppSelector(state => state.schools.error);
-  const search = async (searchParams: SearchSchoolsRequest) => {
+  
+  const search = async (query: string) => {
     try {
-      dispatch(setSearchQuery(searchParams.query));
-      await dispatch(searchSchools(searchParams)).unwrap();
+      dispatch(setSearchQuery(query));
+      await dispatch(fetchSchools({ keyword: query })).unwrap();
       return { success: true };
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : 'Failed to search schools';

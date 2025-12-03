@@ -74,12 +74,8 @@ const AuthPage = () => {
             />
           ) : (
             <RegistrationForms
-              accountType={accountType}
-              onAccountTypeChange={handleAccountTypeChange}
               schoolForm={schoolForm}
-              ownerForm={ownerForm}
               onSchoolSubmit={handleSchoolRegistration}
-              onOwnerSubmit={handleOwnerRegistration}
               isRegistering={isRegistering}
               imagePreview={imagePreview}
               onImageUpload={(e) => handleImageUpload(e, schoolForm.setValue, ownerForm.setValue)}

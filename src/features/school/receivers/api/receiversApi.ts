@@ -1,35 +1,26 @@
-﻿import { apiClient } from '@/shared/api/apiClient';
-import { 
-ReceiversApiResponse
+﻿import { createApiService } from '@/shared/api/createApiService';
+import { API_ENDPOINTS } from '@/shared/api/apiEndpoints';
+import {
+  ReceiversApiResponse
 } from '../types/receiver.types';
+import type { BaseQueryParams } from '@/shared/api/createApiService';
 
-export interface GetReceiversParams {
-  keyword?: string;
+export interface GetReceiversParams extends BaseQueryParams {
   fullName?: string;
   nationalId?: string;
   userId?: number;
-  page?: number;
-  limit?: number;
-  sortBy?: string;
-  sortOrder?: 'ASC' | 'DESC';
 }
 
-const ENDPOINTS = {
-  receivers: 'https://school.safehandapps.com/api/v1/delivery-person',
-  receiverById: (id: string) => `/receivers/${id}`,
-};
+// Create base API service using generic factory
+const baseReceiversApi = createApiService<
+  any,
+  ReceiversApiResponse,
+  any,
+  GetReceiversParams
+>(API_ENDPOINTS.school.receivers);
 
+// Export API with all generic methods
 export const receiversApi = {
-  async getAll(params?: GetReceiversParams): Promise<ReceiversApiResponse> {
-    const response = await apiClient.get<ReceiversApiResponse>(
-      ENDPOINTS.receivers,
-      { params }
-    );
-    return response.data;
-  },
-
-  async delete(id: string): Promise<void> {
-    await apiClient.delete(ENDPOINTS.receiverById(id));
-  },
-
+  getAll: baseReceiversApi.getAll.bind(baseReceiversApi),
+  delete: baseReceiversApi.delete.bind(baseReceiversApi),
 };

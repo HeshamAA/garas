@@ -1,1 +1,0 @@
-export { mockSchools } from './mockSchools';

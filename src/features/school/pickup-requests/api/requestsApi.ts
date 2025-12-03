@@ -1,4 +1,5 @@
-﻿import { apiClient } from '@/shared/api/apiClient';
+﻿/* eslint-disable @typescript-eslint/no-explicit-any */
+import { apiClient } from '@/shared/api/apiClient';
 import {
   RequestsApiResponse,
   SchoolRequestsApiResponse,
@@ -21,6 +22,7 @@ const ENDPOINTS = {
   userRequests: (userId: string) => `https://school.safehandapps.com/api/v1/req-for-receipt`,
   schoolRequests: () => `https://school.safehandapps.com/api/v1/req-for-receipt`,
   requestById: (id: string) => `https://school.safehandapps.com/api/v1/req-for-receipt/${id}`,
+  updateRequestStatus: (id: number) => `https://school.safehandapps.com/api/v1/req-for-receipt/status/${id}`,
 };
 
 export const requestsApi = {
@@ -43,6 +45,14 @@ export const requestsApi = {
 
   async getRequestById(id: string): Promise<{ data: any }> {
     const response = await apiClient.get(ENDPOINTS.requestById(id));
+    return response.data;
+  },
+
+  async updateRequestStatus(id: number, status: string): Promise<{ data: any; message: string }> {
+    const response = await apiClient.patch(
+      ENDPOINTS.updateRequestStatus(id),
+      { status }
+    );
     return response.data;
   },
 };

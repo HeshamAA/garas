@@ -39,7 +39,15 @@ const initialState: SchoolsState = {
 const schoolsSlice = createSlice({
   name: 'schools',
   initialState,
-  reducers: {},
+  reducers: {
+    setSearchQuery: (state, action: PayloadAction<string>) => {
+      state.searchQuery = action.payload;
+    },
+    clearSearchResults: (state) => {
+      state.searchResults = [];
+      state.searchQuery = '';
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchSchools.pending, (state) => {
@@ -80,4 +88,5 @@ const schoolsSlice = createSlice({
   },
 });
 
+export const { setSearchQuery, clearSearchResults } = schoolsSlice.actions;
 export default schoolsSlice.reducer;

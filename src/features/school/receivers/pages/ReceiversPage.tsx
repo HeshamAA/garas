@@ -28,7 +28,7 @@ const ReceiversPage = () => {
   
   useEffect(() => {
     dispatch(fetchReceivers(params));
-  }, [dispatch, params]);
+  }, [dispatch, params.page, params.limit, params.keyword, params.fullName, params.nationalId, params.sortBy, params.sortOrder]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();

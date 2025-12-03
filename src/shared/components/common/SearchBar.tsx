@@ -1,8 +1,7 @@
 ﻿import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
 import { SearchBarProps } from '@/shared/types';
-import { useDebounce } from '@/shared/hooks/useDebounce';
-import { useState, useEffect } from 'react';
+import { useSearchBar } from './hooks/useSearchBar';
 
 const SearchBar = ({
   value,
@@ -11,16 +10,7 @@ const SearchBar = ({
   className = '',
   debounceMs = 300,
 }: SearchBarProps) => {
-  const [localValue, setLocalValue] = useState(value);
-  const debouncedValue = useDebounce(localValue, debounceMs);
-  useEffect(() => {
-    if (debouncedValue !== value) {
-      onChange(debouncedValue);
-    }
-  }, [debouncedValue, onChange, value]);
-  useEffect(() => {
-    setLocalValue(value);
-  }, [value]);
+  const { localValue, setLocalValue } = useSearchBar(value, onChange, debounceMs);
 
   return (
     <div className={`relative ${className}`}>

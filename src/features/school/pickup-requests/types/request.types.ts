@@ -1,19 +1,25 @@
-﻿export type RequestStatus = 'pending' | 'approved' | 'rejected' | 'completed' | 'delivered';
+﻿export type RequestStatus = 'pending' | 'deliverd' | 'canceld' | 'waiting_outside';
 
-export type HowToReceive = 'person' | 'car' | 'other';
+export type HowToReceive = 'person' | 'car';
 
 export interface Student {
   id: number;
   fullName: string;
   class: string;
   code: string;
-  parent:Parent
+  profileImage?: string | null;
+  parent: Parent;
 }
 
 export interface Parent {
   id: number;
   fullName: string;
-  profileImage: string;
+  profileImage: string | null;
+  user?: {
+    id: number;
+    email: string;
+    phoneNumber: string;
+  };
 }
 
 export interface School {
@@ -26,8 +32,9 @@ export interface School {
 export interface DeliveryPerson {
   id: number;
   fullName: string;
-  profileImage: string;
-  user: {
+  profileImage: string | null;
+  nationalId?: string;
+  user?: {
     id: number;
     email: string;
     phoneNumber: string;
@@ -37,10 +44,14 @@ export interface DeliveryPerson {
 export interface PickupRequest {
   id: number;
   date: string;
+  createdAt: string;
+  updatedAt: string;
   deliveryPerson: DeliveryPerson | null;
   howToReceive: HowToReceive;
   location: string;
   numberOfCar: string | null;
+  carType?: string | null;
+  carColor?: string | null;
   status: RequestStatus;
   student: Student;
   parent: Parent;

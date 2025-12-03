@@ -1,3 +1,6 @@
-﻿export { default as StudentsPage } from './pages/StudentsPage';
-export * from './types/student.types';
-export * from './hooks/useStudents';
+﻿export * from './api';
+export * from './hooks';
+export * from './pages';
+export * from './store';
+export * from './types';
+export * from './utils';

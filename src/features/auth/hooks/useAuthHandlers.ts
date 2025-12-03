@@ -1,4 +1,5 @@
-﻿import { useNavigate } from "react-router-dom";
+﻿/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useToast } from "@/shared/hooks";
 import { loginUser, registerUser } from "../store/authThunks";
 import { getDefaultRoute } from "@/shared/constants/routes";
