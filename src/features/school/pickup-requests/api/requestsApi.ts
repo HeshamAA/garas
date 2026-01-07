@@ -1,5 +1,6 @@
-﻿/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { apiClient } from '@/shared/api/apiClient';
+import { API_CONFIG } from '@/shared/api/apiConfig';
 import {
   RequestsApiResponse,
   SchoolRequestsApiResponse,
@@ -12,6 +13,8 @@ export interface GetRequestsParams {
   deliveryId?: number;
   howToReceive?: string;
   status?: string;
+  fromDate?: string; // ISO format date
+  toDate?: string; // ISO format date
   page?: number;
   limit?: number;
   sortBy?: string;
@@ -19,10 +22,10 @@ export interface GetRequestsParams {
 }
 
 const ENDPOINTS = {
-  userRequests: (userId: string) => `https://school.safehandapps.com/api/v1/req-for-receipt`,
-  schoolRequests: () => `https://school.safehandapps.com/api/v1/req-for-receipt`,
-  requestById: (id: string) => `https://school.safehandapps.com/api/v1/req-for-receipt/${id}`,
-  updateRequestStatus: (id: number) => `https://school.safehandapps.com/api/v1/req-for-receipt/status/${id}`,
+  userRequests: (userId: string) => `${API_CONFIG.baseURL}/api/v1/req-for-receipt`,
+  schoolRequests: () => `${API_CONFIG.baseURL}/api/v1/req-for-receipt`,
+  requestById: (id: string) => `${API_CONFIG.baseURL}/api/v1/req-for-receipt/${id}`,
+  updateRequestStatus: (id: number) => `${API_CONFIG.baseURL}/api/v1/req-for-receipt/status/${id}`,
 };
 
 export const requestsApi = {

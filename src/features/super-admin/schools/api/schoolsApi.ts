@@ -1,4 +1,5 @@
 ﻿import { apiClient } from '@/shared/api/apiClient';
+import { API_CONFIG } from '@/shared/api/apiConfig';
 import { 
   RegisterSchoolRequest,
   SearchSchoolsRequest,
@@ -7,7 +8,7 @@ import {
 } from '../types/school.types';
 
 const ENDPOINTS = {
-  schools: 'https://school.safehandapps.com/api/v1/school',
+  schools: `${API_CONFIG.baseURL}/api/v1/school`,
 
 };
 

@@ -56,6 +56,8 @@ export interface PickupRequest {
   student: Student;
   parent: Parent;
   school: School;
+  cancellationReason?: string | null;
+  requestReason?: string | null;
 }
 
 export interface data{

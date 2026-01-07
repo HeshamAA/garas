@@ -1,9 +1,10 @@
 import { apiClient, handleApiError } from '@/shared/api/apiClient';
+import { API_CONFIG } from '@/shared/api/apiConfig';
 
 const FORGOT_PASSWORD_ENDPOINTS = {
-  FORGET_PASSWORD: 'https://school.safehandapps.com/api/v1/auth/forget-password',
-  VERIFY_OTP: 'https://school.safehandapps.com/api/v1/auth/verify-otp',
-  UPDATE_PASSWORD: 'https://school.safehandapps.com/api/v1/auth/update-password',
+  FORGET_PASSWORD: `${API_CONFIG.baseURL}/api/v1/auth/forget-password`,
+  VERIFY_OTP: `${API_CONFIG.baseURL}/api/v1/auth/verify-otp`,
+  UPDATE_PASSWORD: `${API_CONFIG.baseURL}/api/v1/auth/update-password`,
 } as const;
 
 export interface ForgetPasswordRequest {

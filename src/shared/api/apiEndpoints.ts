@@ -2,8 +2,9 @@
  * Centralized API Endpoints Configuration
  * All API endpoints are defined here to avoid hardcoding URLs across the application
  */
+import { API_CONFIG } from './apiConfig';
 
-const BASE_URL = 'https://school.safehandapps.com/api/v1';
+const BASE_URL = `${API_CONFIG.baseURL}/api/v1`;
 
 export const API_ENDPOINTS = {
     // Authentication

@@ -1,4 +1,5 @@
 ﻿import { apiClient, handleApiError } from '@/shared/api/apiClient';
+import { API_CONFIG } from '@/shared/api/apiConfig';
 import {
   LoginCredentials,
   RegistrationData,
@@ -8,11 +9,11 @@ import {
 } from '../types/auth.types';
 
 const AUTH_ENDPOINTS = {
-  LOGIN: 'https://school.safehandapps.com/api/v1/auth/login',
-  REGISTER: 'https://school.safehandapps.com/api/v1/auth/register',
-  LOGOUT: 'https://school.safehandapps.com/api/v1/auth/logout',
-  ME: 'https://school.safehandapps.com/api/v1/auth/get-me',
-  REFRESH: 'https://school.safehandapps.com/api/v1/auth/refresh',
+  LOGIN: `${API_CONFIG.baseURL}/api/v1/auth/login`,
+  REGISTER: `${API_CONFIG.baseURL}/api/v1/auth/register`,
+  LOGOUT: `${API_CONFIG.baseURL}/api/v1/auth/logout`,
+  ME: `${API_CONFIG.baseURL}/api/v1/auth/get-me`,
+  REFRESH: `${API_CONFIG.baseURL}/api/v1/auth/refresh`,
 } as const;
 
 export const authApi = {

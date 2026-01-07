@@ -1,4 +1,5 @@
 import { apiClient } from '@/shared/api/apiClient';
+import { API_CONFIG } from '@/shared/api/apiConfig';
 import { PaginationLinks, PaginationMetadata } from '@/shared/types/pagination.types';
 import {
   CreatePlanPayload,
@@ -11,7 +12,7 @@ import {
   UpdatePlanPayload,
 } from '../types/subscription.types';
 
-const BASE_URL = 'https://school.safehandapps.com/api/v1/subscription';
+const BASE_URL = `${API_CONFIG.baseURL}/api/v1/subscription`;
 
 const ENDPOINTS = {
   subscriptions: `${BASE_URL}/subscriptions`,

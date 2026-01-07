@@ -1,6 +1,7 @@
 import { apiClient, handleApiError } from '@/shared/api/apiClient';
+import { API_CONFIG } from '@/shared/api/apiConfig';
 
-const SCHOOL_REGISTRATION_ENDPOINT = 'https://school.safehandapps.com/api/v1/auth/school/sign-up';
+const SCHOOL_REGISTRATION_ENDPOINT = `${API_CONFIG.baseURL}/api/v1/auth/school/sign-up`;
 
 export interface SchoolSignUpData {
   logo?: File | string;

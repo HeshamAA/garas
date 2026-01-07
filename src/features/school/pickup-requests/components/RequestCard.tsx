@@ -38,6 +38,7 @@ const RequestCard = memo(({
   const [showRejectDialog, setShowRejectDialog] = useState(false);
 
   const isPending = request.status === 'pending';
+  const isFastRequest = request.status === 'fast_request';
 
   const handleRejectClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -61,15 +62,28 @@ const RequestCard = memo(({
   return (
     <>
       <Card
-        className={`flex flex-col rounded-2xl p-6 shadow-sm border border-border/50 hover:shadow-lg transition-shadow cursor-pointer ${className}`}
+        className={`flex flex-col rounded-2xl p-6 shadow-sm transition-shadow cursor-pointer relative overflow-hidden ${
+          isFastRequest 
+            ? 'border-2 border-purple-500 bg-gradient-to-br from-purple-50/50 to-transparent dark:from-purple-950/20 shadow-purple-200 dark:shadow-purple-900/50' 
+            : 'border border-border/50 hover:shadow-lg'
+        } ${className}`}
         onClick={handleCardClick}
       >
-        <RequestCardHeader
-          parentName={request.student.parent?.fullName || 'غير محدد'}
-          parentImage={request.student.parent?.profileImage}
-          parentInitials={parentInitials}
-          status={request.status}
-        />
+        {isFastRequest && (
+          <div className="absolute top-0 left-0 bg-gradient-to-r from-purple-600 to-purple-500 text-white px-4 py-1 text-xs font-bold rounded-br-lg flex items-center gap-1 shadow-lg z-10">
+            <span className="text-lg">⚡</span>
+            طلب سريع
+          </div>
+        )}
+
+        <div className={isFastRequest ? 'mt-8' : ''}>
+          <RequestCardHeader
+            parentName={request.student.parent?.fullName || 'غير محدد'}
+            parentImage={request.student.parent?.profileImage}
+            parentInitials={parentInitials}
+            status={request.status}
+          />
+        </div>
 
         <RequestCardDetails
           studentName={request.student.fullName}
@@ -88,6 +102,20 @@ const RequestCard = memo(({
           deliveryPerson={request.deliveryPerson}
           deliveryPersonInitials={deliveryPersonInitials}
         />
+
+        {request.requestReason && (
+          <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+            <p className="text-xs font-semibold text-blue-700 dark:text-blue-400 mb-1">سبب الطلب:</p>
+            <p className="text-sm text-blue-900 dark:text-blue-300">{request.requestReason}</p>
+          </div>
+        )}
+
+        {request.cancellationReason && (
+          <div className="mt-4 p-3 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800 rounded-lg">
+            <p className="text-xs font-semibold text-red-700 dark:text-red-400 mb-1">سبب الرفض:</p>
+            <p className="text-sm text-red-900 dark:text-red-300">{request.cancellationReason}</p>
+          </div>
+        )}
 
         {isPending && onApprove && onCancel && (
           <div className="mt-4 pt-4 border-t border-border/50 flex gap-3">

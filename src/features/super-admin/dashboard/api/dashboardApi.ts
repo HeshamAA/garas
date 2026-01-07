@@ -43,7 +43,7 @@ export const superAdminDashboardApi = {
   async getStatistics(): Promise<{ success: boolean; message: string; data: SuperAdminStatistics }> {
     try {
       const response = await apiClient.get<{ success: boolean; message: string; data: SuperAdminStatistics }>(
-        'https://school.safehandapps.com/api/v1/school/dashboard'
+        `${API_CONFIG.baseURL}/api/v1/school/dashboard`
       );
 
       return handleApiResponse(response);
