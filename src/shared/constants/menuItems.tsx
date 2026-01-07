@@ -1,4 +1,4 @@
-import { LucideIcon, TrendingUp, FileText, Users, UserCheck, Building2, Settings, CreditCard, ListChecks } from 'lucide-react';
+import { LucideIcon, TrendingUp, FileText, Users, UserCheck, Building2, Settings, CreditCard, ListChecks, Clock } from 'lucide-react';
 import { SCHOOL_ROUTES, SUPER_ADMIN_ROUTES } from './routes';
 
 export interface MenuItem {
@@ -13,6 +13,7 @@ export const SCHOOL_MENU_ITEMS: MenuItem[] = [
   { icon: Users, label: 'أولياء الأمور', path: SCHOOL_ROUTES.PARENTS },
   { icon: UserCheck, label: 'الطلاب', path: SCHOOL_ROUTES.STUDENTS },
   { icon: Users, label: 'المستلمون', path: SCHOOL_ROUTES.RECEIVERS },
+  { icon: Clock, label: 'وقت الخروج الرسمي', path: SCHOOL_ROUTES.CLOSED_TIME },
   { icon: CreditCard, label: 'اشتراك المدرسة', path: SCHOOL_ROUTES.SUBSCRIPTION },
 ];
 

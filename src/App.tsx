@@ -19,6 +19,7 @@ import { SchoolDashboardPage } from "@/features/school/dashboard";
 import { UserDashboardPage } from "@/features/super-admin/dashboard";
 import { SchoolSubscriptionPage, SubscriptionPlansPage, SuperAdminSubscriptionsPage } from "@/features/subscription";
 import { PageTransitionLoader } from "@/shared/components/PageTransitionLoader";
+import { ClosedTimePage } from "@/features/school/closed-time";
 
 const queryClient = new QueryClient();
 
@@ -90,6 +91,14 @@ const App = () => (
               element={
                 <ProtectedRoute requiredRole="school">
                   <SchoolSubscriptionPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/closed-time"
+              element={
+                <ProtectedRoute requiredRole="school">
+                  <ClosedTimePage />
                 </ProtectedRoute>
               }
             />

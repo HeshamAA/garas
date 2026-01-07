@@ -22,6 +22,7 @@ export const SCHOOL_ROUTES = {
   TRUSTED_RECEIVERS: '/trusted-receivers',
   RECEIVE_REQUESTS: '/receive-requests',
   SUBSCRIPTION: '/my-subscription',
+  CLOSED_TIME: '/closed-time',
 } as const;
 
 export const ROUTES = {
