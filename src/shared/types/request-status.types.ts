@@ -1,5 +1,7 @@
 export enum RequestStatusEnum {
   PENDING = 'pending',
+  APPROVED = 'approved',
+  FAST_REQUEST = 'fast_request',
   DELIVERED = 'deliverd',
   CANCELLED = 'canceld',
   WAITING_OUTSIDE = 'waiting_outside',
@@ -21,6 +23,20 @@ export const REQUEST_STATUS_MAP: Record<RequestStatusEnum, RequestStatusInfo> = 
     textColor: 'text-yellow-700',
     icon: '⏳',
   },
+  [RequestStatusEnum.APPROVED]: {
+    label: 'تمت الموافقة',
+    color: 'success',
+    bgColor: 'bg-emerald-500/10',
+    textColor: 'text-emerald-700',
+    icon: '✓',
+  },
+  [RequestStatusEnum.FAST_REQUEST]: {
+    label: 'طلب سريع',
+    color: 'info',
+    bgColor: 'bg-purple-500/10',
+    textColor: 'text-purple-700',
+    icon: '⚡',
+  },
   [RequestStatusEnum.DELIVERED]: {
     label: 'تم التسليم',
     color: 'success',
@@ -29,7 +45,7 @@ export const REQUEST_STATUS_MAP: Record<RequestStatusEnum, RequestStatusInfo> = 
     icon: '✅',
   },
   [RequestStatusEnum.CANCELLED]: {
-    label: 'ملغي',
+    label: 'مرفوض',
     color: 'destructive',
     bgColor: 'bg-red-500/10',
     textColor: 'text-red-700',
@@ -83,6 +99,8 @@ export const getFilterableStatuses = () => {
   return [
     { value: 'all', label: 'الكل' },
     { value: RequestStatusEnum.PENDING, label: REQUEST_STATUS_MAP[RequestStatusEnum.PENDING].label },
+    { value: RequestStatusEnum.APPROVED, label: REQUEST_STATUS_MAP[RequestStatusEnum.APPROVED].label },
+    { value: RequestStatusEnum.FAST_REQUEST, label: REQUEST_STATUS_MAP[RequestStatusEnum.FAST_REQUEST].label },
     { value: RequestStatusEnum.WAITING_OUTSIDE, label: REQUEST_STATUS_MAP[RequestStatusEnum.WAITING_OUTSIDE].label },
     { value: RequestStatusEnum.DELIVERED, label: REQUEST_STATUS_MAP[RequestStatusEnum.DELIVERED].label },
     { value: RequestStatusEnum.CANCELLED, label: REQUEST_STATUS_MAP[RequestStatusEnum.CANCELLED].label },

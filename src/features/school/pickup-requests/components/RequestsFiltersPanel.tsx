@@ -1,5 +1,6 @@
 import { GenericFilterPanel } from '@/shared/components/common/GenericFilterPanel';
 import { FilterField } from '@/shared/types/filter.types';
+import { getFilterableStatuses } from '@/shared/types';
 
 interface RequestsFiltersPanelProps {
   howToReceiveFilter: string;
@@ -51,12 +52,7 @@ export const RequestsFiltersPanel = ({
       placeholder: 'اختر الحالة',
       value: statusFilter,
       onChange: onStatusChange,
-      options: [
-        { value: 'pending', label: 'قيد الانتظار' },
-        { value: 'waiting_outside', label: 'بانتظار الاستلام' },
-        { value: 'deliverd', label: 'تم التسليم' },
-        { value: 'canceld', label: 'ملغي' },
-      ],
+      options: getFilterableStatuses(),
     },
   ];
 

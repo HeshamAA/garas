@@ -5,9 +5,10 @@ import RequestCard from '../components/RequestCard';
 import { RequestsPageHeader } from '../components/RequestsPageHeader';
 import { RequestsSearchBar } from '../components/RequestsSearchBar';
 import { RequestsFiltersPanel } from '../components/RequestsFiltersPanel';
+import { DateRangeFilter } from '../components/DateRangeFilter';
 import { useReceiveRequestsPage } from '../hooks/useReceiveRequestsPage';
 import { useAppDispatch } from '@/shared/hooks';
-import { cancelRequest } from '../store/requestsThunks';
+import { cancelRequest, approveRequest } from '../store/requestsThunks';
 import toast from 'react-hot-toast';
 
 export default function ReceiveRequestsPage() {
@@ -30,6 +31,8 @@ export default function ReceiveRequestsPage() {
     setSortBy,
     sortOrder,
     setSortOrder,
+    dateRange,
+    handleDateRangeChange,
     hasActiveFilters,
     handleSearch,
     handleApplyFilters,
@@ -37,12 +40,21 @@ export default function ReceiveRequestsPage() {
     handlePageChange,
   } = useReceiveRequestsPage();
 
-  const handleCancelRequest = async (id: number) => {
+  const handleCancelRequest = async (id: number, reason?: string) => {
     try {
-      await dispatch(cancelRequest(id)).unwrap();
-      toast.success('تم إلغاء الطلب بنجاح');
+      await dispatch(cancelRequest({ id, reason })).unwrap();
+      toast.success('تم رفض الطلب بنجاح');
     } catch (error) {
-      toast.error('فشل إلغاء الطلب');
+      toast.error('فشل رفض الطلب');
+    }
+  };
+
+  const handleApproveRequest = async (id: number) => {
+    try {
+      await dispatch(approveRequest(id)).unwrap();
+      toast.success('تم قبول الطلب بنجاح');
+    } catch (error) {
+      toast.error('فشل قبول الطلب');
     }
   };
 
@@ -64,6 +76,11 @@ export default function ReceiveRequestsPage() {
         <RequestsPageHeader />
 
         <div className="space-y-4 animate-slide-in-right">
+          <DateRangeFilter
+            selectedRange={dateRange}
+            onRangeChange={handleDateRangeChange}
+          />
+
           <RequestsSearchBar
             searchQuery={searchQuery}
             onSearchChange={setSearchQuery}
@@ -103,6 +120,7 @@ export default function ReceiveRequestsPage() {
                   key={request.id} 
                   request={request} 
                   onCancel={handleCancelRequest}
+                  onApprove={handleApproveRequest}
                   isLoading={isLoading} 
                 />
               ))}

@@ -1,4 +1,4 @@
-﻿export type RequestStatus = 'pending' | 'deliverd' | 'canceld' | 'waiting_outside';
+﻿export type RequestStatus = 'pending' | 'approved' | 'fast_request' | 'deliverd' | 'canceld' | 'waiting_outside';
 
 export type HowToReceive = 'person' | 'car';
 

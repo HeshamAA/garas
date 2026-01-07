@@ -48,10 +48,14 @@ export const requestsApi = {
     return response.data;
   },
 
-  async updateRequestStatus(id: number, status: string): Promise<{ data: any; message: string }> {
+  async updateRequestStatus(id: number, status: string, cancellationReason?: string): Promise<{ data: any; message: string }> {
+    const body: { status: string; cancellationReason?: string } = { status };
+    if (cancellationReason) {
+      body.cancellationReason = cancellationReason;
+    }
     const response = await apiClient.patch(
       ENDPOINTS.updateRequestStatus(id),
-      { status }
+      body
     );
     return response.data;
   },
