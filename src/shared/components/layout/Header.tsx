@@ -15,7 +15,7 @@ const Header = ({ showTabs = true }: HeaderProps) => {
 
   const schoolName = user?.school?.name || user?.name || "اسم المدرسة";
   const schoolLogo = user?.profileImage || user?.avatar;
-  console.log(user)
+
   const tabs = [
     { name: "أولياء الأمور", path: "/parents" },
     { name: "الطلاب", path: "/students" },

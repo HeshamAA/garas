@@ -11,13 +11,13 @@ import { RecentRequestsCard } from './components/RecentRequestsCard';
 const SchoolDashboardPage = () => {
   const { subscriptionId, isReady } = useOneSignal();
   const { statistics, recentRequests, loading, loadingRequests } = useDashboardData();
-  
+
   // Initialize Pusher for real-time updates
   usePusherRequests();
 
   useEffect(() => {
     if (isReady && subscriptionId) {
-      console.log('OneSignal is ready! Subscription ID:', subscriptionId);
+      // OneSignal ready
     }
   }, [isReady, subscriptionId]);
 

@@ -20,7 +20,6 @@ export const useOneSignal = () => {
       if (window.getOneSignalSubscriptionId) {
         const id = window.getOneSignalSubscriptionId();
         setSubscriptionId(id);
-        console.log('OneSignal Subscription ID:', id);
       }
     };
 

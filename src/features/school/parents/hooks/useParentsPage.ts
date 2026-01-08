@@ -61,7 +61,7 @@ export const useParentsPage = () => {
   );
 
   const handleViewRequests = useCallback((parentId: number) => {
-    console.log('View requests for parent:', parentId);
+    // TODO: Navigate to parent requests
   }, []);
 
   const hasActiveFilters = Boolean(fullNameFilter || nationalIdFilter || sortBy);

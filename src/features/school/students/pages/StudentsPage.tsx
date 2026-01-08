@@ -37,7 +37,7 @@ const StudentsPage = () => {
   }, [dispatch, params.page, params.limit, params.keyword, params.fullName, params.code, params.stage, params.class, params.sortBy, params.sortOrder]);
 
   const handleViewRequests = (studentId: number) => {
-    console.log('View requests for student:', studentId);
+    // TODO: Navigate to student requests
   };
 
   const handleSearch = (e: React.FormEvent) => {

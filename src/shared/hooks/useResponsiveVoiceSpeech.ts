@@ -128,7 +128,6 @@ export const useResponsiveVoiceSpeech = () => {
             toast.success(`جاري النداء: ${text}`);
             processGlobalQueue();
         } else {
-            toast.success(`تمت الإضافة لقائمة النداء (${globalQueue.length})`);
             // Trigger processing in case it stopped but queue has items
             if (!isGlobalProcessing) processGlobalQueue();
         }

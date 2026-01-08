@@ -58,6 +58,7 @@ export interface PickupRequest {
   school: School;
   cancellationReason?: string | null;
   requestReason?: string | null;
+  reminderCount?: number;
 }
 
 export interface data{

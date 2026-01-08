@@ -13,7 +13,7 @@ export const RecentRequestsCard = ({ requests, loading }: RecentRequestsCardProp
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-right">طلبات الاستلام الأخيرة</CardTitle>
+        <CardTitle className="text-right">طلبات الاستلام السريعة</CardTitle>
       </CardHeader>
       <CardContent>
         {loading ? (
@@ -28,8 +28,8 @@ export const RecentRequestsCard = ({ requests, loading }: RecentRequestsCardProp
           </div>
         ) : (
           <EmptyState
-            message="لا توجد طلبات استلام"
-            description="لم يتم تسجيل أي طلبات استلام حتى الآن."
+            message="لا توجد طلبات استلام سريعة"
+            description="لم يتم تسجيل أي طلبات استلام سريعة حتى الآن."
           />
         )}
       </CardContent>

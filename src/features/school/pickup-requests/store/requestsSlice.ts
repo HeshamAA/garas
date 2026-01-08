@@ -47,7 +47,6 @@ const requestsSlice = createSlice({
       })
       .addCase(fetchSchoolRequests.rejected, (state, action) => {
         state.schoolRequests.isLoading = false;
-         console.log(action.payload)
         state.schoolRequests.error = action.payload as string || 'Failed to fetch school requests';
       })
       // Cancel request

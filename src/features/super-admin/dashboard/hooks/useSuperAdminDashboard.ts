@@ -12,7 +12,6 @@ export const useSuperAdminDashboard = () => {
     setLoading(true);
     try {
       const response = await statisticsApi.getSuperAdminStatistics();
-      console.log(response);
       setStatistics(response.data);
     } catch (error) {
       toast.error('فشل في تحميل الإحصائيات');

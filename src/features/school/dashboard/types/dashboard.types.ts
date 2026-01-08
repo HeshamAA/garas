@@ -10,14 +10,22 @@ export interface StatCard {
   bgColor: string;
 }
 
+export interface PaginationMeta {
+  currentPage: number;
+  totalPages: number;
+  totalItems: number;
+  itemsPerPage: number;
+}
+
 export interface DashboardData {
   statistics: SchoolStatistics | null;
   recentRequests: PickupRequest[];
   loading: boolean;
   loadingRequests: boolean;
+  pagination: PaginationMeta | null;
 }
 
 export interface UseDashboardDataReturn extends DashboardData {
   fetchStatistics: () => Promise<void>;
-  fetchRecentRequests: () => Promise<void>;
+  fetchRecentRequests: (page?: number) => Promise<void>;
 }
