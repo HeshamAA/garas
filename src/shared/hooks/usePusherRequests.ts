@@ -33,13 +33,23 @@ export const usePusherRequests = () => {
       const isFastRequest = request?.status === 'fast_request';
 
       if (isFastRequest) {
-        toast.success(
-          `⚡ طلب سريع جديد من ${studentName}`,
-          {
-            duration: 5000,
-            icon: '⚡',
-          }
-        );
+        toast.success(`⚡ طلب سريع جديد من ${studentName}`, {
+          duration: 8000,
+          icon: '⚡',
+          style: {
+            background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+            color: '#fff',
+            fontFamily: 'Cairo, Tajawal, system-ui, -apple-system, sans-serif',
+            direction: 'rtl',
+            textAlign: 'right',
+            padding: '20px 24px',
+            fontSize: '18px',
+            fontWeight: 'bold',
+            borderRadius: '12px',
+            boxShadow: '0 8px 24px rgba(245, 158, 11, 0.4)',
+            minWidth: '320px',
+          },
+        });
 
         // نطق الرسالة اللي جاية في الـ event للطلب السريع
         const message = data.message || request?.message;
@@ -47,12 +57,23 @@ export const usePusherRequests = () => {
           speakText(message, true);
         }
       } else {
-        toast.success(
-          `📋 طلب استلام جديد من ${studentName}`,
-          {
-            duration: 4000,
-          }
-        );
+        toast.success(`📋 طلب استلام جديد للطالب ${studentName}`, {
+          duration: 6000,
+          style: {
+            background: '#fff',
+            color: '#1f2937',
+            fontFamily: 'Cairo, Tajawal, system-ui, -apple-system, sans-serif',
+            direction: 'rtl',
+            textAlign: 'right',
+            padding: '18px 22px',
+            fontSize: '16px',
+            fontWeight: '600',
+            borderRadius: '12px',
+            border: '2px solid hsl(206, 71%, 63%)',
+            boxShadow: '0 6px 20px rgba(74, 144, 205, 0.2)',
+            minWidth: '300px',
+          },
+        });
       }
 
       // Refresh requests list
@@ -60,7 +81,7 @@ export const usePusherRequests = () => {
     };
 
     // تحديث طلب
-    const handleRequestUpdated = (data: any) => {
+    const handleRequestUpdated = (data: unknown) => {
       const request = data.request || data;
       toast(`تم تحديث الطلب #${request?.id || ''}`, {
         duration: 3000,
@@ -71,7 +92,7 @@ export const usePusherRequests = () => {
     };
 
     // إلغاء طلب
-    const handleRequestCancelled = (data: any) => {
+    const handleRequestCancelled = (data: unknown) => {
       const request = data.request || data;
       toast.error(`تم إلغاء الطلب #${request?.id || ''}`, {
         duration: 3000,

@@ -24,7 +24,7 @@ class PusherService {
 
     // Connection state logging
     this.pusher.connection.bind('connected', () => {
-      toast.success('تم الاتصال بالخادم', { duration: 2000 });
+      
     });
 
     this.pusher.connection.bind('disconnected', () => {

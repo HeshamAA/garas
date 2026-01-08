@@ -1,32 +1,35 @@
 export interface Notification {
-  id: string;
-  notification: {
-    title: string;
-    message: string;
-    createdAt: string;
+  id: number;
+  title: string;
+  message: string;
+  createdAt: string;
+  type: string;
+  scheduledAt: string;
+  navigationData?: {
+    params: { id: number };
+    screen: string;
   };
-  user: {
-    id: string;
-    name: string;
-  };
-  isRead: boolean;
-  readAt: string | null;
+  recipients: {
+    user: { id: number };
+    isRead: boolean;
+    readAt: string | null;
+  }[];
 }
 
 export interface NotificationsResponse {
-  data:{items:Notification[]}
+  success: boolean;
+  message: string;
+  data: { items: Notification[] };
   metadata: {
-    currentPage:number
-    itemsPerPage:number
-    totalItems:number
-    totalPages:number
+    currentPage: number;
+    itemsPerPage: number;
+    totalItems: number;
+    totalPages: number;
   };
-  links:{
-    hasNext:boolean
-  }
-  
-unreadCount:number
-
+  links: {
+    hasNext: boolean;
+  };
+  unreadCount: number;
 }
 
 export interface NotificationParams {
