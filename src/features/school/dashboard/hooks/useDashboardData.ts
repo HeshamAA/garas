@@ -29,12 +29,14 @@ export const useDashboardData = (): UseDashboardDataReturn => {
     setLoadingRequests(true);
     try {
       const response = await requestsApi.getSchoolRequests({
-        limit: 5,
+        limit: 10,
         page: 1,
         sortBy: 'date',
         sortOrder: 'DESC',
+        status: 'fast_request', // Filter only fast requests
       });
-      setRecentRequests(response.data?.items || []);
+      // Take only first 5 fast requests
+      setRecentRequests((response.data?.items || []).slice(0, 5));
     } catch (error) {
       console.error('Failed to fetch recent requests:', error);
     } finally {

@@ -8,11 +8,15 @@ import { RequestsFiltersPanel } from '../components/RequestsFiltersPanel';
 import { DateRangeFilter } from '../components/DateRangeFilter';
 import { useReceiveRequestsPage } from '../hooks/useReceiveRequestsPage';
 import { useAppDispatch } from '@/shared/hooks';
+import { usePusherRequests } from '@/shared/hooks/usePusherRequests';
 import { cancelRequest, approveRequest } from '../store/requestsThunks';
 import toast from 'react-hot-toast';
 
 export default function ReceiveRequestsPage() {
   const dispatch = useAppDispatch();
+
+  // Initialize Pusher for real-time updates
+  usePusherRequests();
 
   const {
     items,

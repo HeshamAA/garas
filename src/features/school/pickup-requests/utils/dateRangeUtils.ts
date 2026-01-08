@@ -10,10 +10,15 @@ export const getDateRange = (rangeType: DateRangeType): DateRange => {
   
   switch (rangeType) {
     case 'today': {
-      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      // Get today's date in local timezone
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      const todayStr = `${year}-${month}-${day}`;
+      
       return {
-        fromDate: today.toISOString().split('T')[0],
-        toDate: today.toISOString().split('T')[0],
+        fromDate: todayStr,
+        toDate: todayStr,
       };
     }
     
@@ -23,19 +28,35 @@ export const getDateRange = (rangeType: DateRangeType): DateRange => {
       const daysToSaturday = dayOfWeek === 6 ? 0 : (dayOfWeek + 1);
       const startOfWeek = new Date(now);
       startOfWeek.setDate(now.getDate() - daysToSaturday);
-      startOfWeek.setHours(0, 0, 0, 0);
+      
+      const startYear = startOfWeek.getFullYear();
+      const startMonth = String(startOfWeek.getMonth() + 1).padStart(2, '0');
+      const startDay = String(startOfWeek.getDate()).padStart(2, '0');
+      
+      const endYear = now.getFullYear();
+      const endMonth = String(now.getMonth() + 1).padStart(2, '0');
+      const endDay = String(now.getDate()).padStart(2, '0');
       
       return {
-        fromDate: startOfWeek.toISOString().split('T')[0],
-        toDate: now.toISOString().split('T')[0],
+        fromDate: `${startYear}-${startMonth}-${startDay}`,
+        toDate: `${endYear}-${endMonth}-${endDay}`,
       };
     }
     
     case 'month': {
       const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      
+      const startYear = startOfMonth.getFullYear();
+      const startMonth = String(startOfMonth.getMonth() + 1).padStart(2, '0');
+      const startDay = '01';
+      
+      const endYear = now.getFullYear();
+      const endMonth = String(now.getMonth() + 1).padStart(2, '0');
+      const endDay = String(now.getDate()).padStart(2, '0');
+      
       return {
-        fromDate: startOfMonth.toISOString().split('T')[0],
-        toDate: now.toISOString().split('T')[0],
+        fromDate: `${startYear}-${startMonth}-${startDay}`,
+        toDate: `${endYear}-${endMonth}-${endDay}`,
       };
     }
     

@@ -6,4 +6,6 @@ export { useAppSelector } from './useAppSelector';
 export { useSidebarState } from './useSidebarState';
 export { useOneSignal } from './useOneSignal';
 export { useEntityManagement } from './useEntityManagement';
+export { usePusherRequests } from './usePusherRequests';
+export { useResponsiveVoiceSpeech } from './useResponsiveVoiceSpeech';
 export type { EntityManagementConfig, EntityManagementReturn } from './useEntityManagement';

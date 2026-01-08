@@ -4,6 +4,7 @@ import { memo, useState } from 'react';
 import { X, Check } from 'lucide-react';
 import type { PickupRequest } from '../types/request.types';
 import { useRequestCard } from '../hooks/useRequestCard';
+
 import { RequestCardHeader } from './RequestCardHeader';
 import { RequestCardDetails } from './RequestCardDetails';
 import { RequestCardDeliveryInfo } from './RequestCardDeliveryInfo';
@@ -18,12 +19,12 @@ interface RequestCardProps {
   className?: string;
 }
 
-const RequestCard = memo(({ 
-  request, 
-  onCancel, 
+const RequestCard = memo(({
+  request,
+  onCancel,
   onApprove,
-  isLoading = false, 
-  className = '' 
+  isLoading = false,
+  className = ''
 }: RequestCardProps) => {
   const {
     formattedDate,
@@ -35,10 +36,13 @@ const RequestCard = memo(({
     handleCardClick,
   } = useRequestCard(request);
 
+
   const [showRejectDialog, setShowRejectDialog] = useState(false);
 
   const isPending = request.status === 'pending';
   const isFastRequest = request.status === 'fast_request';
+
+
 
   const handleRejectClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -62,11 +66,10 @@ const RequestCard = memo(({
   return (
     <>
       <Card
-        className={`flex flex-col rounded-2xl p-6 shadow-sm transition-shadow cursor-pointer relative overflow-hidden ${
-          isFastRequest 
-            ? 'border-2 border-purple-500 bg-gradient-to-br from-purple-50/50 to-transparent dark:from-purple-950/20 shadow-purple-200 dark:shadow-purple-900/50' 
-            : 'border border-border/50 hover:shadow-lg'
-        } ${className}`}
+        className={`flex flex-col rounded-2xl p-6 shadow-sm transition-shadow cursor-pointer relative overflow-hidden ${isFastRequest
+          ? 'border-2 border-purple-500 bg-gradient-to-br from-purple-50/50 to-transparent dark:from-purple-950/20 shadow-purple-200 dark:shadow-purple-900/50'
+          : 'border border-border/50 hover:shadow-lg'
+          } ${className}`}
         onClick={handleCardClick}
       >
         {isFastRequest && (
@@ -97,6 +100,8 @@ const RequestCard = memo(({
           carType={request.carType}
           carColor={request.carColor}
         />
+
+
 
         <RequestCardDeliveryInfo
           deliveryPerson={request.deliveryPerson}

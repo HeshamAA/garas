@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { DashboardLayout } from '@/shared/components/layout';
 import { useOneSignal } from '@/shared/hooks';
+import { usePusherRequests } from '@/shared/hooks/usePusherRequests';
 import { useDashboardData } from './hooks/useDashboardData';
 import { mapStatisticsToCards } from './utils/statsMapper';
 import { DashboardHeader } from './components/DashboardHeader';
@@ -10,7 +11,10 @@ import { RecentRequestsCard } from './components/RecentRequestsCard';
 const SchoolDashboardPage = () => {
   const { subscriptionId, isReady } = useOneSignal();
   const { statistics, recentRequests, loading, loadingRequests } = useDashboardData();
-  console.log(recentRequests)
+  
+  // Initialize Pusher for real-time updates
+  usePusherRequests();
+
   useEffect(() => {
     if (isReady && subscriptionId) {
       console.log('OneSignal is ready! Subscription ID:', subscriptionId);
