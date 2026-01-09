@@ -104,7 +104,13 @@ export const usePusherRequests = (options?: UsePusherRequestsOptions) => {
       if (shouldPlaySound) {
         const message = data.message || request?.message;
         if (message) {
+          // تشغيل الصوت فوراً
           speakText(message, true);
+          
+          // تشغيل الصوت مرة ثانية بعد 7 ثواني للتأكيد
+          setTimeout(() => {
+            speakText(message, true);
+          }, 7000);
         }
       }
 
