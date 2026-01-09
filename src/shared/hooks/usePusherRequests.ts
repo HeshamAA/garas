@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { usePusher, PUSHER_CHANNELS, PUSHER_EVENTS } from '@/shared/services/pusher';
 import { fetchSchoolRequests } from '@/features/school/pickup-requests/store/requestsThunks';
@@ -7,7 +7,13 @@ import { useAppDispatch } from './useAppDispatch';
 import { useAppSelector } from './useAppSelector';
 import { useResponsiveVoiceSpeech } from './useResponsiveVoiceSpeech';
 
-export const usePusherRequests = () => {
+interface UsePusherRequestsOptions {
+  onNewRequest?: () => void;
+  onRequestUpdated?: () => void;
+  onRequestCancelled?: () => void;
+}
+
+export const usePusherRequests = (options?: UsePusherRequestsOptions) => {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
   const { speakText } = useResponsiveVoiceSpeech();
@@ -21,16 +27,22 @@ export const usePusherRequests = () => {
     enabled,
   });
 
+  // Use ref to avoid stale closures
+  const optionsRef = useRef(options);
+  optionsRef.current = options;
+
   useEffect(() => {
     if (!channel) {
       return;
     }
 
-    // طلب جديد (عادي أو سريع)
+    // طلب جديد (عادي أو سريع أو بانتظار الاستلام)
     const handleNewRequest = (data: any) => {
       const request = data.request || data;
       const studentName = request?.student?.fullName || 'طالب';
       const isFastRequest = request?.status === 'fast_request';
+      const isWaitingOutside = request?.status === 'waiting_outside';
+      const shouldPlaySound = isFastRequest || isWaitingOutside;
 
       if (isFastRequest) {
         toast.success(`⚡ طلب سريع جديد من ${studentName}`, {
@@ -50,12 +62,24 @@ export const usePusherRequests = () => {
             minWidth: '320px',
           },
         });
-
-        // نطق الرسالة اللي جاية في الـ event للطلب السريع
-        const message = data.message || request?.message;
-        if (message) {
-          speakText(message, true);
-        }
+      } else if (isWaitingOutside) {
+        toast.success(`🚗 ${studentName} بانتظار الاستلام`, {
+          duration: 8000,
+          icon: '🚗',
+          style: {
+            background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+            color: '#fff',
+            fontFamily: 'Cairo, Tajawal, system-ui, -apple-system, sans-serif',
+            direction: 'rtl',
+            textAlign: 'right',
+            padding: '20px 24px',
+            fontSize: '18px',
+            fontWeight: 'bold',
+            borderRadius: '12px',
+            boxShadow: '0 8px 24px rgba(59, 130, 246, 0.4)',
+            minWidth: '320px',
+          },
+        });
       } else {
         toast.success(`📋 طلب استلام جديد للطالب ${studentName}`, {
           duration: 6000,
@@ -76,8 +100,19 @@ export const usePusherRequests = () => {
         });
       }
 
+      // نطق الرسالة للطلب السريع أو بانتظار الاستلام
+      if (shouldPlaySound) {
+        const message = data.message || request?.message;
+        if (message) {
+          speakText(message, true);
+        }
+      }
+
       // Refresh requests list
       dispatch(fetchSchoolRequests({ page: 1, limit: 10 }));
+      
+      // Call custom callback
+      optionsRef.current?.onNewRequest?.();
     };
 
     // تحديث طلب
@@ -89,6 +124,9 @@ export const usePusherRequests = () => {
       });
       // Refresh requests list
       dispatch(fetchSchoolRequests({ page: 1, limit: 10 }));
+      
+      // Call custom callback
+      optionsRef.current?.onRequestUpdated?.();
     };
 
     // إلغاء طلب
@@ -99,6 +137,9 @@ export const usePusherRequests = () => {
       });
       // Refresh requests list
       dispatch(fetchSchoolRequests({ page: 1, limit: 10 }));
+      
+      // Call custom callback
+      optionsRef.current?.onRequestCancelled?.();
     };
 
     // Bind events

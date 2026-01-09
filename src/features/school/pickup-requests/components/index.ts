@@ -13,3 +13,4 @@ export { default as RequestStatusBadge } from './RequestStatusBadge';
 export { RequestStatusCard } from './RequestStatusCard';
 export { RejectRequestDialog } from './RejectRequestDialog';
 export { DateRangeFilter } from './DateRangeFilter';
+export { StatusFilter } from './StatusFilter';

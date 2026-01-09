@@ -19,7 +19,7 @@ export const useReceiveRequestsPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   const [howToReceiveFilter, setHowToReceiveFilter] = useState('');
-  const [statusFilter, setStatusFilter] = useState('');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
   const [sortBy, setSortBy] = useState('');
   const [sortOrder, setSortOrder] = useState<'ASC' | 'DESC'>('ASC');
   const [dateRange, setDateRange] = useState<DateRangeType>('all');
@@ -40,6 +40,18 @@ export const useReceiveRequestsPage = () => {
         ...params,
         fromDate: dates.fromDate,
         toDate: dates.toDate,
+        page: 1,
+      });
+    },
+    [params]
+  );
+
+  const handleStatusChange = useCallback(
+    (status: string) => {
+      setStatusFilter(status);
+      setParams({
+        ...params,
+        status: status === 'all' ? undefined : status,
         page: 1,
       });
     },
@@ -69,7 +81,7 @@ export const useReceiveRequestsPage = () => {
 
   const handleClearFilters = useCallback(() => {
     setHowToReceiveFilter('');
-    setStatusFilter('');
+    setStatusFilter('all');
     setSortBy('');
     setSortOrder('ASC');
     setDateRange('all');
@@ -85,7 +97,7 @@ export const useReceiveRequestsPage = () => {
   );
 
   const hasActiveFilters = Boolean(
-    howToReceiveFilter || statusFilter || sortBy || dateRange !== 'all'
+    howToReceiveFilter || statusFilter !== 'all' || sortBy || dateRange !== 'all'
   );
 
   return {
@@ -103,7 +115,7 @@ export const useReceiveRequestsPage = () => {
     howToReceiveFilter,
     setHowToReceiveFilter,
     statusFilter,
-    setStatusFilter,
+    handleStatusChange,
     sortBy,
     setSortBy,
     sortOrder,

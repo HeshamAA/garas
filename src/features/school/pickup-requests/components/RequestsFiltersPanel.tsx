@@ -1,12 +1,9 @@
 import { GenericFilterPanel } from '@/shared/components/common/GenericFilterPanel';
 import { FilterField } from '@/shared/types/filter.types';
-import { getFilterableStatuses } from '@/shared/types';
 
 interface RequestsFiltersPanelProps {
   howToReceiveFilter: string;
   onHowToReceiveChange: (value: string) => void;
-  statusFilter: string;
-  onStatusChange: (value: string) => void;
   sortBy: string;
   onSortByChange: (value: string) => void;
   sortOrder: 'ASC' | 'DESC';
@@ -20,8 +17,6 @@ interface RequestsFiltersPanelProps {
 export const RequestsFiltersPanel = ({
   howToReceiveFilter,
   onHowToReceiveChange,
-  statusFilter,
-  onStatusChange,
   sortBy,
   onSortByChange,
   sortOrder,
@@ -44,15 +39,6 @@ export const RequestsFiltersPanel = ({
         { value: 'person', label: 'شخصياً' },
         { value: 'car', label: 'بالسيارة' },
       ],
-    },
-    {
-      name: 'status',
-      label: 'الحالة',
-      type: 'select',
-      placeholder: 'اختر الحالة',
-      value: statusFilter,
-      onChange: onStatusChange,
-      options: getFilterableStatuses(),
     },
   ];
 

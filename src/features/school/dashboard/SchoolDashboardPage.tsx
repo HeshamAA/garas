@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { DashboardLayout } from '@/shared/components/layout';
 import { useOneSignal } from '@/shared/hooks';
 import { usePusherRequests } from '@/shared/hooks/usePusherRequests';
@@ -10,10 +10,20 @@ import { RecentRequestsCard } from './components/RecentRequestsCard';
 
 const SchoolDashboardPage = () => {
   const { subscriptionId, isReady } = useOneSignal();
-  const { statistics, recentRequests, loading, loadingRequests } = useDashboardData();
+  const { statistics, recentRequests, loading, loadingRequests, fetchStatistics, fetchRecentRequests } = useDashboardData();
+
+  // Callback to refresh dashboard data on real-time updates
+  const handleRequestChange = useCallback(() => {
+    fetchStatistics();
+    fetchRecentRequests();
+  }, [fetchStatistics, fetchRecentRequests]);
 
   // Initialize Pusher for real-time updates
-  usePusherRequests();
+  usePusherRequests({
+    onNewRequest: handleRequestChange,
+    onRequestUpdated: handleRequestChange,
+    onRequestCancelled: handleRequestChange,
+  });
 
   useEffect(() => {
     if (isReady && subscriptionId) {

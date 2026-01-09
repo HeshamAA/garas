@@ -6,6 +6,7 @@ import { RequestsPageHeader } from '../components/RequestsPageHeader';
 import { RequestsSearchBar } from '../components/RequestsSearchBar';
 import { RequestsFiltersPanel } from '../components/RequestsFiltersPanel';
 import { DateRangeFilter } from '../components/DateRangeFilter';
+import { StatusFilter } from '../components/StatusFilter';
 import { useReceiveRequestsPage } from '../hooks/useReceiveRequestsPage';
 import { useAppDispatch } from '@/shared/hooks';
 import { usePusherRequests } from '@/shared/hooks/usePusherRequests';
@@ -30,7 +31,7 @@ export default function ReceiveRequestsPage() {
     howToReceiveFilter,
     setHowToReceiveFilter,
     statusFilter,
-    setStatusFilter,
+    handleStatusChange,
     sortBy,
     setSortBy,
     sortOrder,
@@ -85,6 +86,11 @@ export default function ReceiveRequestsPage() {
             onRangeChange={handleDateRangeChange}
           />
 
+          <StatusFilter
+            selectedStatus={statusFilter as any}
+            onStatusChange={handleStatusChange}
+          />
+
           <RequestsSearchBar
             searchQuery={searchQuery}
             onSearchChange={setSearchQuery}
@@ -98,8 +104,6 @@ export default function ReceiveRequestsPage() {
             <RequestsFiltersPanel
               howToReceiveFilter={howToReceiveFilter}
               onHowToReceiveChange={setHowToReceiveFilter}
-              statusFilter={statusFilter}
-              onStatusChange={setStatusFilter}
               sortBy={sortBy}
               onSortByChange={setSortBy}
               sortOrder={sortOrder}
